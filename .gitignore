@@ -1,0 +1,9 @@
+# TypeScript composite project build output
+/**/*.d.ts
+/tsconfig.tsbuildinfo
+
+# Node.js dependencies
+/node_modules/
+
+# local playground etc.
+/tmp/

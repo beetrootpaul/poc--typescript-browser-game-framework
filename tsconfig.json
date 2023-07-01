@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    // Required, because this project is meant to be referenced by game projects through "references" field in their respective tsconfig.json files.
+    "composite": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "strict": true
+  },
+  "include": [
+    "./src"
+  ]
+}
