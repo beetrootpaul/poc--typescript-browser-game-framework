@@ -16,7 +16,9 @@
   "scripts": {
     "prepare": "husky install",
     "test": "jest",
+    "start": "npm run typecheck:watch",
     "typecheck": "tsc",
+    "typecheck:watch": "tsc --watch",
     "format": "prettier --write src/",
     "cleanup": "rimraf ./**/*.d.ts ./tsconfig.tsbuildinfo"
   },
