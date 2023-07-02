@@ -2,9 +2,21 @@
   "compilerOptions": {
     // Required, because this project is meant to be referenced by game projects through "references" field in their respective tsconfig.json files.
     "composite": true,
+    //
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    //
+    "module": "ES2020",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
+    //
+    "target": "ES2020",
     "emitDeclarationOnly": true,
+    //
     "strict": true
   },
   "include": [
