@@ -1,3 +1,3 @@
-interface PrintDebug {
+export interface PrintDebug {
   d(): string;
 }

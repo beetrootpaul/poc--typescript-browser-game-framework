@@ -1,3 +1,5 @@
+import { PrintDebug } from "./debug/PrintDebug.ts";
+
 export function xy_(x: number, y: number): Xy {
   return new Xy(x, y);
 }
@@ -17,6 +19,10 @@ export class Xy implements PrintDebug {
 
   floor(): Xy {
     return new Xy(Math.floor(this.x), Math.floor(this.y));
+  }
+
+  add(other: Xy): Xy {
+    return new Xy(this.x + other.x, this.y + other.y);
   }
 
   sub(other: Xy): Xy {

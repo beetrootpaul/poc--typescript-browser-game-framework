@@ -1,22 +1,30 @@
 import { Color } from "./Color.ts";
 import { Xy, xy_ } from "./Xy.ts";
 
+// `b` in loops in this file stands for a byte (index)
+
 export class DrawApi {
   readonly #canvasSize: Xy;
   readonly #canvasRgbaBytes: Uint8ClampedArray;
+
+  #cameraOffset: Xy = xy_(0, 0);
 
   constructor(canvasSize: Xy, canvasRgbaBytes: Uint8ClampedArray) {
     this.#canvasSize = canvasSize;
     this.#canvasRgbaBytes = canvasRgbaBytes;
   }
 
+  setCameraOffset(offset: Xy): void {
+    this.#cameraOffset = offset;
+  }
+
   clear(color: Color): void {
-    for (let pixels = 0; pixels < this.#canvasRgbaBytes.length / 4; pixels++) {
-      const i = pixels * 4;
-      this.#canvasRgbaBytes[i] = color.r;
-      this.#canvasRgbaBytes[i + 1] = color.g;
-      this.#canvasRgbaBytes[i + 2] = color.b;
-      this.#canvasRgbaBytes[i + 3] = 255;
+    for (let pixel = 0; pixel < this.#canvasRgbaBytes.length / 4; pixel++) {
+      const b = pixel * 4;
+      this.#canvasRgbaBytes[b] = color.r;
+      this.#canvasRgbaBytes[b + 1] = color.g;
+      this.#canvasRgbaBytes[b + 2] = color.b;
+      this.#canvasRgbaBytes[b + 3] = 255;
     }
   }
 
@@ -24,11 +32,12 @@ export class DrawApi {
   // TODO: clipping outside canvas
   // TODO: negative x/y
   setPixel(xy: Xy, c: Color): void {
-    let bi = (xy.y * this.#canvasSize.x + xy.x) * 4;
-    this.#canvasRgbaBytes[bi] = c.r;
-    this.#canvasRgbaBytes[bi + 1] = c.g;
-    this.#canvasRgbaBytes[bi + 2] = c.b;
-    this.#canvasRgbaBytes[bi + 3] = 255;
+    const canvasXy = xy.sub(this.#cameraOffset);
+    let b = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
+    this.#canvasRgbaBytes[b] = c.r;
+    this.#canvasRgbaBytes[b + 1] = c.g;
+    this.#canvasRgbaBytes[b + 2] = c.b;
+    this.#canvasRgbaBytes[b + 3] = 255;
   }
 
   // TODO: cover it with tests
