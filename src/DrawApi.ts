@@ -1,5 +1,5 @@
-import { Color } from "./color.ts";
-import { Xy } from "./xy.ts";
+import { Color } from "./Color.ts";
+import { Xy } from "./Xy.ts";
 
 export class DrawApi {
   readonly #canvasSize: Xy;

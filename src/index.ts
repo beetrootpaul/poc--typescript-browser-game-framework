@@ -1,8 +1,11 @@
-export { Color } from "./color.ts";
-export { Xy } from "./xy.ts";
-export { Framework } from "./framework.ts";
+export { Color } from "./Color.ts";
+export { Xy } from "./Xy.ts";
+export { Framework } from "./Framework.ts";
 export type {
+  GameOnStart,
+  GameOnUpdate,
+  GameOnDraw,
   GameDrawContext,
   GameUpdateContext,
   GameStartContext,
-} from "./framework.ts";
+} from "./Framework.ts";

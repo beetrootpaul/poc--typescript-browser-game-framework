@@ -1,4 +1,4 @@
-import { FpsLogger, FpsLoggerAverage, FpsLoggerNoop } from "./fpsLogger.ts";
+import { FpsLogger, FpsLoggerAverage, FpsLoggerNoop } from "./FpsLogger.ts";
 
 type GameLoopCallbacks = {
   updateFn: (frameNumber: number) => void;

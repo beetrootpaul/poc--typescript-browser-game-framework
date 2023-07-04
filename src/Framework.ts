@@ -1,11 +1,11 @@
-import { Color } from "./color.ts";
-import { DrawApi } from "./drawApi.ts";
-import { FullScreen } from "./fullScreen.ts";
-import { GameInput, GameInputEvent } from "./gameInput/gameInput.ts";
-import { GameLoop } from "./gameLoop/gameLoop.ts";
-import { Loading } from "./loading.ts";
-import { StorageApi, StorageApiValueConstraint } from "./storageApi.ts";
-import { Xy } from "./xy.ts";
+import { Color } from "./Color.ts";
+import { DrawApi } from "./DrawApi.ts";
+import { FullScreen } from "./FullScreen.ts";
+import { GameInput, GameInputEvent } from "./game_input/GameInput.ts";
+import { GameLoop } from "./game_loop/GameLoop.ts";
+import { Loading } from "./Loading.ts";
+import { StorageApi, StorageApiValueConstraint } from "./StorageApi.ts";
+import { Xy } from "./Xy.ts";
 
 export type GameStartContext<
   StorageApiValue extends StorageApiValueConstraint
@@ -23,13 +23,13 @@ export type GameDrawContext = {
   drawApi: DrawApi;
 };
 
-type GameOnStart<StorageApiValue extends StorageApiValueConstraint> = (
+export type GameOnStart<StorageApiValue extends StorageApiValueConstraint> = (
   startContext: GameStartContext<StorageApiValue>
 ) => void;
-type GameOnUpdate<StorageApiValue extends StorageApiValueConstraint> = (
+export type GameOnUpdate<StorageApiValue extends StorageApiValueConstraint> = (
   updateContext: GameUpdateContext<StorageApiValue>
 ) => void;
-type GameOnDraw = (drawContext: GameDrawContext) => void;
+export type GameOnDraw = (drawContext: GameDrawContext) => void;
 
 type FrameworkOptions = {
   htmlDisplaySelector: string;

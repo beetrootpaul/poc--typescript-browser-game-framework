@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { Color } from "./color.ts";
+import { Color } from "./Color.ts";
 
 describe("Colopr", () => {
   describe("constructor", () => {
