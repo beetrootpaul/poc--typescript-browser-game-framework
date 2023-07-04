@@ -40,9 +40,12 @@ type FrameworkOptions = {
   gameCanvasSize: Xy;
   desiredFps: number;
   logActualFps?: boolean;
+  debug?: boolean;
 };
 
 export class Framework<StorageApiValue extends StorageApiValueConstraint> {
+  readonly #debug: boolean;
+
   readonly #gameCanvasSize: Xy;
   readonly #htmlCanvasBackground: Color;
 
@@ -64,6 +67,8 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
   #onDraw?: GameOnDraw;
 
   constructor(options: FrameworkOptions) {
+    this.#debug = options.debug ?? false;
+
     this.#loading = new Loading(options.htmlDisplaySelector);
 
     this.#gameCanvasSize = options.gameCanvasSize.floor();
@@ -233,6 +238,17 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
       .sub(this.#gameCanvasSize.mul(scaleToFill))
       .div(2)
       .floor();
+
+    if (this.#debug) {
+      const debugBgMargin = 1;
+      this.#htmlCanvasContext.fillStyle = "#ff0000";
+      this.#htmlCanvasContext.fillRect(
+        centeringOffset.x - debugBgMargin,
+        centeringOffset.y - debugBgMargin,
+        scaleToFill * this.#gameCanvasSize.x + 2 * debugBgMargin,
+        scaleToFill * this.#gameCanvasSize.y + 2 * debugBgMargin
+      );
+    }
 
     this.#htmlCanvasContext.drawImage(
       this.#offscreenContext.canvas,
