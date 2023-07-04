@@ -16,7 +16,7 @@ export class FpsLoggerAverage implements FpsLogger {
     if (this.#nextIndex === 0) {
       const s = this.#samples.reduce((sum, nextFps) => sum + nextFps, 0);
       const averageFps = s / this.#samples.length;
-      console.debug("FPS: ", Math.floor(averageFps));
+      console.info("FPS: ", Math.floor(averageFps));
     }
   }
 }
