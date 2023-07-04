@@ -5,6 +5,8 @@ export function xy_(x: number, y: number): Xy {
 }
 
 export class Xy implements PrintDebug {
+  static zero = new Xy(0, 0);
+
   readonly x: number;
   readonly y: number;
 
