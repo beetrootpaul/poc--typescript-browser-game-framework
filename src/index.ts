@@ -6,6 +6,7 @@ export type {
   GameUpdateContext,
   GameStartContext,
 } from "./Framework.ts";
+export type { StorageApiValueConstraint } from "./StorageApi.ts";
 
 export { Color } from "./Color.ts";
 export { DrawApi } from "./DrawApi.ts";
