@@ -1,5 +1,5 @@
 import { Color } from "./Color.ts";
-import { Xy } from "./Xy.ts";
+import { Xy, xy_ } from "./Xy.ts";
 
 export class DrawApi {
   readonly #canvasSize: Xy;
@@ -10,7 +10,7 @@ export class DrawApi {
     this.#canvasRgbaBytes = canvasRgbaBytes;
   }
 
-  clear(color: Color) {
+  clear(color: Color): void {
     for (let pixels = 0; pixels < this.#canvasRgbaBytes.length / 4; pixels++) {
       const i = pixels * 4;
       this.#canvasRgbaBytes[i] = color.r;
@@ -20,8 +20,37 @@ export class DrawApi {
     }
   }
 
+  // TODO: cover it with tests
+  // TODO: clipping outside canvas
+  // TODO: negative x/y
+  setPixel(xy: Xy, c: Color): void {
+    let bi = (xy.y * this.#canvasSize.x + xy.x) * 4;
+    this.#canvasRgbaBytes[bi] = c.r;
+    this.#canvasRgbaBytes[bi + 1] = c.g;
+    this.#canvasRgbaBytes[bi + 2] = c.b;
+    this.#canvasRgbaBytes[bi + 3] = 255;
+  }
+
+  // TODO: cover it with tests
+  // TODO: clipping outside canvas
+  // TODO: negative x1/y1
+  // TODO: negative w/h
+  // TODO: Xy helper for iterating between xy1 and xy2, while operating on a Xy instance
+  drawRectFilled(xy1: Xy, xy2: Xy, c: Color): void {
+    for (let y = xy1.y; y < xy2.y; ++y) {
+      for (let x = xy1.x; x < xy2.x; ++x) {
+        this.setPixel(xy_(x, y), c);
+      }
+    }
+  }
+
   // TODO: remove this temporary method
-  drawSomething(pos = 0, color: Color, imgBytes: Uint8Array, imgW: number) {
+  drawSomething(
+    pos = 0,
+    color: Color,
+    imgBytes: Uint8Array,
+    imgW: number
+  ): void {
     const pxLen = this.#canvasRgbaBytes.length / 4;
 
     this.#canvasRgbaBytes[0] = 0;
