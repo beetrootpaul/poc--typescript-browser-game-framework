@@ -17,6 +17,10 @@ export class Xy implements PrintDebug {
     return Math.min(this.x, this.y);
   }
 
+  round(): Xy {
+    return new Xy(Math.round(this.x), Math.round(this.y));
+  }
+
   floor(): Xy {
     return new Xy(Math.floor(this.x), Math.floor(this.y));
   }

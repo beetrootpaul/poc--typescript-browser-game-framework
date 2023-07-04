@@ -10,16 +10,16 @@ export class DrawApi {
   #cameraOffset: Xy = xy_(0, 0);
 
   constructor(canvasSize: Xy, canvasRgbaBytes: Uint8ClampedArray) {
-    this.#canvasSize = canvasSize;
+    this.#canvasSize = canvasSize.round();
     this.#canvasRgbaBytes = canvasRgbaBytes;
   }
 
   setCameraOffset(offset: Xy): void {
-    this.#cameraOffset = offset;
+    this.#cameraOffset = offset.round();
   }
 
   clear(color: Color): void {
-    for (let pixel = 0; pixel < this.#canvasRgbaBytes.length / 4; pixel++) {
+    for (let pixel = 0; pixel < this.#canvasRgbaBytes.length / 4; pixel += 1) {
       const b = pixel * 4;
       this.#canvasRgbaBytes[b] = color.r;
       this.#canvasRgbaBytes[b + 1] = color.g;
@@ -32,7 +32,7 @@ export class DrawApi {
   // TODO: clipping outside canvas
   // TODO: negative x/y
   setPixel(xy: Xy, c: Color): void {
-    const canvasXy = xy.sub(this.#cameraOffset);
+    const canvasXy = xy.sub(this.#cameraOffset).round();
     let b = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
     this.#canvasRgbaBytes[b] = c.r;
     this.#canvasRgbaBytes[b + 1] = c.g;
@@ -46,8 +46,10 @@ export class DrawApi {
   // TODO: negative w/h
   // TODO: Xy helper for iterating between xy1 and xy2, while operating on a Xy instance
   drawRectFilled(xy1: Xy, xy2: Xy, c: Color): void {
-    for (let y = xy1.y; y < xy2.y; ++y) {
-      for (let x = xy1.x; x < xy2.x; ++x) {
+    const xy1Int = xy1.round();
+    const xy2Int = xy2.round();
+    for (let y = xy1Int.y; y < xy2Int.y; y += 1) {
+      for (let x = xy1Int.x; x < xy2Int.x; x += 1) {
         this.setPixel(xy_(x, y), c);
       }
     }
@@ -90,7 +92,7 @@ export class DrawApi {
     });
 
     // TODO: refactor
-    for (let px = 0; px < imgBytes.length / 4; px++) {
+    for (let px = 0; px < imgBytes.length / 4; px += 1) {
       const offset = pos * 4 + Math.floor(px / imgW) * this.#canvasSize.x * 4;
       const target = offset + (px % imgW) * 4;
       const idx = px * 4;
