@@ -9,6 +9,9 @@ export class DrawApi {
 
   #cameraOffset: Xy = xy_(0, 0);
 
+  // Hex representation of a Color is used as this map's keys, because it makes it easier to retrieve mappings with use of string equality
+  readonly #spriteColorMapping: Map<string, Color> = new Map();
+
   constructor(canvasSize: Xy, canvasRgbaBytes: Uint8ClampedArray) {
     this.#canvasSize = canvasSize.round();
     this.#canvasRgbaBytes = canvasRgbaBytes;
@@ -57,6 +60,16 @@ export class DrawApi {
     }
   }
 
+  // TODO: cover it with tests
+  mapSpriteColor(from: Color, to: Color): void {
+    // TODO: consider writing a custom equality check function
+    if (from.asCssHex() === to.asCssHex()) {
+      this.#spriteColorMapping.delete(from.asCssHex());
+    } else {
+      this.#spriteColorMapping.set(from.asCssHex(), to);
+    }
+  }
+
   // TODO: remove this temporary method
   drawSomething(
     imgBytes: Uint8Array,
@@ -68,10 +81,14 @@ export class DrawApi {
       const offset = Math.floor(px / imgW) * this.#canvasSize.x * 4;
       const target = offset + (px % imgW) * 4;
       const idx = px * imgBytesPerColor;
+      // TODO: how to make it clearer that we simplify transparency here to below and above 127?
       if (imgType === "rgb" || imgBytes[idx + 3] > 127) {
-        this.#canvasRgbaBytes[target] = imgBytes[idx];
-        this.#canvasRgbaBytes[target + 1] = imgBytes[idx + 1];
-        this.#canvasRgbaBytes[target + 2] = imgBytes[idx + 2];
+        // TODO: refactor?
+        let c = new Color(imgBytes[idx], imgBytes[idx + 1], imgBytes[idx + 2]);
+        c = this.#spriteColorMapping.get(c.asCssHex()) ?? c;
+        this.#canvasRgbaBytes[target] = c.r;
+        this.#canvasRgbaBytes[target + 1] = c.g;
+        this.#canvasRgbaBytes[target + 2] = c.b;
         this.#canvasRgbaBytes[target + 3] = 255;
       }
     }
