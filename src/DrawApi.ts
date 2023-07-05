@@ -1,4 +1,4 @@
-import { Color } from "./Color.ts";
+import { Color, SolidColor } from "./Color.ts";
 import { Xy, xy_ } from "./Xy.ts";
 
 // `b` in loops in this file stands for a byte (index)
@@ -24,12 +24,18 @@ export class DrawApi {
 
   // TODO: cover it with tests
   clear(color: Color): void {
-    for (let pixel = 0; pixel < this.#canvasRgbaBytes.length / 4; pixel += 1) {
-      const b = pixel * 4;
-      this.#canvasRgbaBytes[b] = color.r;
-      this.#canvasRgbaBytes[b + 1] = color.g;
-      this.#canvasRgbaBytes[b + 2] = color.b;
-      this.#canvasRgbaBytes[b + 3] = 255;
+    if (color instanceof SolidColor) {
+      for (
+        let pixel = 0;
+        pixel < this.#canvasRgbaBytes.length / 4;
+        pixel += 1
+      ) {
+        const b = pixel * 4;
+        this.#canvasRgbaBytes[b] = color.r;
+        this.#canvasRgbaBytes[b + 1] = color.g;
+        this.#canvasRgbaBytes[b + 2] = color.b;
+        this.#canvasRgbaBytes[b + 3] = 255;
+      }
     }
   }
 
@@ -37,12 +43,14 @@ export class DrawApi {
   // TODO: clipping outside canvas
   // TODO: negative x/y
   setPixel(xy: Xy, c: Color): void {
-    const canvasXy = xy.sub(this.#cameraOffset).round();
-    let b = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
-    this.#canvasRgbaBytes[b] = c.r;
-    this.#canvasRgbaBytes[b + 1] = c.g;
-    this.#canvasRgbaBytes[b + 2] = c.b;
-    this.#canvasRgbaBytes[b + 3] = 255;
+    if (c instanceof SolidColor) {
+      const canvasXy = xy.sub(this.#cameraOffset).round();
+      let b = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
+      this.#canvasRgbaBytes[b] = c.r;
+      this.#canvasRgbaBytes[b + 1] = c.g;
+      this.#canvasRgbaBytes[b + 2] = c.b;
+      this.#canvasRgbaBytes[b + 3] = 255;
+    }
   }
 
   // TODO: cover it with tests
@@ -51,22 +59,25 @@ export class DrawApi {
   // TODO: negative w/h
   // TODO: Xy helper for iterating between xy1 and xy2, while operating on a Xy instance
   drawRectFilled(xy1: Xy, xy2: Xy, c: Color): void {
-    const xy1Int = xy1.round();
-    const xy2Int = xy2.round();
-    for (let y = xy1Int.y; y < xy2Int.y; y += 1) {
-      for (let x = xy1Int.x; x < xy2Int.x; x += 1) {
-        this.setPixel(xy_(x, y), c);
+    if (c instanceof SolidColor) {
+      const xy1Int = xy1.round();
+      const xy2Int = xy2.round();
+      for (let y = xy1Int.y; y < xy2Int.y; y += 1) {
+        for (let x = xy1Int.x; x < xy2Int.x; x += 1) {
+          this.setPixel(xy_(x, y), c);
+        }
       }
     }
   }
 
   // TODO: cover it with tests
+  // TODO: maybe pass mapping as param to sprite drawing instead of setting it independently and having to reset it afterwards?
   mapSpriteColor(from: Color, to: Color): void {
     // TODO: consider writing a custom equality check function
-    if (from.asCssHex() === to.asCssHex()) {
-      this.#spriteColorMapping.delete(from.asCssHex());
+    if (from.asRgbaCssHex() === to.asRgbaCssHex()) {
+      this.#spriteColorMapping.delete(from.asRgbaCssHex());
     } else {
-      this.#spriteColorMapping.set(from.asCssHex(), to);
+      this.#spriteColorMapping.set(from.asRgbaCssHex(), to);
     }
   }
 
@@ -84,12 +95,18 @@ export class DrawApi {
       // TODO: how to make it clearer that we simplify transparency here to below and above 127?
       if (imgType === "rgb" || imgBytes[idx + 3] > 127) {
         // TODO: refactor?
-        let c = new Color(imgBytes[idx], imgBytes[idx + 1], imgBytes[idx + 2]);
-        c = this.#spriteColorMapping.get(c.asCssHex()) ?? c;
-        this.#canvasRgbaBytes[target] = c.r;
-        this.#canvasRgbaBytes[target + 1] = c.g;
-        this.#canvasRgbaBytes[target + 2] = c.b;
-        this.#canvasRgbaBytes[target + 3] = 255;
+        let c: Color = new SolidColor(
+          imgBytes[idx],
+          imgBytes[idx + 1],
+          imgBytes[idx + 2]
+        );
+        c = this.#spriteColorMapping.get(c.asRgbaCssHex()) ?? c;
+        if (c instanceof SolidColor) {
+          this.#canvasRgbaBytes[target] = c.r;
+          this.#canvasRgbaBytes[target + 1] = c.g;
+          this.#canvasRgbaBytes[target + 2] = c.b;
+          this.#canvasRgbaBytes[target + 3] = 255;
+        }
       }
     }
   }

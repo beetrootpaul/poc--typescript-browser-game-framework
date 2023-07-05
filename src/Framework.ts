@@ -1,4 +1,4 @@
-import { Color } from "./Color.ts";
+import { SolidColor } from "./Color.ts";
 import { DrawApi } from "./DrawApi.ts";
 import { FullScreen } from "./FullScreen.ts";
 import { GameInput, GameInputEvent } from "./game_input/GameInput.ts";
@@ -36,7 +36,7 @@ type FrameworkOptions = {
   htmlCanvasSelector: string;
   htmlOffscreenCanvasFallbackSelector: string;
   htmlControlsFullscreenSelector: string;
-  htmlCanvasBackground: Color;
+  htmlCanvasBackground: SolidColor;
   gameCanvasSize: Xy;
   desiredFps: number;
   logActualFps?: boolean;
@@ -47,7 +47,7 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
   readonly #debug: boolean;
 
   readonly #gameCanvasSize: Xy;
-  readonly #htmlCanvasBackground: Color;
+  readonly #htmlCanvasBackground: SolidColor;
 
   readonly #htmlCanvasContext: CanvasRenderingContext2D;
   readonly #offscreenContext:
@@ -216,7 +216,8 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
 
     this.#htmlCanvasContext.imageSmoothingEnabled = false;
 
-    this.#htmlCanvasContext.fillStyle = this.#htmlCanvasBackground.asCssHex();
+    this.#htmlCanvasContext.fillStyle =
+      this.#htmlCanvasBackground.asRgbCssHex();
     this.#htmlCanvasContext.fillRect(
       0,
       0,

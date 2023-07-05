@@ -1,4 +1,5 @@
 declare global {
+  // noinspection JSUnusedGlobalSymbols
   interface Document {
     webkitFullscreenEnabled?: boolean;
     webkitFullscreenElement?: () => Element;
