@@ -27,12 +27,16 @@ export class Xy implements PrintDebug {
     return new Xy(Math.floor(this.x), Math.floor(this.y));
   }
 
-  add(other: Xy): Xy {
-    return new Xy(this.x + other.x, this.y + other.y);
+  add(other: Xy | number): Xy {
+    return typeof other === "number"
+      ? new Xy(this.x + other, this.y + other)
+      : new Xy(this.x + other.x, this.y + other.y);
   }
 
-  sub(other: Xy): Xy {
-    return new Xy(this.x - other.x, this.y - other.y);
+  sub(other: Xy | number): Xy {
+    return typeof other === "number"
+      ? new Xy(this.x - other, this.y - other)
+      : new Xy(this.x - other.x, this.y - other.y);
   }
 
   mul(other: Xy | number): Xy {
