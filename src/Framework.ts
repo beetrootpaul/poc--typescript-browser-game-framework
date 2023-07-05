@@ -173,9 +173,12 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
       this.#setupHtmlCanvas();
     });
 
+    // TODO: rename to make it clear this will happen before the game loop starts and game gets rendered
     onStart?.({
       storageApi: this.#storageApi,
     });
+
+    this.#loading.showApp();
 
     this.#gameInput.startListening();
 
@@ -186,8 +189,6 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
           this.#fullScreen.toggle();
         }
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
-        // console.log("eee");
-        // console.log(continuousEvents);
         this.#onUpdate?.({
           frameNumber,
           gameInputEvents: continuousEvents,
@@ -201,8 +202,6 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
         this.#render();
       },
     });
-
-    this.#loading.showApp();
   }
 
   // This function assumes that <canvas> has width and height set to 100% by CSS.
