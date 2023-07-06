@@ -97,7 +97,12 @@ export class DrawApi {
     for (let px = 0; px < imgBytes.length / imgBytesPerColor; px += 1) {
       const imgX = px % imgW;
       const imgY = Math.floor(px / imgW);
-      if (imgX >= imgXy1.x && imgX < imgXy2.x && imgY >= imgXy1.y && imgY < imgXy2.y) {
+      if (
+        imgX >= imgXy1.x &&
+        imgX < imgXy2.x &&
+        imgY >= imgXy1.y &&
+        imgY < imgXy2.y
+      ) {
         const offset = baseOffset + imgY * this.#canvasSize.x;
         const target = (offset + imgX) * 4;
         const idx = px * imgBytesPerColor;
