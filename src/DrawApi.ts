@@ -81,31 +81,47 @@ export class DrawApi {
     }
   }
 
+  // TODO: REWORK THIS
   // TODO: remove this temporary method
   drawSomething(
     imgBytes: Uint8Array,
     imgW: number,
-    imgType: "rgb" | "rgba"
+    imgType: "rgb" | "rgba",
+    imgXy1: Xy,
+    imgXy2: Xy,
+    targetXy1: Xy
   ): void {
     const imgBytesPerColor = imgType === "rgb" ? 3 : 4;
+    const baseOffset =
+      (targetXy1.y - imgXy1.y) * this.#canvasSize.x + (targetXy1.x - imgXy1.x);
     for (let px = 0; px < imgBytes.length / imgBytesPerColor; px += 1) {
-      const offset = Math.floor(px / imgW) * this.#canvasSize.x * 4;
-      const target = offset + (px % imgW) * 4;
-      const idx = px * imgBytesPerColor;
-      // TODO: how to make it clearer that we simplify transparency here to below and above 127?
-      if (imgType === "rgb" || imgBytes[idx + 3] > 127) {
-        // TODO: refactor?
-        let c: Color = new SolidColor(
-          imgBytes[idx],
-          imgBytes[idx + 1],
-          imgBytes[idx + 2]
-        );
-        c = this.#spriteColorMapping.get(c.asRgbaCssHex()) ?? c;
-        if (c instanceof SolidColor) {
-          this.#canvasRgbaBytes[target] = c.r;
-          this.#canvasRgbaBytes[target + 1] = c.g;
-          this.#canvasRgbaBytes[target + 2] = c.b;
-          this.#canvasRgbaBytes[target + 3] = 255;
+      const imgX = px % imgW;
+      const imgY = Math.floor(px / imgW);
+      if (imgX >= imgXy1.x && imgX < imgXy2.x && imgY >= imgXy1.y && imgY < imgXy2.y) {
+        const offset = baseOffset + imgY * this.#canvasSize.x;
+        const target = (offset + imgX) * 4;
+        const idx = px * imgBytesPerColor;
+        // TODO: how to make it clearer that we simplify transparency here to below and above 127?
+        if (imgType === "rgb" || imgBytes[idx + 3] > 127) {
+          // TODO: refactor?
+          let c: Color = new SolidColor(
+            imgBytes[idx],
+            imgBytes[idx + 1],
+            imgBytes[idx + 2]
+          );
+          c = this.#spriteColorMapping.get(c.asRgbaCssHex()) ?? c;
+          if (c instanceof SolidColor) {
+            // TODO: consider reusing this.setPixel(…)
+            const adjustedTarget =
+              target -
+              (this.#cameraOffset.y * this.#canvasSize.x +
+                this.#cameraOffset.x) *
+                4;
+            this.#canvasRgbaBytes[adjustedTarget] = c.r;
+            this.#canvasRgbaBytes[adjustedTarget + 1] = c.g;
+            this.#canvasRgbaBytes[adjustedTarget + 2] = c.b;
+            this.#canvasRgbaBytes[adjustedTarget + 3] = 255;
+          }
         }
       }
     }

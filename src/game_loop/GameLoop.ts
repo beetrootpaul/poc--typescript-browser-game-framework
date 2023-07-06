@@ -107,6 +107,7 @@ export class GameLoop {
 
     this.#callbacks.renderFn();
 
+    // TODO: pass `requestAnimationFrame` as an external param and cover this game loop logic with tests based on mocked `requestAnimationFrame`
     window.requestAnimationFrame(this.#tick);
   };
 }
