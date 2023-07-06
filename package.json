@@ -1,17 +1,17 @@
 {
-  "name": "poc--typescript-web-game-framework",
+  "name": "poc--typescript-browser-game-framework",
   "version": "0.0.0",
   "author": "Beetroot Paul",
   "license": "MIT",
   "private": true,
-  "description": "A PoC of a web game framework written in TypeScript.",
-  "homepage": "https://github.com/beetrootpaul/poc--typescript-web-game-framework#readme",
+  "description": "A PoC of a framework written in TypeScript, meant to be used for games played in web browsers.",
+  "homepage": "https://github.com/beetrootpaul/poc--typescript-browser-game-framework#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/beetrootpaul/poc--typescript-web-game-framework.git"
+    "url": "git+https://github.com/beetrootpaul/poc--typescript-browser-game-framework.git"
   },
   "bugs": {
-    "url": "https://github.com/beetrootpaul/poc--typescript-web-game-framework/issues"
+    "url": "https://github.com/beetrootpaul/poc--typescript-browser-game-framework/issues"
   },
   "scripts": {
     "prepare": "husky install",
