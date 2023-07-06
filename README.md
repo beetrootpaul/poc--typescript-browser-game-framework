@@ -1,6 +1,6 @@
-# poc--typescript-web-game-framework
+# poc--typescript-browser-game-framework
 
-A PoC of a web game framework written in TypeScript.
+A PoC of a framework written in TypeScript, meant to be used for games played in web browsers.
 
 ## Setup
 
