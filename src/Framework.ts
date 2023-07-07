@@ -165,6 +165,7 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
     this.#onDraw = onDraw;
   }
 
+  // TODO: How to prevent an error of calling startGame twice? What would happen if called twice?
   startGame(onStart?: GameOnStart<StorageApiValue>): void {
     this.#setupHtmlCanvas();
     window.addEventListener("resize", (_event) => {

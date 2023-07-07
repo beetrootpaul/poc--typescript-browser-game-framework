@@ -13,6 +13,7 @@ export class StorageApi<StorageApiValue extends StorageApiValueConstraint> {
     );
   }
 
+  // TODO: use zod or some other popular lib and validate value's shape here
   load(): StorageApiValue | null {
     const maybeValue: string | null = window.localStorage.getItem(
       StorageApi.#key
