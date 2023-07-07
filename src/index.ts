@@ -2,7 +2,6 @@
 export type { Color } from "./Color.ts";
 
 export { SolidColor, TransparentColor, transparent } from "./Color.ts";
-export { Framework } from "./Framework.ts";
 export { xy_, Xy } from "./Xy.ts";
 
 export { PocTsBGFramework } from "./PocTsBGFramework.ts";

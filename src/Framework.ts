@@ -8,7 +8,7 @@ import { PocTsBGFramework } from "./PocTsBGFramework.ts";
 import { StorageApi } from "./StorageApi.ts";
 import { Xy } from "./Xy.ts";
 
-type FrameworkOptions = {
+export type FrameworkOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
   htmlOffscreenCanvasFallbackSelector: string;
