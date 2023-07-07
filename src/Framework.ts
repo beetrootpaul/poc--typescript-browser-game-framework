@@ -1,37 +1,14 @@
 import { SolidColor } from "./Color.ts";
 import { DrawApi } from "./DrawApi.ts";
 import { FullScreen } from "./FullScreen.ts";
-import { GameInput, GameInputEvent } from "./game_input/GameInput.ts";
+import { GameInput } from "./game_input/GameInput.ts";
 import { GameLoop } from "./game_loop/GameLoop.ts";
 import { Loading } from "./Loading.ts";
-import { StorageApi, StorageApiValueConstraint } from "./StorageApi.ts";
+import { PocTsBGFramework } from "./PocTsBGFramework.ts";
+import { StorageApi } from "./StorageApi.ts";
 import { Xy } from "./Xy.ts";
 
-export type GameStartContext<
-  StorageApiValue extends StorageApiValueConstraint
-> = {
-  storageApi: StorageApi<StorageApiValue>;
-};
-export type GameUpdateContext<
-  StorageApiValue extends StorageApiValueConstraint
-> = {
-  frameNumber: number;
-  gameInputEvents: Set<GameInputEvent>;
-  storageApi: StorageApi<StorageApiValue>;
-};
-export type GameDrawContext = {
-  drawApi: DrawApi;
-};
-
-export type GameOnStart<StorageApiValue extends StorageApiValueConstraint> = (
-  startContext: GameStartContext<StorageApiValue>
-) => void;
-export type GameOnUpdate<StorageApiValue extends StorageApiValueConstraint> = (
-  updateContext: GameUpdateContext<StorageApiValue>
-) => void;
-export type GameOnDraw = (drawContext: GameDrawContext) => void;
-
-type FrameworkOptions = {
+export type FrameworkOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
   htmlOffscreenCanvasFallbackSelector: string;
@@ -43,7 +20,7 @@ type FrameworkOptions = {
   debug?: boolean;
 };
 
-export class Framework<StorageApiValue extends StorageApiValueConstraint> {
+export class Framework {
   readonly #debug: boolean;
 
   readonly #gameCanvasSize: Xy;
@@ -61,10 +38,10 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
   readonly #fullScreen: FullScreen;
 
   readonly #drawApi: DrawApi;
-  readonly #storageApi: StorageApi<StorageApiValue>;
+  readonly #storageApi: StorageApi;
 
-  #onUpdate?: GameOnUpdate<StorageApiValue>;
-  #onDraw?: GameOnDraw;
+  #onUpdate?: () => void;
+  #onDraw?: () => void;
 
   constructor(options: FrameworkOptions) {
     this.#debug = options.debug ?? false;
@@ -156,27 +133,29 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
       this.#offscreenImageData.data
     );
 
-    this.#storageApi = new StorageApi<StorageApiValue>();
+    this.#storageApi = new StorageApi();
+
+    PocTsBGFramework.drawApi = this.#drawApi;
+    PocTsBGFramework.storageApi = this.#storageApi;
   }
 
-  setOnUpdate(onUpdate: GameOnUpdate<StorageApiValue>) {
+  setOnUpdate(onUpdate: () => void) {
     this.#onUpdate = onUpdate;
   }
 
-  setOnDraw(onDraw: GameOnDraw) {
+  setOnDraw(onDraw: () => void) {
     this.#onDraw = onDraw;
   }
 
-  startGame(onStart?: GameOnStart<StorageApiValue>): void {
+  // TODO: How to prevent an error of calling startGame twice? What would happen if called twice?
+  startGame(onStart?: () => void): void {
     this.#setupHtmlCanvas();
     window.addEventListener("resize", (_event) => {
       this.#setupHtmlCanvas();
     });
 
     // TODO: rename to make it clear this will happen before the game loop starts and game gets rendered
-    onStart?.({
-      storageApi: this.#storageApi,
-    });
+    onStart?.();
 
     this.#loading.showApp();
 
@@ -189,16 +168,14 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
           this.#fullScreen.toggle();
         }
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
-        this.#onUpdate?.({
-          frameNumber,
-          gameInputEvents: continuousEvents,
-          storageApi: this.#storageApi,
-        });
+
+        PocTsBGFramework.frameNumber = frameNumber;
+        PocTsBGFramework.gameInputEvents = continuousEvents;
+
+        this.#onUpdate?.();
       },
       renderFn: () => {
-        this.#onDraw?.({
-          drawApi: this.#drawApi,
-        });
+        this.#onDraw?.();
         this.#render();
       },
     });
