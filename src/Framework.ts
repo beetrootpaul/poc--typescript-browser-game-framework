@@ -3,7 +3,7 @@ import { DrawApi } from "./DrawApi.ts";
 import { FullScreen } from "./FullScreen.ts";
 import { GameInput, GameInputEvent } from "./game_input/GameInput.ts";
 import { GameLoop } from "./game_loop/GameLoop.ts";
-import { GlobalApi } from "./GlobalApi.ts";
+import { PocTsBGFramework } from "./PocTsBGFramework.ts";
 import { Loading } from "./Loading.ts";
 import { StorageApi, StorageApiValueConstraint } from "./StorageApi.ts";
 import { Xy } from "./Xy.ts";
@@ -156,7 +156,7 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
 
     this.#storageApi = new StorageApi<StorageApiValue>();
 
-    GlobalApi.drawApi = this.#drawApi;
+    PocTsBGFramework.drawApi = this.#drawApi;
   }
 
   setOnUpdate(onUpdate: GameOnUpdate<StorageApiValue>) {

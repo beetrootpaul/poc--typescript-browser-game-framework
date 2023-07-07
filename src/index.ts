@@ -13,4 +13,4 @@ export { SolidColor, TransparentColor, transparent } from "./Color.ts";
 export { Framework } from "./Framework.ts";
 export { xy_, Xy } from "./Xy.ts";
 
-export { GlobalApi } from "./GlobalApi.ts";
+export { PocTsBGFramework } from "./PocTsBGFramework.ts";
