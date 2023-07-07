@@ -3,6 +3,7 @@ import { DrawApi } from "./DrawApi.ts";
 import { FullScreen } from "./FullScreen.ts";
 import { GameInput, GameInputEvent } from "./game_input/GameInput.ts";
 import { GameLoop } from "./game_loop/GameLoop.ts";
+import { GlobalApi } from "./GlobalApi.ts";
 import { Loading } from "./Loading.ts";
 import { StorageApi, StorageApiValueConstraint } from "./StorageApi.ts";
 import { Xy } from "./Xy.ts";
@@ -19,9 +20,6 @@ export type GameUpdateContext<
   gameInputEvents: Set<GameInputEvent>;
   storageApi: StorageApi<StorageApiValue>;
 };
-export type GameDrawContext = {
-  drawApi: DrawApi;
-};
 
 export type GameOnStart<StorageApiValue extends StorageApiValueConstraint> = (
   startContext: GameStartContext<StorageApiValue>
@@ -29,7 +27,7 @@ export type GameOnStart<StorageApiValue extends StorageApiValueConstraint> = (
 export type GameOnUpdate<StorageApiValue extends StorageApiValueConstraint> = (
   updateContext: GameUpdateContext<StorageApiValue>
 ) => void;
-export type GameOnDraw = (drawContext: GameDrawContext) => void;
+export type GameOnDraw = () => void;
 
 type FrameworkOptions = {
   htmlDisplaySelector: string;
@@ -157,6 +155,8 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
     );
 
     this.#storageApi = new StorageApi<StorageApiValue>();
+
+    GlobalApi.drawApi = this.#drawApi;
   }
 
   setOnUpdate(onUpdate: GameOnUpdate<StorageApiValue>) {
@@ -196,9 +196,7 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
         });
       },
       renderFn: () => {
-        this.#onDraw?.({
-          drawApi: this.#drawApi,
-        });
+        this.#onDraw?.();
         this.#render();
       },
     });
