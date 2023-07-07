@@ -1,6 +1,6 @@
 # TypeScript composite project build output
-/**/*.d.ts
 /tsconfig.tsbuildinfo
+/types/
 
 # Node.js dependencies
 /node_modules/

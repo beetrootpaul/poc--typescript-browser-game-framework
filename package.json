@@ -20,7 +20,7 @@
     "typecheck": "tsc",
     "typecheck:watch": "tsc --watch",
     "format": "prettier --ignore-path .gitignore --write src/",
-    "cleanup": "rimraf ./**/*.d.ts ./tsconfig.tsbuildinfo"
+    "cleanup": "rimraf ./types/ ./tsconfig.tsbuildinfo"
   },
   "lint-staged": {
     "src/**/*": [
