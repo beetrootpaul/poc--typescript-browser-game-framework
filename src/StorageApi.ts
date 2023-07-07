@@ -1,4 +1,4 @@
-export type StorageApiValueConstraint = Record<
+type StorageApiValueConstraint = Record<
   string,
   string | number | boolean | null
 >;

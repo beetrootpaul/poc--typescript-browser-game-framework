@@ -1,7 +1,7 @@
 import { DrawApi } from "./DrawApi.ts";
 import { Framework, type FrameworkOptions } from "./Framework.ts";
 import { GameInputEvent } from "./game_input/GameInput.ts";
-import { StorageApi, StorageApiValueConstraint } from "./StorageApi.ts";
+import { StorageApi } from "./StorageApi.ts";
 
 let framework: Framework;
 
@@ -10,9 +10,7 @@ let framework: Framework;
 //    Inspiration: [PICO-8's API](https://www.lexaloffle.com/dl/docs/pico-8_manual.html).
 
 // TODO: after name for the framework gets chosen: rename this to the framework name or to its abbreviation
-export class PocTsBGFramework<
-  StorageApiValue extends StorageApiValueConstraint
-> {
+export class PocTsBGFramework {
   // The most important function, has to be called first in order
   //   to properly initialize other fields and variables.
   //
