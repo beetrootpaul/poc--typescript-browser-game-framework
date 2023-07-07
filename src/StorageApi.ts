@@ -3,10 +3,12 @@ export type StorageApiValueConstraint = Record<
   string | number | boolean | null
 >;
 
-export class StorageApi<StorageApiValue extends StorageApiValueConstraint> {
+export class StorageApi {
   static readonly #key: string = "game_stored_state";
 
-  store(value: StorageApiValue): void {
+  store<StorageApiValue extends StorageApiValueConstraint>(
+    value: StorageApiValue
+  ): void {
     window.localStorage.setItem(
       StorageApi.#key,
       JSON.stringify(value, null, 2)
@@ -14,11 +16,13 @@ export class StorageApi<StorageApiValue extends StorageApiValueConstraint> {
   }
 
   // TODO: use zod or some other popular lib and validate value's shape here
-  load(): StorageApiValue | null {
+  load<
+    StorageApiValue extends StorageApiValueConstraint
+  >(): StorageApiValue | null {
     const maybeValue: string | null = window.localStorage.getItem(
       StorageApi.#key
     );
-    return maybeValue ? (JSON.parse(maybeValue) as StorageApiValue) : null;
+    return maybeValue ? JSON.parse(maybeValue) : null;
   }
 
   clear() {
