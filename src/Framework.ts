@@ -16,8 +16,6 @@ export type GameStartContext<
 export type GameUpdateContext<
   StorageApiValue extends StorageApiValueConstraint
 > = {
-  frameNumber: number;
-  gameInputEvents: Set<GameInputEvent>;
   storageApi: StorageApi<StorageApiValue>;
 };
 
@@ -184,14 +182,17 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
 
     this.#gameLoop.start({
       updateFn: (frameNumber) => {
+
         const fireOnceEvents = this.#gameInput.consumeFireOnceEvents();
         if (fireOnceEvents.has("full_screen")) {
           this.#fullScreen.toggle();
         }
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
+
+        PocTsBGFramework.frameNumber = frameNumber;
+        PocTsBGFramework.gameInputEvents = continuousEvents;
+
         this.#onUpdate?.({
-          frameNumber,
-          gameInputEvents: continuousEvents,
           storageApi: this.#storageApi,
         });
       },
