@@ -1,4 +1,4 @@
-import { GameInputEvent, gameInputEventBehavior } from "./gameInput.ts";
+import { GameInputEvent, gameInputEventBehavior } from "./GameInput.ts";
 
 export class KeyboardGameInput {
   readonly #keyMapping: Map<string, GameInputEvent> = new Map<

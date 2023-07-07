@@ -1,11 +1,11 @@
-import { Color } from "./color.ts";
-import { DrawApi } from "./drawApi.ts";
-import { FullScreen } from "./fullScreen.ts";
-import { GameInput, GameInputEvent } from "./gameInput/gameInput.ts";
-import { GameLoop } from "./gameLoop/gameLoop.ts";
-import { Loading } from "./loading.ts";
-import { StorageApi, StorageApiValueConstraint } from "./storageApi.ts";
-import { Xy } from "./xy.ts";
+import { SolidColor } from "./Color.ts";
+import { DrawApi } from "./DrawApi.ts";
+import { FullScreen } from "./FullScreen.ts";
+import { GameInput, GameInputEvent } from "./game_input/GameInput.ts";
+import { GameLoop } from "./game_loop/GameLoop.ts";
+import { Loading } from "./Loading.ts";
+import { StorageApi, StorageApiValueConstraint } from "./StorageApi.ts";
+import { Xy } from "./Xy.ts";
 
 export type GameStartContext<
   StorageApiValue extends StorageApiValueConstraint
@@ -23,28 +23,31 @@ export type GameDrawContext = {
   drawApi: DrawApi;
 };
 
-type GameOnStart<StorageApiValue extends StorageApiValueConstraint> = (
+export type GameOnStart<StorageApiValue extends StorageApiValueConstraint> = (
   startContext: GameStartContext<StorageApiValue>
 ) => void;
-type GameOnUpdate<StorageApiValue extends StorageApiValueConstraint> = (
+export type GameOnUpdate<StorageApiValue extends StorageApiValueConstraint> = (
   updateContext: GameUpdateContext<StorageApiValue>
 ) => void;
-type GameOnDraw = (drawContext: GameDrawContext) => void;
+export type GameOnDraw = (drawContext: GameDrawContext) => void;
 
 type FrameworkOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
   htmlOffscreenCanvasFallbackSelector: string;
   htmlControlsFullscreenSelector: string;
-  htmlCanvasBackground: Color;
+  htmlCanvasBackground: SolidColor;
   gameCanvasSize: Xy;
   desiredFps: number;
   logActualFps?: boolean;
+  debug?: boolean;
 };
 
 export class Framework<StorageApiValue extends StorageApiValueConstraint> {
+  readonly #debug: boolean;
+
   readonly #gameCanvasSize: Xy;
-  readonly #htmlCanvasBackground: Color;
+  readonly #htmlCanvasBackground: SolidColor;
 
   readonly #htmlCanvasContext: CanvasRenderingContext2D;
   readonly #offscreenContext:
@@ -64,6 +67,8 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
   #onDraw?: GameOnDraw;
 
   constructor(options: FrameworkOptions) {
+    this.#debug = options.debug ?? false;
+
     this.#loading = new Loading(options.htmlDisplaySelector);
 
     this.#gameCanvasSize = options.gameCanvasSize.floor();
@@ -168,9 +173,12 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
       this.#setupHtmlCanvas();
     });
 
+    // TODO: rename to make it clear this will happen before the game loop starts and game gets rendered
     onStart?.({
       storageApi: this.#storageApi,
     });
+
+    this.#loading.showApp();
 
     this.#gameInput.startListening();
 
@@ -181,8 +189,6 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
           this.#fullScreen.toggle();
         }
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
-        // console.log("eee");
-        // console.log(continuousEvents);
         this.#onUpdate?.({
           frameNumber,
           gameInputEvents: continuousEvents,
@@ -196,8 +202,6 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
         this.#render();
       },
     });
-
-    this.#loading.showApp();
   }
 
   // This function assumes that <canvas> has width and height set to 100% by CSS.
@@ -212,7 +216,8 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
 
     this.#htmlCanvasContext.imageSmoothingEnabled = false;
 
-    this.#htmlCanvasContext.fillStyle = this.#htmlCanvasBackground.asCssHex();
+    this.#htmlCanvasContext.fillStyle =
+      this.#htmlCanvasBackground.asRgbCssHex();
     this.#htmlCanvasContext.fillRect(
       0,
       0,
@@ -233,6 +238,17 @@ export class Framework<StorageApiValue extends StorageApiValueConstraint> {
       .sub(this.#gameCanvasSize.mul(scaleToFill))
       .div(2)
       .floor();
+
+    if (this.#debug) {
+      const debugBgMargin = 1;
+      this.#htmlCanvasContext.fillStyle = "#ff0000";
+      this.#htmlCanvasContext.fillRect(
+        centeringOffset.x - debugBgMargin,
+        centeringOffset.y - debugBgMargin,
+        scaleToFill * this.#gameCanvasSize.x + 2 * debugBgMargin,
+        scaleToFill * this.#gameCanvasSize.y + 2 * debugBgMargin
+      );
+    }
 
     this.#htmlCanvasContext.drawImage(
       this.#offscreenContext.canvas,

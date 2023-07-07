@@ -1,4 +1,4 @@
-import { FpsLogger, FpsLoggerAverage, FpsLoggerNoop } from "./fpsLogger.ts";
+import { FpsLogger, FpsLoggerAverage, FpsLoggerNoop } from "./FpsLogger.ts";
 
 type GameLoopCallbacks = {
   updateFn: (frameNumber: number) => void;
@@ -12,12 +12,13 @@ type GameLoopOptions = {
 
 export class GameLoop {
   readonly #desiredFps: number;
+  #adjustedFps: number;
 
   readonly #fpsLogger: FpsLogger;
 
   #previousTime?: DOMHighResTimeStamp;
-  readonly #expectedTimeStep: number;
-  readonly #safetyMaxTimeStep: number;
+  #expectedTimeStep: number;
+  #safetyMaxTimeStep: number;
   #accumulatedTimeStep: number;
 
   #frameNumber: number;
@@ -26,12 +27,13 @@ export class GameLoop {
 
   constructor({ desiredFps, logActualFps }: GameLoopOptions) {
     this.#desiredFps = desiredFps;
+    this.#adjustedFps = desiredFps;
 
     this.#fpsLogger = logActualFps
       ? new FpsLoggerAverage()
       : new FpsLoggerNoop();
 
-    this.#expectedTimeStep = 1000 / this.#desiredFps;
+    this.#expectedTimeStep = 1000 / this.#adjustedFps;
     this.#safetyMaxTimeStep = 5 * this.#expectedTimeStep;
     this.#accumulatedTimeStep = this.#expectedTimeStep;
 
@@ -67,8 +69,31 @@ export class GameLoop {
     }
 
     if (this.#accumulatedTimeStep >= this.#expectedTimeStep) {
-      this.#fpsLogger.track(1000 / this.#accumulatedTimeStep);
+      const actualFps = 1000 / this.#accumulatedTimeStep;
+      this.#fpsLogger.track(actualFps);
+
+      // TODO: make sure console.debug are not spammed on prod build
+      if (
+        actualFps > this.#desiredFps * 1.1 &&
+        this.#adjustedFps > this.#desiredFps / 2
+      ) {
+        this.#adjustedFps -= 1;
+        this.#expectedTimeStep = 1000 / this.#adjustedFps;
+        console.debug(
+          `Decreasing the adjusted FPS by 1. New = ${this.#adjustedFps}`
+        );
+      } else if (
+        actualFps < this.#desiredFps / 1.1 &&
+        this.#adjustedFps < this.#desiredFps * 2
+      ) {
+        this.#adjustedFps += 1;
+        this.#expectedTimeStep = 1000 / this.#adjustedFps;
+        console.debug(
+          `Increasing the adjusted FPS by 1. New = ${this.#adjustedFps}`
+        );
+      }
     }
+
     while (this.#accumulatedTimeStep >= this.#expectedTimeStep) {
       this.#callbacks.updateFn(this.#frameNumber);
 
@@ -82,6 +107,7 @@ export class GameLoop {
 
     this.#callbacks.renderFn();
 
+    // TODO: pass `requestAnimationFrame` as an external param and cover this game loop logic with tests based on mocked `requestAnimationFrame`
     window.requestAnimationFrame(this.#tick);
   };
 }
