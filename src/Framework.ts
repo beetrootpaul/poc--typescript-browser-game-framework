@@ -8,17 +8,6 @@ import { PocTsBGFramework } from "./PocTsBGFramework.ts";
 import { StorageApi } from "./StorageApi.ts";
 import { Xy } from "./Xy.ts";
 
-export type GameStartContext = {
-  storageApi: StorageApi;
-};
-export type GameUpdateContext = {
-  storageApi: StorageApi;
-};
-
-export type GameOnStart = (startContext: GameStartContext) => void;
-export type GameOnUpdate = (updateContext: GameUpdateContext) => void;
-export type GameOnDraw = () => void;
-
 type FrameworkOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
@@ -51,8 +40,8 @@ export class Framework {
   readonly #drawApi: DrawApi;
   readonly #storageApi: StorageApi;
 
-  #onUpdate?: GameOnUpdate;
-  #onDraw?: GameOnDraw;
+  #onUpdate?: () => void;
+  #onDraw?: () => void;
 
   constructor(options: FrameworkOptions) {
     this.#debug = options.debug ?? false;
@@ -150,25 +139,23 @@ export class Framework {
     PocTsBGFramework.storageApi = this.#storageApi;
   }
 
-  setOnUpdate(onUpdate: GameOnUpdate) {
+  setOnUpdate(onUpdate: () => void) {
     this.#onUpdate = onUpdate;
   }
 
-  setOnDraw(onDraw: GameOnDraw) {
+  setOnDraw(onDraw: () => void) {
     this.#onDraw = onDraw;
   }
 
   // TODO: How to prevent an error of calling startGame twice? What would happen if called twice?
-  startGame(onStart?: GameOnStart): void {
+  startGame(onStart?: () => void): void {
     this.#setupHtmlCanvas();
     window.addEventListener("resize", (_event) => {
       this.#setupHtmlCanvas();
     });
 
     // TODO: rename to make it clear this will happen before the game loop starts and game gets rendered
-    onStart?.({
-      storageApi: this.#storageApi,
-    });
+    onStart?.();
 
     this.#loading.showApp();
 
@@ -185,9 +172,7 @@ export class Framework {
         PocTsBGFramework.frameNumber = frameNumber;
         PocTsBGFramework.gameInputEvents = continuousEvents;
 
-        this.#onUpdate?.({
-          storageApi: this.#storageApi,
-        });
+        this.#onUpdate?.();
       },
       renderFn: () => {
         this.#onDraw?.();
