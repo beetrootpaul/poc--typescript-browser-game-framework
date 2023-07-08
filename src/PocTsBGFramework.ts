@@ -7,6 +7,7 @@ import { StorageApi } from "./StorageApi.ts";
 //    It serves as a public, global, statically accessible API.
 //    Inspiration: [PICO-8's API](https://www.lexaloffle.com/dl/docs/pico-8_manual.html).
 
+// TODO: review the whole public API and rename from the usage point of view
 // TODO: after name for the framework gets chosen: rename this to the framework name or to its abbreviation
 export class PocTsBGFramework {
   static #framework: Framework;
