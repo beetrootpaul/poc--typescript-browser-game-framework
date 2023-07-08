@@ -189,18 +189,7 @@ export class Framework {
         }
         if (fireOnceEvents.has("debug_toggle")) {
           this.#debug = !this.#debug;
-
-          // TODO: encapsulate this border handling and debug stuff in general
-          const debugBgMargin = 1;
-          this.#htmlCanvasContext.fillStyle = this.#debug
-            ? "#ff0000"
-            : this.#htmlCanvasBackground.asRgbCssHex();
-          this.#htmlCanvasContext.fillRect(
-            this.#centeringOffset.x - debugBgMargin,
-            this.#centeringOffset.y - debugBgMargin,
-            this.#scaleToFill * this.#gameCanvasSize.x + 2 * debugBgMargin,
-            this.#scaleToFill * this.#gameCanvasSize.y + 2 * debugBgMargin
-          );
+          this.#redrawDebugMargin();
         }
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
 
@@ -252,6 +241,8 @@ export class Framework {
       .div(2)
       .floor();
 
+    this.#redrawDebugMargin();
+
     this.#htmlCanvasContext.drawImage(
       this.#offscreenContext.canvas,
       0,
@@ -262,6 +253,19 @@ export class Framework {
       this.#centeringOffset.y,
       this.#scaleToFill * this.#gameCanvasSize.x,
       this.#scaleToFill * this.#gameCanvasSize.y
+    );
+  }
+
+  #redrawDebugMargin(): void {
+    const debugBgMargin = 1;
+    this.#htmlCanvasContext.fillStyle = this.#debug
+      ? "#ff0000"
+      : this.#htmlCanvasBackground.asRgbCssHex();
+    this.#htmlCanvasContext.fillRect(
+      this.#centeringOffset.x - debugBgMargin,
+      this.#centeringOffset.y - debugBgMargin,
+      this.#scaleToFill * this.#gameCanvasSize.x + 2 * debugBgMargin,
+      this.#scaleToFill * this.#gameCanvasSize.y + 2 * debugBgMargin
     );
   }
 }
