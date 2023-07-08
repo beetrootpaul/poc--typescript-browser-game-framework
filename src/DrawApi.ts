@@ -1,4 +1,5 @@
 import { Color, SolidColor } from "./Color.ts";
+import { Sprite } from "./Sprite.ts";
 import { Xy, xy_ } from "./Xy.ts";
 
 // `b` in loops in this file stands for a byte (index)
@@ -82,26 +83,27 @@ export class DrawApi {
   }
 
   // TODO: REWORK THIS
-  // TODO: remove this temporary method
-  drawSomething(
+  // TODO: cover it with tests
+  // TODO: make sure the case of sprite.xy2 < sprite.xy1 is handled correctly
+  drawSprite(
     imgBytes: Uint8Array,
     imgW: number,
     imgType: "rgb" | "rgba",
-    imgXy1: Xy,
-    imgXy2: Xy,
+    sprite: Sprite,
     targetXy1: Xy
   ): void {
     const imgBytesPerColor = imgType === "rgb" ? 3 : 4;
     const baseOffset =
-      (targetXy1.y - imgXy1.y) * this.#canvasSize.x + (targetXy1.x - imgXy1.x);
+      (targetXy1.y - sprite.xy1.y) * this.#canvasSize.x +
+      (targetXy1.x - sprite.xy1.x);
     for (let px = 0; px < imgBytes.length / imgBytesPerColor; px += 1) {
       const imgX = px % imgW;
       const imgY = Math.floor(px / imgW);
       if (
-        imgX >= imgXy1.x &&
-        imgX < imgXy2.x &&
-        imgY >= imgXy1.y &&
-        imgY < imgXy2.y
+        imgX >= sprite.xy1.x &&
+        imgX < sprite.xy2.x &&
+        imgY >= sprite.xy1.y &&
+        imgY < sprite.xy2.y
       ) {
         const offset = baseOffset + imgY * this.#canvasSize.x;
         const target = (offset + imgX) * 4;
