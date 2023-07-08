@@ -17,11 +17,23 @@ export type FrameworkOptions = {
   gameCanvasSize: Xy;
   desiredFps: number;
   logActualFps?: boolean;
-  debug?: boolean;
+  debug?: {
+    enabledOnInit: boolean;
+    /**
+     * A key to toggle debug mode on/off. Has to match a
+     * [KeyboardEvent.key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key)
+     * of a desired key.
+     */
+    toggleKey?: string;
+  };
 };
 
 export class Framework {
-  readonly #debug: boolean;
+  readonly #debugOptions: FrameworkOptions["debug"];
+  #debug: boolean;
+  get debug(): boolean {
+    return this.#debug;
+  }
 
   readonly #gameCanvasSize: Xy;
   readonly #htmlCanvasBackground: SolidColor;
@@ -43,8 +55,14 @@ export class Framework {
   #onUpdate?: () => void;
   #onDraw?: () => void;
 
+  #scaleToFill = 1;
+  #centeringOffset = Xy.zero;
+
   constructor(options: FrameworkOptions) {
-    this.#debug = options.debug ?? false;
+    this.#debugOptions = options.debug ?? {
+      enabledOnInit: false,
+    };
+    this.#debug = this.#debugOptions?.enabledOnInit;
 
     this.#loading = new Loading(options.htmlDisplaySelector);
 
@@ -112,7 +130,9 @@ export class Framework {
       this.#offscreenContext = offscreenContext;
     }
 
-    this.#gameInput = new GameInput();
+    this.#gameInput = new GameInput({
+      debugToggleKey: this.#debugOptions?.toggleKey,
+    });
 
     this.#gameLoop = new GameLoop({
       desiredFps: options.desiredFps,
@@ -167,6 +187,10 @@ export class Framework {
         if (fireOnceEvents.has("full_screen")) {
           this.#fullScreen.toggle();
         }
+        if (fireOnceEvents.has("debug_toggle")) {
+          this.#debug = !this.#debug;
+          this.#redrawDebugMargin();
+        }
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
 
         PocTsBGFramework.frameNumber = frameNumber;
@@ -210,22 +234,14 @@ export class Framework {
       this.#htmlCanvasContext.canvas.width,
       this.#htmlCanvasContext.canvas.height
     );
-    const scaleToFill = htmlCanvasSize.div(this.#gameCanvasSize).floor().min();
-    const centeringOffset = htmlCanvasSize
-      .sub(this.#gameCanvasSize.mul(scaleToFill))
+    // TODO: encapsulate this calculation and related fields
+    this.#scaleToFill = htmlCanvasSize.div(this.#gameCanvasSize).floor().min();
+    this.#centeringOffset = htmlCanvasSize
+      .sub(this.#gameCanvasSize.mul(this.#scaleToFill))
       .div(2)
       .floor();
 
-    if (this.#debug) {
-      const debugBgMargin = 1;
-      this.#htmlCanvasContext.fillStyle = "#ff0000";
-      this.#htmlCanvasContext.fillRect(
-        centeringOffset.x - debugBgMargin,
-        centeringOffset.y - debugBgMargin,
-        scaleToFill * this.#gameCanvasSize.x + 2 * debugBgMargin,
-        scaleToFill * this.#gameCanvasSize.y + 2 * debugBgMargin
-      );
-    }
+    this.#redrawDebugMargin();
 
     this.#htmlCanvasContext.drawImage(
       this.#offscreenContext.canvas,
@@ -233,10 +249,23 @@ export class Framework {
       0,
       this.#offscreenContext.canvas.width,
       this.#offscreenContext.canvas.height,
-      centeringOffset.x,
-      centeringOffset.y,
-      scaleToFill * this.#gameCanvasSize.x,
-      scaleToFill * this.#gameCanvasSize.y
+      this.#centeringOffset.x,
+      this.#centeringOffset.y,
+      this.#scaleToFill * this.#gameCanvasSize.x,
+      this.#scaleToFill * this.#gameCanvasSize.y
+    );
+  }
+
+  #redrawDebugMargin(): void {
+    const debugBgMargin = 1;
+    this.#htmlCanvasContext.fillStyle = this.#debug
+      ? "#ff0000"
+      : this.#htmlCanvasBackground.asRgbCssHex();
+    this.#htmlCanvasContext.fillRect(
+      this.#centeringOffset.x - debugBgMargin,
+      this.#centeringOffset.y - debugBgMargin,
+      this.#scaleToFill * this.#gameCanvasSize.x + 2 * debugBgMargin,
+      this.#scaleToFill * this.#gameCanvasSize.y + 2 * debugBgMargin
     );
   }
 }

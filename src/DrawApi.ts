@@ -43,7 +43,7 @@ export class DrawApi {
   // TODO: cover it with tests
   // TODO: clipping outside canvas
   // TODO: negative x/y
-  setPixel(xy: Xy, c: Color): void {
+  pixel(xy: Xy, c: Color): void {
     if (c instanceof SolidColor) {
       const canvasXy = xy.sub(this.#cameraOffset).round();
       let b = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
@@ -59,13 +59,13 @@ export class DrawApi {
   // TODO: negative x1/y1
   // TODO: negative w/h
   // TODO: Xy helper for iterating between xy1 and xy2, while operating on a Xy instance
-  drawRectFilled(xy1: Xy, xy2: Xy, c: Color): void {
+  rectFilled(xy1: Xy, xy2: Xy, c: Color): void {
     if (c instanceof SolidColor) {
       const xy1Int = xy1.round();
       const xy2Int = xy2.round();
       for (let y = xy1Int.y; y < xy2Int.y; y += 1) {
         for (let x = xy1Int.x; x < xy2Int.x; x += 1) {
-          this.setPixel(xy_(x, y), c);
+          this.pixel(xy_(x, y), c);
         }
       }
     }
@@ -85,7 +85,7 @@ export class DrawApi {
   // TODO: REWORK THIS
   // TODO: cover it with tests
   // TODO: make sure the case of sprite.xy2 < sprite.xy1 is handled correctly
-  drawSprite(
+  sprite(
     imgBytes: Uint8Array,
     imgW: number,
     imgType: "rgb" | "rgba",

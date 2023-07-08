@@ -8,17 +8,31 @@ export type GameInputEvent =
   | "right"
   | "up"
   | "down"
-  | "full_screen";
+  | "full_screen"
+  | "debug_toggle";
 
 export const gameInputEventBehavior: Record<string, { fireOnce?: boolean }> = {
   // TODO: move full_screen out of this set OR move its handling to TouchGameInput and similar ones
   full_screen: { fireOnce: true },
+  debug_toggle: { fireOnce: true },
+};
+
+type GameInputParams = {
+  debugToggleKey?: string;
 };
 
 export class GameInput {
-  readonly #keyboardGameInput = new KeyboardGameInput();
-  readonly #touchGameInput = new TouchGameInput();
-  readonly #gamepadGameInput = new GamepadGameInput();
+  readonly #keyboardGameInput: KeyboardGameInput;
+  readonly #touchGameInput: TouchGameInput;
+  readonly #gamepadGameInput: GamepadGameInput;
+
+  constructor(params: GameInputParams) {
+    this.#keyboardGameInput = new KeyboardGameInput({
+      debugToggleKey: params.debugToggleKey,
+    });
+    this.#touchGameInput = new TouchGameInput();
+    this.#gamepadGameInput = new GamepadGameInput();
+  }
 
   startListening() {
     this.#keyboardGameInput.startListening();

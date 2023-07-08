@@ -1,5 +1,9 @@
 import { GameInputEvent, gameInputEventBehavior } from "./GameInput.ts";
 
+type KeyboardGameInputParams = {
+  debugToggleKey?: string;
+};
+
 export class KeyboardGameInput {
   readonly #keyMapping: Map<string, GameInputEvent> = new Map<
     string,
@@ -26,8 +30,14 @@ export class KeyboardGameInput {
   readonly #recentFireOnceEvents: Set<GameInputEvent> =
     new Set<GameInputEvent>();
 
-  startListening() {
-    document.addEventListener("keydown", (keyboardEvent) => {
+  constructor(params: KeyboardGameInputParams) {
+    if (params.debugToggleKey) {
+      this.#keyMapping.set(params.debugToggleKey, "debug_toggle");
+    }
+  }
+
+  startListening(): void {
+    document.addEventListener("keydown", (keyboardEvent: KeyboardEvent) => {
       const gameInputEvent = this.#keyMapping.get(keyboardEvent.key);
       if (gameInputEvent) {
         keyboardEvent.preventDefault();
