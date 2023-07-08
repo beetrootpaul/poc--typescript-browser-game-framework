@@ -5,18 +5,7 @@ export class Utils {
   //   - `min` if `value` is `< min`
   //   - `max` if `value` is `> max`
   static clamp(a: number, b: number, c: number): number {
-    // prettier-ignore
-    return a < b
-      ? (
-        b < c
-          ? b
-          : (a < c ? c : a)
-      )
-      : (
-        a < c
-          ? a
-          : (b < c ? c : b)
-      );
+    return a + b + c - Math.min(a, b, c) - Math.max(a, b, c);
   }
 
   // TODO: migrate from Lua
