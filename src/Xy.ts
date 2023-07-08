@@ -1,4 +1,5 @@
 import { PrintDebug } from "./debug/PrintDebug.ts";
+import { Utils } from "./Utils.ts";
 
 export function xy_(x: number, y: number): Xy {
   return new Xy(x, y);
@@ -49,6 +50,13 @@ export class Xy implements PrintDebug {
     return typeof other === "number"
       ? new Xy(this.x / other, this.y / other)
       : new Xy(this.x / other.x, this.y / other.y);
+  }
+
+  clamp(xy1: Xy, xy2: Xy): Xy {
+    return xy_(
+      Utils.clamp(xy1.x, this.x, xy2.x),
+      Utils.clamp(xy1.y, this.y, xy2.y)
+    );
   }
 
   d(): string {

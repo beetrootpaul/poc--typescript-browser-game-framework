@@ -3,6 +3,7 @@ export type { Color } from "./Color.ts";
 
 export { SolidColor, TransparentColor, transparent } from "./Color.ts";
 export { Sprite, spr_ } from "./Sprite.ts";
+export { Utils } from "./Utils.ts";
 export { xy_, Xy } from "./Xy.ts";
 
 export { PocTsBGFramework } from "./PocTsBGFramework.ts";
