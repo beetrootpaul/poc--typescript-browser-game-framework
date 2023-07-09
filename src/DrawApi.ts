@@ -1,21 +1,31 @@
+import { Assets } from "./Assets.ts";
 import { Color, SolidColor } from "./Color.ts";
 import { Sprite } from "./Sprite.ts";
 import { Xy, xy_ } from "./Xy.ts";
 
-// `b` in loops in this file stands for a byte (index)
+type DrawApiOptions = {
+  // TODO: better name to indicate in-out nature of this param?
+  mutableCanvasRgbaBytes: Uint8ClampedArray;
+  canvasSize: Xy;
+  assets: Assets;
+};
 
+// `b` in loops in this file stands for a byte (index)
+//
 export class DrawApi {
+  readonly #mutableCanvasRgbaBytes: Uint8ClampedArray;
   readonly #canvasSize: Xy;
-  readonly #canvasRgbaBytes: Uint8ClampedArray;
+  readonly #assets: Assets;
 
   #cameraOffset: Xy = xy_(0, 0);
 
   // Hex representation of a Color is used as this map's keys, because it makes it easier to retrieve mappings with use of string equality
   readonly #spriteColorMapping: Map<string, Color> = new Map();
 
-  constructor(canvasSize: Xy, canvasRgbaBytes: Uint8ClampedArray) {
-    this.#canvasSize = canvasSize.round();
-    this.#canvasRgbaBytes = canvasRgbaBytes;
+  constructor(options: DrawApiOptions) {
+    this.#mutableCanvasRgbaBytes = options.mutableCanvasRgbaBytes;
+    this.#canvasSize = options.canvasSize.round();
+    this.#assets = options.assets;
   }
 
   // TODO: cover it with tests
@@ -28,14 +38,14 @@ export class DrawApi {
     if (color instanceof SolidColor) {
       for (
         let pixel = 0;
-        pixel < this.#canvasRgbaBytes.length / 4;
+        pixel < this.#mutableCanvasRgbaBytes.length / 4;
         pixel += 1
       ) {
         const b = pixel * 4;
-        this.#canvasRgbaBytes[b] = color.r;
-        this.#canvasRgbaBytes[b + 1] = color.g;
-        this.#canvasRgbaBytes[b + 2] = color.b;
-        this.#canvasRgbaBytes[b + 3] = 255;
+        this.#mutableCanvasRgbaBytes[b] = color.r;
+        this.#mutableCanvasRgbaBytes[b + 1] = color.g;
+        this.#mutableCanvasRgbaBytes[b + 2] = color.b;
+        this.#mutableCanvasRgbaBytes[b + 3] = 255;
       }
     }
   }
@@ -47,10 +57,10 @@ export class DrawApi {
     if (c instanceof SolidColor) {
       const canvasXy = xy.sub(this.#cameraOffset).round();
       let b = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
-      this.#canvasRgbaBytes[b] = c.r;
-      this.#canvasRgbaBytes[b + 1] = c.g;
-      this.#canvasRgbaBytes[b + 2] = c.b;
-      this.#canvasRgbaBytes[b + 3] = 255;
+      this.#mutableCanvasRgbaBytes[b] = c.r;
+      this.#mutableCanvasRgbaBytes[b + 1] = c.g;
+      this.#mutableCanvasRgbaBytes[b + 2] = c.b;
+      this.#mutableCanvasRgbaBytes[b + 3] = 255;
     }
   }
 
@@ -82,17 +92,16 @@ export class DrawApi {
     }
   }
 
-  // TODO: REWORK THIS
+  // TODO: implement clipping of the desired sprite size to the real source image area
   // TODO: cover it with tests
   // TODO: make sure the case of sprite.xy2 < sprite.xy1 is handled correctly
-  sprite(
-    imgBytes: Uint8ClampedArray,
-    imgW: number,
-    imgType: "rgb" | "rgba",
-    sprite: Sprite,
-    targetXy1: Xy
-  ): void {
-    const imgBytesPerColor = imgType === "rgb" ? 3 : 4;
+  sprite(spriteImageUrl: string, sprite: Sprite, targetXy1: Xy): void {
+    const {
+      width: imgW,
+      height: imgH,
+      rgba8bitData: imgBytes,
+    } = this.#assets.getImage(spriteImageUrl);
+    const imgBytesPerColor = 4;
     const baseOffset =
       (targetXy1.y - sprite.xy1.y) * this.#canvasSize.x +
       (targetXy1.x - sprite.xy1.x);
@@ -109,7 +118,7 @@ export class DrawApi {
         const target = (offset + imgX) * 4;
         const idx = px * imgBytesPerColor;
         // TODO: how to make it clearer that we simplify transparency here to below and above 127?
-        if (imgType === "rgb" || imgBytes[idx + 3] > 127) {
+        if (imgBytes[idx + 3] > 127) {
           // TODO: refactor?
           let c: Color = new SolidColor(
             imgBytes[idx],
@@ -124,10 +133,10 @@ export class DrawApi {
               (this.#cameraOffset.y * this.#canvasSize.x +
                 this.#cameraOffset.x) *
                 4;
-            this.#canvasRgbaBytes[adjustedTarget] = c.r;
-            this.#canvasRgbaBytes[adjustedTarget + 1] = c.g;
-            this.#canvasRgbaBytes[adjustedTarget + 2] = c.b;
-            this.#canvasRgbaBytes[adjustedTarget + 3] = 255;
+            this.#mutableCanvasRgbaBytes[adjustedTarget] = c.r;
+            this.#mutableCanvasRgbaBytes[adjustedTarget + 1] = c.g;
+            this.#mutableCanvasRgbaBytes[adjustedTarget + 2] = c.b;
+            this.#mutableCanvasRgbaBytes[adjustedTarget + 3] = 255;
           }
         }
       }

@@ -1,3 +1,4 @@
+import { AssetsToLoad } from "./Assets.ts";
 import { DrawApi } from "./DrawApi.ts";
 import { Framework, type FrameworkOptions } from "./Framework.ts";
 import { GameInputEvent } from "./game_input/GameInput.ts";
@@ -16,8 +17,13 @@ export class PocTsBGFramework {
   //   to properly initialize other fields and variables.
   //
 
-  static init(options: FrameworkOptions): void {
-    this.#framework = new Framework(options);
+  // TODO: type the startGame fn or the entire object inside resolved Promise
+  static init(
+    frameworkOptions: FrameworkOptions,
+    assetsToLoad: AssetsToLoad
+  ): Promise<{ startGame: (onStart?: () => void) => void }> {
+    PocTsBGFramework.#framework = new Framework(frameworkOptions);
+    return PocTsBGFramework.#framework.loadAssets(assetsToLoad);
   }
 
   // Framework's lifecycle methods, exposed for a static access.
@@ -25,15 +31,11 @@ export class PocTsBGFramework {
   //
 
   static setOnUpdate(onUpdate: () => void) {
-    this.#framework.setOnUpdate(onUpdate);
+    PocTsBGFramework.#framework.setOnUpdate(onUpdate);
   }
 
   static setOnDraw(onDraw: () => void): void {
-    this.#framework.setOnDraw(onDraw);
-  }
-
-  static startGame(onStart?: () => void): void {
-    this.#framework.startGame(onStart);
+    PocTsBGFramework.#framework.setOnDraw(onDraw);
   }
 
   // The rest of the globally and statically available API.
@@ -49,6 +51,6 @@ export class PocTsBGFramework {
   //
 
   static get debug(): boolean {
-    return this.#framework.debug;
+    return PocTsBGFramework.#framework.debug;
   }
 }

@@ -1,3 +1,4 @@
+import { Assets, AssetsToLoad } from "./Assets.ts";
 import { SolidColor } from "./Color.ts";
 import { DrawApi } from "./DrawApi.ts";
 import { FullScreen } from "./FullScreen.ts";
@@ -45,6 +46,8 @@ export class Framework {
   readonly #gameInput: GameInput;
   readonly #gameLoop: GameLoop;
   readonly #fullScreen: FullScreen;
+
+  readonly #assets: Assets;
 
   readonly #drawApi: DrawApi;
   readonly #storageApi: StorageApi;
@@ -112,19 +115,31 @@ export class Framework {
       options.htmlControlsFullscreenSelector
     );
 
+    this.#assets = new Assets();
+
     this.#offscreenImageData = this.#offscreenContext.createImageData(
       this.#offscreenContext.canvas.width,
       this.#offscreenContext.canvas.height
     );
-    this.#drawApi = new DrawApi(
-      this.#gameCanvasSize,
-      this.#offscreenImageData.data
-    );
+    this.#drawApi = new DrawApi({
+      mutableCanvasRgbaBytes: this.#offscreenImageData.data,
+      canvasSize: this.#gameCanvasSize,
+      assets: this.#assets,
+    });
 
     this.#storageApi = new StorageApi();
 
     PocTsBGFramework.drawApi = this.#drawApi;
     PocTsBGFramework.storageApi = this.#storageApi;
+  }
+
+  // TODO: type the startGame fn or the entire object inside resolved Promise
+  loadAssets(
+    assetsToLoad: AssetsToLoad
+  ): Promise<{ startGame: (onStart?: () => void) => void }> {
+    return this.#assets.loadImages(assetsToLoad.images).then(() => ({
+      startGame: this.#startGame.bind(this),
+    }));
   }
 
   setOnUpdate(onUpdate: () => void) {
@@ -136,7 +151,7 @@ export class Framework {
   }
 
   // TODO: How to prevent an error of calling startGame twice? What would happen if called twice?
-  startGame(onStart?: () => void): void {
+  #startGame(onStart?: () => void): void {
     this.#setupHtmlCanvas();
     window.addEventListener("resize", (_event) => {
       this.#setupHtmlCanvas();
