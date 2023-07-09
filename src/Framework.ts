@@ -1,6 +1,6 @@
 import { Assets, AssetsToLoad } from "./Assets.ts";
 import { SolidColor } from "./Color.ts";
-import { DrawApi } from "./DrawApi.ts";
+import { DrawApi } from "./draw_api/DrawApi.ts";
 import { FullScreen } from "./FullScreen.ts";
 import { GameInput } from "./game_input/GameInput.ts";
 import { GameLoop } from "./game_loop/GameLoop.ts";

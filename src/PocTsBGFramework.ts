@@ -1,5 +1,5 @@
 import { AssetsToLoad } from "./Assets.ts";
-import { DrawApi } from "./DrawApi.ts";
+import { DrawApi } from "./draw_api/DrawApi.ts";
 import { Framework, type FrameworkOptions } from "./Framework.ts";
 import { GameInputEvent } from "./game_input/GameInput.ts";
 import { StorageApi } from "./StorageApi.ts";

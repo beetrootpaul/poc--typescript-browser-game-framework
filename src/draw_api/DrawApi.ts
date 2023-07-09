@@ -1,7 +1,10 @@
-import { Assets } from "./Assets.ts";
-import { Color, SolidColor } from "./Color.ts";
-import { Sprite } from "./Sprite.ts";
-import { Xy, xy_ } from "./Xy.ts";
+import { Assets } from "../Assets.ts";
+import { Color, SolidColor } from "../Color.ts";
+import { Sprite } from "../Sprite.ts";
+import { Xy, xy_ } from "../Xy.ts";
+import { DrawRectFilled } from "./DrawRectFilled.ts";
+
+export type DrawPixelFn = (xy: Xy, c: Color) => void;
 
 type DrawApiOptions = {
   // TODO: better name to indicate in-out nature of this param?
@@ -17,6 +20,8 @@ export class DrawApi {
   readonly #canvasSize: Xy;
   readonly #assets: Assets;
 
+  readonly #drawRectFilled: DrawRectFilled;
+
   #cameraOffset: Xy = xy_(0, 0);
 
   // Hex representation of a Color is used as this map's keys, because it makes it easier to retrieve mappings with use of string equality
@@ -26,6 +31,8 @@ export class DrawApi {
     this.#mutableCanvasRgbaBytes = options.mutableCanvasRgbaBytes;
     this.#canvasSize = options.canvasSize.round();
     this.#assets = options.assets;
+
+    this.#drawRectFilled = new DrawRectFilled(this.pixel.bind(this));
   }
 
   // TODO: cover it with tests
@@ -64,21 +71,8 @@ export class DrawApi {
     }
   }
 
-  // TODO: cover it with tests
-  // TODO: clipping outside canvas
-  // TODO: negative x1/y1
-  // TODO: negative w/h
-  // TODO: Xy helper for iterating between xy1 and xy2, while operating on a Xy instance
-  rectFilled(xy1: Xy, xy2: Xy, c: Color): void {
-    if (c instanceof SolidColor) {
-      const xy1Int = xy1.round();
-      const xy2Int = xy2.round();
-      for (let y = xy1Int.y; y < xy2Int.y; y += 1) {
-        for (let x = xy1Int.x; x < xy2Int.x; x += 1) {
-          this.pixel(xy_(x, y), c);
-        }
-      }
-    }
+  rectFilled(xy1: Xy, xy2: Xy, c: SolidColor): void {
+    this.#drawRectFilled.draw(xy1, xy2, c);
   }
 
   // TODO: cover it with tests
@@ -127,7 +121,7 @@ export class DrawApi {
           );
           c = this.#spriteColorMapping.get(c.asRgbaCssHex()) ?? c;
           if (c instanceof SolidColor) {
-            // TODO: consider reusing this.setPixel(…)
+            // TODO: consider reusing this.pixel(…)
             const adjustedTarget =
               target -
               (this.#cameraOffset.y * this.#canvasSize.x +
