@@ -57,18 +57,26 @@ export class DrawApi {
     }
   }
 
-  // TODO: cover it with tests
-  // TODO: clipping outside canvas
-  // TODO: negative x/y
   pixel(xy: Xy, c: Color): void {
-    if (c instanceof SolidColor) {
-      const canvasXy = xy.sub(this.#cameraOffset).round();
-      let b = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
-      this.#mutableCanvasRgbaBytes[b] = c.r;
-      this.#mutableCanvasRgbaBytes[b + 1] = c.g;
-      this.#mutableCanvasRgbaBytes[b + 2] = c.b;
-      this.#mutableCanvasRgbaBytes[b + 3] = 255;
+    if (!(c instanceof SolidColor)) {
+      return;
     }
+
+    const canvasXy = xy.sub(this.#cameraOffset).round();
+    if (
+      canvasXy.x < 0 ||
+      canvasXy.x >= this.#canvasSize.x ||
+      canvasXy.y < 0 ||
+      canvasXy.y >= this.#canvasSize.y
+    ) {
+      return;
+    }
+
+    let b = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
+    this.#mutableCanvasRgbaBytes[b] = c.r;
+    this.#mutableCanvasRgbaBytes[b + 1] = c.g;
+    this.#mutableCanvasRgbaBytes[b + 2] = c.b;
+    this.#mutableCanvasRgbaBytes[b + 3] = 255;
   }
 
   rectFilled(xy1: Xy, xy2: Xy, c: SolidColor): void {
