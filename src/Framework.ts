@@ -108,6 +108,7 @@ export class Framework {
     this.#gameLoop = new GameLoop({
       desiredFps: options.desiredFps,
       logActualFps: options.logActualFps ?? false,
+      requestAnimationFrameFn: window.requestAnimationFrame.bind(window),
     });
 
     this.#fullScreen = FullScreen.newFor(

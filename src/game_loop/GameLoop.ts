@@ -1,35 +1,39 @@
 import { FpsLogger, FpsLoggerAverage, FpsLoggerNoop } from "./FpsLogger.ts";
 
-type GameLoopCallbacks = {
+export type GameLoopCallbacks = {
   updateFn: (frameNumber: number) => void;
   renderFn: () => void;
 };
 
 type GameLoopOptions = {
   desiredFps: number;
-  logActualFps: boolean;
+  logActualFps?: boolean;
+  requestAnimationFrameFn: AnimationFrameProvider["requestAnimationFrame"];
 };
 
 export class GameLoop {
   readonly #desiredFps: number;
   #adjustedFps: number;
 
+  readonly #requestAnimationFrameFn: AnimationFrameProvider["requestAnimationFrame"];
+
   readonly #fpsLogger: FpsLogger;
 
   #previousTime?: DOMHighResTimeStamp;
   #expectedTimeStep: number;
-  #safetyMaxTimeStep: number;
+  readonly #safetyMaxTimeStep: number;
   #accumulatedTimeStep: number;
 
   #frameNumber: number;
 
   #callbacks: GameLoopCallbacks;
 
-  constructor({ desiredFps, logActualFps }: GameLoopOptions) {
-    this.#desiredFps = desiredFps;
-    this.#adjustedFps = desiredFps;
+  constructor(options: GameLoopOptions) {
+    this.#desiredFps = options.desiredFps;
+    this.#adjustedFps = options.desiredFps;
+    this.#requestAnimationFrameFn = options.requestAnimationFrameFn;
 
-    this.#fpsLogger = logActualFps
+    this.#fpsLogger = options.logActualFps
       ? new FpsLoggerAverage()
       : new FpsLoggerNoop();
 
@@ -47,7 +51,7 @@ export class GameLoop {
 
   start(callbacks: GameLoopCallbacks): void {
     this.#callbacks = callbacks;
-    window.requestAnimationFrame(this.#tick);
+    this.#requestAnimationFrameFn(this.#tick);
   }
 
   // TODO: seems like the game runs faster on a mobile browser than on a desktop one
@@ -109,7 +113,6 @@ export class GameLoop {
 
     this.#callbacks.renderFn();
 
-    // TODO: pass `requestAnimationFrame` as an external param and cover this game loop logic with tests based on mocked `requestAnimationFrame`
-    window.requestAnimationFrame(this.#tick);
+    this.#requestAnimationFrameFn(this.#tick);
   };
 }
