@@ -107,4 +107,25 @@ describe("DrawRectFilled", () => {
       `,
     });
   });
+
+  test("negative size", () => {
+    // given
+    const canvas = new TestCanvas(5, 4, c0);
+    const rectFilled = new DrawRectFilled(canvas.setPx.bind(canvas));
+
+    // when
+    const xy1 = xy_(4, 3);
+    rectFilled.draw(xy1, xy1.add(xy_(-3, -2)), SolidColor.fromRgbCssHex(c1));
+
+    //then
+    canvas.expectToEqual({
+      withMapping: { [c0]: "-", [c1]: "#" },
+      expectedImageAsAscii: `
+        -----
+        -###-
+        -###-
+        -----
+      `,
+    });
+  });
 });

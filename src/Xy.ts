@@ -8,6 +8,24 @@ export function xy_(x: number, y: number): Xy {
 export class Xy implements PrintDebug {
   static zero = new Xy(0, 0);
 
+  static forEachIntXyBetween(
+    xy1: Xy,
+    xy2: Xy,
+    callback: (xy: Xy) => void
+  ): void {
+    xy1 = xy1.round();
+    xy2 = xy2.round();
+    const [xMinInclusive, xMaxExclusive] =
+      xy1.x < xy2.x ? [xy1.x, xy2.x] : [xy2.x, xy1.x];
+    const [yMinInclusive, yMaxExclusive] =
+      xy1.y < xy2.y ? [xy1.y, xy2.y] : [xy2.y, xy1.y];
+    for (let x = xMinInclusive; x < xMaxExclusive; x += 1) {
+      for (let y = yMinInclusive; y < yMaxExclusive; y += 1) {
+        callback(xy_(x, y));
+      }
+    }
+  }
+
   readonly x: number;
   readonly y: number;
 
