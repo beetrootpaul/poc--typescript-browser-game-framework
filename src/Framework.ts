@@ -11,7 +11,6 @@ import { Xy } from "./Xy.ts";
 export type FrameworkOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
-  htmlOffscreenCanvasFallbackSelector: string;
   htmlControlsFullscreenSelector: string;
   htmlCanvasBackground: SolidColor;
   gameCanvasSize: Xy;
@@ -39,9 +38,7 @@ export class Framework {
   readonly #htmlCanvasBackground: SolidColor;
 
   readonly #htmlCanvasContext: CanvasRenderingContext2D;
-  readonly #offscreenContext:
-    | OffscreenCanvasRenderingContext2D
-    | CanvasRenderingContext2D;
+  readonly #offscreenContext: OffscreenCanvasRenderingContext2D;
   readonly #offscreenImageData: ImageData;
 
   readonly #loading: Loading;
@@ -87,48 +84,19 @@ export class Framework {
     }
     this.#htmlCanvasContext = htmlCanvasContext;
 
-    if (typeof OffscreenCanvas == "undefined") {
-      console.warn(
-        "No OffscreenCanvas support. Falling back to a regular <canvas>."
-      );
-      const htmlOffscreenCanvasFallback =
-        document.querySelector<HTMLCanvasElement>(
-          options.htmlOffscreenCanvasFallbackSelector
-        );
-      if (!htmlOffscreenCanvasFallback) {
-        throw Error(
-          `Was unable to find a fallback offscreen <canvas> by selector '${options.htmlOffscreenCanvasFallbackSelector}'`
-        );
-      }
-      htmlOffscreenCanvasFallback.width = options.gameCanvasSize.x;
-      htmlOffscreenCanvasFallback.height = options.gameCanvasSize.y;
-      const fallbackOffscreenContext = htmlOffscreenCanvasFallback.getContext(
-        "2d",
-        {
-          // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#turn_off_transparency
-          alpha: false,
-        }
-      );
-      if (!fallbackOffscreenContext) {
-        throw Error(
-          "Was unable to obtain fallback offscreen canvas' 2D context"
-        );
-      }
-      this.#offscreenContext = fallbackOffscreenContext;
-    } else {
-      const offscreenCanvas = new OffscreenCanvas(
-        options.gameCanvasSize.x,
-        options.gameCanvasSize.y
-      );
-      const offscreenContext = offscreenCanvas.getContext("2d", {
-        // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#turn_off_transparency
-        alpha: false,
-      });
-      if (!offscreenContext) {
-        throw Error("Was unable to obtain OffscreenCanvas' 2D context");
-      }
-      this.#offscreenContext = offscreenContext;
+    const offscreenCanvas = document
+      .createElement("canvas")
+      .transferControlToOffscreen();
+    offscreenCanvas.width = options.gameCanvasSize.x;
+    offscreenCanvas.height = options.gameCanvasSize.y;
+    const offscreenContext = offscreenCanvas.getContext("2d", {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#turn_off_transparency
+      alpha: false,
+    });
+    if (!offscreenContext) {
+      throw Error("Was unable to obtain OffscreenCanvas' 2D context");
     }
+    this.#offscreenContext = offscreenContext;
 
     this.#gameInput = new GameInput({
       debugToggleKey: this.#debugOptions?.toggleKey,
