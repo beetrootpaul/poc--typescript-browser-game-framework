@@ -50,6 +50,8 @@ export class GameLoop {
     window.requestAnimationFrame(this.#tick);
   }
 
+  // TODO: seems like the game runs faster on a mobile browser than on a desktop one
+
   // Keep this function as an arrow one in order to avoid issues with `this`.
   #tick = (currentTime: DOMHighResTimeStamp): void => {
     // In the 1st frame, we don't have this.#previousTime yet, therefore we take currentTime

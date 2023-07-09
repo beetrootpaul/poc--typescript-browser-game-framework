@@ -86,7 +86,7 @@ export class DrawApi {
   // TODO: cover it with tests
   // TODO: make sure the case of sprite.xy2 < sprite.xy1 is handled correctly
   sprite(
-    imgBytes: Uint8Array,
+    imgBytes: Uint8ClampedArray,
     imgW: number,
     imgType: "rgb" | "rgba",
     sprite: Sprite,
