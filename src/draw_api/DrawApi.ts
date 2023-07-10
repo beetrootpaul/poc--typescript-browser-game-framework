@@ -2,25 +2,26 @@ import { Assets } from "../Assets.ts";
 import { Color, SolidColor } from "../Color.ts";
 import { Sprite } from "../Sprite.ts";
 import { Xy, xy_ } from "../Xy.ts";
+import { DrawClear } from "./DrawClear.ts";
 import { DrawRectFilled } from "./DrawRectFilled.ts";
 
-export type DrawPixelFn = (xy: Xy, c: Color) => void;
-
 type DrawApiOptions = {
-  // TODO: better name to indicate in-out nature of this param?
-  mutableCanvasRgbaBytes: Uint8ClampedArray;
+  // TODO: better name to indicate in-out nature of this param? Or some info in JSDoc?
+  canvasBytes: Uint8ClampedArray;
   canvasSize: Xy;
   assets: Assets;
 };
 
-// `b` in loops in this file stands for a byte (index)
-//
 export class DrawApi {
-  readonly #mutableCanvasRgbaBytes: Uint8ClampedArray;
+  // TODO: still needed as a separate field?
+  readonly #canvasBytes: Uint8ClampedArray;
+  // TODO: still needed as a separate field?
   readonly #canvasSize: Xy;
+  // TODO: still needed as a separate field?
   readonly #assets: Assets;
 
-  readonly #drawRectFilled: DrawRectFilled;
+  readonly #clear: DrawClear;
+  readonly #rectFilled: DrawRectFilled;
 
   #cameraOffset: Xy = xy_(0, 0);
 
@@ -28,11 +29,12 @@ export class DrawApi {
   readonly #spriteColorMapping: Map<string, Color> = new Map();
 
   constructor(options: DrawApiOptions) {
-    this.#mutableCanvasRgbaBytes = options.mutableCanvasRgbaBytes;
+    this.#canvasBytes = options.canvasBytes;
     this.#canvasSize = options.canvasSize.round();
     this.#assets = options.assets;
 
-    this.#drawRectFilled = new DrawRectFilled(this.pixel.bind(this));
+    this.#clear = new DrawClear(this.#canvasBytes, this.#canvasSize);
+    this.#rectFilled = new DrawRectFilled(this.#canvasBytes, this.#canvasSize);
   }
 
   // TODO: cover it with tests
@@ -40,28 +42,12 @@ export class DrawApi {
     this.#cameraOffset = offset.round();
   }
 
-  // TODO: cover it with tests
-  clear(color: Color): void {
-    if (color instanceof SolidColor) {
-      for (
-        let pixel = 0;
-        pixel < this.#mutableCanvasRgbaBytes.length / 4;
-        pixel += 1
-      ) {
-        const b = pixel * 4;
-        this.#mutableCanvasRgbaBytes[b] = color.r;
-        this.#mutableCanvasRgbaBytes[b + 1] = color.g;
-        this.#mutableCanvasRgbaBytes[b + 2] = color.b;
-        this.#mutableCanvasRgbaBytes[b + 3] = 255;
-      }
-    }
+  clear(color: SolidColor): void {
+    this.#clear.draw(color);
   }
 
-  pixel(xy: Xy, c: Color): void {
-    if (!(c instanceof SolidColor)) {
-      return;
-    }
-
+  // TODO: extract, cover with tests, remove offset part
+  pixel(xy: Xy, c: SolidColor): void {
     const canvasXy = xy.sub(this.#cameraOffset).round();
     if (
       canvasXy.x < 0 ||
@@ -72,15 +58,19 @@ export class DrawApi {
       return;
     }
 
-    let b = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
-    this.#mutableCanvasRgbaBytes[b] = c.r;
-    this.#mutableCanvasRgbaBytes[b + 1] = c.g;
-    this.#mutableCanvasRgbaBytes[b + 2] = c.b;
-    this.#mutableCanvasRgbaBytes[b + 3] = 255;
+    let i = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
+    this.#canvasBytes[i] = c.r;
+    this.#canvasBytes[i + 1] = c.g;
+    this.#canvasBytes[i + 2] = c.b;
+    this.#canvasBytes[i + 3] = 255;
   }
 
-  rectFilled(xy1: Xy, xy2: Xy, c: SolidColor): void {
-    this.#drawRectFilled.draw(xy1, xy2, c);
+  rectFilled(xy1: Xy, xy2: Xy, color: SolidColor): void {
+    this.#rectFilled.draw(
+      xy1.sub(this.#cameraOffset).round(),
+      xy2.sub(this.#cameraOffset).round(),
+      color
+    );
   }
 
   // TODO: cover it with tests
@@ -135,10 +125,10 @@ export class DrawApi {
               (this.#cameraOffset.y * this.#canvasSize.x +
                 this.#cameraOffset.x) *
                 4;
-            this.#mutableCanvasRgbaBytes[adjustedTarget] = c.r;
-            this.#mutableCanvasRgbaBytes[adjustedTarget + 1] = c.g;
-            this.#mutableCanvasRgbaBytes[adjustedTarget + 2] = c.b;
-            this.#mutableCanvasRgbaBytes[adjustedTarget + 3] = 255;
+            this.#canvasBytes[adjustedTarget] = c.r;
+            this.#canvasBytes[adjustedTarget + 1] = c.g;
+            this.#canvasBytes[adjustedTarget + 2] = c.b;
+            this.#canvasBytes[adjustedTarget + 3] = 255;
           }
         }
       }

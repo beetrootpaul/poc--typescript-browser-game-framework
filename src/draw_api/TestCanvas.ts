@@ -1,34 +1,37 @@
 import { expect } from "@jest/globals";
-import { type Color } from "../Color.ts";
-import { Xy } from "../Xy.ts";
+import { SolidColor } from "../Color.ts";
+import { Xy, xy_ } from "../Xy.ts";
 
 export class TestCanvas {
-  readonly #pixels: string[][];
+  readonly size: Xy;
+  readonly bytes: Uint8ClampedArray;
 
-  constructor(width: number, height: number, defaultColorRgbCssHex: string) {
-    this.#pixels = Array.from({ length: height }, () =>
-      Array.from({ length: width }, () => toSolidRgba(defaultColorRgbCssHex))
-    );
-  }
-
-  setPx(xy: Xy, c: Color) {
-    if (
-      xy.y < 0 ||
-      xy.y >= this.#pixels.length ||
-      xy.x < 0 ||
-      xy.x >= this.#pixels[0].length
-    ) {
-      // do nothing, since we assume the `DrawApi#pixel` used on production performs clipping on its own
-      return;
+  constructor(width: number, height: number, color: SolidColor) {
+    this.size = xy_(width, height);
+    this.bytes = new Uint8ClampedArray(4 * width * height);
+    for (let i = 0; i < width * height; i += 1) {
+      this.bytes[4 * i] = color.r;
+      this.bytes[4 * i + 1] = color.g;
+      this.bytes[4 * i + 2] = color.b;
+      this.bytes[4 * i + 3] = 0xff;
     }
-    this.#pixels[xy.y][xy.x] = c.asRgbaCssHex();
   }
 
   expectToEqual(params: {
-    withMapping: Record<string, string>;
+    withMapping: Record<string, SolidColor>;
     expectedImageAsAscii: string;
   }) {
-    const actualAscii = this.#asAscii(params.withMapping);
+    const { withMapping: asciiToColor, expectedImageAsAscii } = params;
+
+    const rgbHexToAscii: Map<string, string> = new Map(
+      Object.entries(asciiToColor).map(([ascii, color]) => [
+        color.asRgbCssHex(),
+        ascii,
+      ])
+    );
+
+    const actualAscii = this.#asAscii(rgbHexToAscii);
+
     const expectedAscii =
       params.expectedImageAsAscii
         .trim()
@@ -36,27 +39,31 @@ export class TestCanvas {
         .map((line) => line.trim())
         .filter((line) => line.length > 0)
         .join("\n") + "\n";
+
     expect(actualAscii).toEqual(expectedAscii);
   }
 
-  #asAscii(rgbCssHexToAscii: Record<string, string>): string {
-    const rgbaCssHexToAscii: Map<string, string> = new Map(
-      Object.entries(rgbCssHexToAscii).map(([rgb, ascii]) => [
-        toSolidRgba(rgb),
-        ascii,
-      ])
-    );
-    return this.#pixels.reduce((asciiImage, pixelsRow) => {
-      const asciiRow = pixelsRow.reduce((asciiRow, rgba) => {
-        const asciiPixel = rgbaCssHexToAscii.get(rgba) ?? "?";
-        return asciiRow + asciiPixel;
-      }, "");
-      return asciiImage + asciiRow + "\n";
-    }, "");
-  }
-}
+  #asAscii(rgbHexToAscii: Map<string, string>): string {
+    let asciiImage = "";
 
-// TODO: sounds like something that should be a util fn of Color or SolidColor
-function toSolidRgba(rgbCssHex: string): string {
-  return rgbCssHex + "ff";
+    for (let y = 0; y < this.size.y; y += 1) {
+      for (let x = 0; x < this.size.x; x += 1) {
+        const i = 4 * (y * this.size.x + x);
+        const colorBytes = this.bytes.slice(i, i + 4);
+        if (colorBytes[3] !== 0xff) {
+          asciiImage += "!";
+        } else {
+          const color = new SolidColor(
+            colorBytes[0],
+            colorBytes[1],
+            colorBytes[2]
+          );
+          asciiImage += rgbHexToAscii.get(color.asRgbCssHex()) ?? "?";
+        }
+      }
+      asciiImage += "\n";
+    }
+
+    return asciiImage;
+  }
 }

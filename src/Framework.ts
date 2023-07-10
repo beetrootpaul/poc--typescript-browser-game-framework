@@ -123,7 +123,7 @@ export class Framework {
       this.#offscreenContext.canvas.height
     );
     this.#drawApi = new DrawApi({
-      mutableCanvasRgbaBytes: this.#offscreenImageData.data,
+      canvasBytes: this.#offscreenImageData.data,
       canvasSize: this.#gameCanvasSize,
       assets: this.#assets,
     });
