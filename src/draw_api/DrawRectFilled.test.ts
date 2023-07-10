@@ -6,7 +6,7 @@ import { TestCanvas } from "./TestCanvas.ts";
 
 describe("DrawRectFilled", () => {
   const c0 = SolidColor.fromRgbCssHex("#010203");
-  const c1 = SolidColor.fromRgbCssHex("#040506");
+  const c1 = SolidColor.fromRgbCssHex("#111213");
 
   test("simple 1x1", () => {
     // given

@@ -5,7 +5,7 @@ import { TestCanvas } from "./TestCanvas.ts";
 
 describe("DrawClear", () => {
   const c0 = SolidColor.fromRgbCssHex("#010203");
-  const c1 = SolidColor.fromRgbCssHex("#040506");
+  const c1 = SolidColor.fromRgbCssHex("#111213");
 
   test("clear the whole canvas with a given color", () => {
     // given

@@ -1,6 +1,7 @@
 import { SolidColor } from "../Color.ts";
 import { Xy } from "../Xy.ts";
 
+// TODO: rename to DrawRect and provide a way to draw both filled and not filled rects
 export class DrawRectFilled {
   readonly #canvasBytes: Uint8ClampedArray;
   readonly #canvasSize: Xy;

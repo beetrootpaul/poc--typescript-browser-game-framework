@@ -3,6 +3,7 @@ import { Color, SolidColor } from "../Color.ts";
 import { Sprite } from "../Sprite.ts";
 import { Xy, xy_ } from "../Xy.ts";
 import { DrawClear } from "./DrawClear.ts";
+import { DrawEllipse } from "./DrawEllipse.ts";
 import { DrawPixel } from "./DrawPixel.ts";
 import { DrawRectFilled } from "./DrawRectFilled.ts";
 
@@ -24,6 +25,7 @@ export class DrawApi {
   readonly #clear: DrawClear;
   readonly #pixel: DrawPixel;
   readonly #rectFilled: DrawRectFilled;
+  readonly #ellipse: DrawEllipse;
 
   #cameraOffset: Xy = xy_(0, 0);
 
@@ -38,6 +40,7 @@ export class DrawApi {
     this.#clear = new DrawClear(this.#canvasBytes, this.#canvasSize);
     this.#pixel = new DrawPixel(this.#canvasBytes, this.#canvasSize);
     this.#rectFilled = new DrawRectFilled(this.#canvasBytes, this.#canvasSize);
+    this.#ellipse = new DrawEllipse(this.#canvasBytes, this.#canvasSize);
   }
 
   // TODO: cover it with tests
@@ -58,6 +61,24 @@ export class DrawApi {
       xy1.sub(this.#cameraOffset).round(),
       xy2.sub(this.#cameraOffset).round(),
       color
+    );
+  }
+
+  ellipse(xy1: Xy, xy2: Xy, color: SolidColor): void {
+    this.#ellipse.draw(
+      xy1.sub(this.#cameraOffset).round(),
+      xy2.sub(this.#cameraOffset).round(),
+      color,
+      false
+    );
+  }
+
+  ellipseFilled(xy1: Xy, xy2: Xy, color: SolidColor): void {
+    this.#ellipse.draw(
+      xy1.sub(this.#cameraOffset).round(),
+      xy2.sub(this.#cameraOffset).round(),
+      color,
+      true
     );
   }
 
