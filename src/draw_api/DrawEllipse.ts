@@ -15,8 +15,13 @@ export class DrawEllipse {
     this.#pixel = new DrawPixel(this.#canvasBytes, this.#canvasSize);
   }
 
+  // TEST: for switched order of xy1 and xy2 (and soltion maybe this? -> [xy1,xy2]=[Math.min(…),Math.max(…)]
   // Based on https://github.com/aseprite/aseprite/blob/25fbe786f8353a2ddb57de3bcc5db00066cc9ca6/src/doc/algo.cpp#L216-L315
   draw(xy1: Xy, xy2: Xy, color: SolidColor, fill: boolean): void {
+    if (Math.abs(xy2.x - xy1.x) <= 0 || Math.abs(xy2.y - xy1.y) <= 0) {
+      return;
+    }
+
     let x0 = xy1.x;
     let x1 = xy2.x - 1;
     let y0 = xy1.y;
