@@ -21,6 +21,12 @@ export class TestCanvas {
     withMapping: Record<string, SolidColor>;
     expectedImageAsAscii: string;
   }) {
+    // first, let's check if bytes didn't increase in their length
+
+    expect(this.bytes.length).toEqual(this.size.x * this.size.y * 4);
+
+    // then, let's proceed to the actual image check
+
     const { withMapping: asciiToColor, expectedImageAsAscii } = params;
 
     const rgbHexToAscii: Map<string, string> = new Map(

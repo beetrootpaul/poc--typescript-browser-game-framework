@@ -129,4 +129,96 @@ describe("DrawRectFilled", () => {
       `,
     });
   });
+
+  test("clipping: over the left edge", () => {
+    // given
+    const canvas = new TestCanvas(6, 6, c0);
+    const rectFilled = new DrawRectFilled(canvas.bytes, canvas.size);
+
+    // when
+    const xy1 = xy_(-2, 1);
+    rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1);
+
+    //then
+    canvas.expectToEqual({
+      withMapping: { "-": c0, "#": c1 },
+      expectedImageAsAscii: `
+        ------
+        ##----
+        ##----
+        ##----
+        ##----
+        ------
+      `,
+    });
+  });
+
+  test("clipping: over the right edge", () => {
+    // given
+    const canvas = new TestCanvas(6, 6, c0);
+    const rectFilled = new DrawRectFilled(canvas.bytes, canvas.size);
+
+    // when
+    const xy1 = xy_(4, 1);
+    rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1);
+
+    //then
+    canvas.expectToEqual({
+      withMapping: { "-": c0, "#": c1 },
+      expectedImageAsAscii: `
+        ------
+        ----##
+        ----##
+        ----##
+        ----##
+        ------
+      `,
+    });
+  });
+
+  test("clipping: over the top edge", () => {
+    // given
+    const canvas = new TestCanvas(6, 6, c0);
+    const rectFilled = new DrawRectFilled(canvas.bytes, canvas.size);
+
+    // when
+    const xy1 = xy_(1, -2);
+    rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1);
+
+    //then
+    canvas.expectToEqual({
+      withMapping: { "-": c0, "#": c1 },
+      expectedImageAsAscii: `
+        -####-
+        -####-
+        ------
+        ------
+        ------
+        ------
+      `,
+    });
+  });
+
+  test("clipping: over the bottom edge", () => {
+    // given
+    const canvas = new TestCanvas(6, 6, c0);
+    const rectFilled = new DrawRectFilled(canvas.bytes, canvas.size);
+
+    // when
+    const xy1 = xy_(1, 4);
+    rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1);
+
+    //then
+    canvas.expectToEqual({
+      withMapping: { "-": c0, "#": c1 },
+      expectedImageAsAscii: `
+        ------
+        ------
+        ------
+        ------
+        -####-
+        -####-
+      `,
+    });
+  });
 });
