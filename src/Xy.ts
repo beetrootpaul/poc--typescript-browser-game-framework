@@ -55,6 +55,22 @@ export class Xy implements PrintDebug {
     return Math.min(this.x, this.y);
   }
 
+  gt(other: Xy): boolean {
+    return this.x > other.x && this.y > other.y;
+  }
+
+  gte(other: Xy): boolean {
+    return this.x >= other.x && this.y >= other.y;
+  }
+
+  lt(other: Xy): boolean {
+    return this.x < other.x && this.y < other.y;
+  }
+
+  lte(other: Xy): boolean {
+    return this.x <= other.x && this.y <= other.y;
+  }
+
   clamp(xy1: Xy, xy2: Xy): Xy {
     return new Xy(
       Utils.clamp(xy1.x, this.x, xy2.x),

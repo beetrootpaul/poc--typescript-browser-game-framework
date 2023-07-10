@@ -3,6 +3,7 @@ import { Color, SolidColor } from "../Color.ts";
 import { Sprite } from "../Sprite.ts";
 import { Xy, xy_ } from "../Xy.ts";
 import { DrawClear } from "./DrawClear.ts";
+import { DrawPixel } from "./DrawPixel.ts";
 import { DrawRectFilled } from "./DrawRectFilled.ts";
 
 type DrawApiOptions = {
@@ -21,6 +22,7 @@ export class DrawApi {
   readonly #assets: Assets;
 
   readonly #clear: DrawClear;
+  readonly #pixel: DrawPixel;
   readonly #rectFilled: DrawRectFilled;
 
   #cameraOffset: Xy = xy_(0, 0);
@@ -34,6 +36,7 @@ export class DrawApi {
     this.#assets = options.assets;
 
     this.#clear = new DrawClear(this.#canvasBytes, this.#canvasSize);
+    this.#pixel = new DrawPixel(this.#canvasBytes, this.#canvasSize);
     this.#rectFilled = new DrawRectFilled(this.#canvasBytes, this.#canvasSize);
   }
 
@@ -46,23 +49,8 @@ export class DrawApi {
     this.#clear.draw(color);
   }
 
-  // TODO: extract, cover with tests, remove offset part
-  pixel(xy: Xy, c: SolidColor): void {
-    const canvasXy = xy.sub(this.#cameraOffset).round();
-    if (
-      canvasXy.x < 0 ||
-      canvasXy.x >= this.#canvasSize.x ||
-      canvasXy.y < 0 ||
-      canvasXy.y >= this.#canvasSize.y
-    ) {
-      return;
-    }
-
-    let i = (canvasXy.y * this.#canvasSize.x + canvasXy.x) * 4;
-    this.#canvasBytes[i] = c.r;
-    this.#canvasBytes[i + 1] = c.g;
-    this.#canvasBytes[i + 2] = c.b;
-    this.#canvasBytes[i + 3] = 255;
+  pixel(xy: Xy, color: SolidColor): void {
+    this.#pixel.draw(xy.sub(this.#cameraOffset).round(), color);
   }
 
   rectFilled(xy1: Xy, xy2: Xy, color: SolidColor): void {

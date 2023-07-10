@@ -4,7 +4,6 @@ import { xy_ } from "../Xy.ts";
 import { DrawRectFilled } from "./DrawRectFilled.ts";
 import { TestCanvas } from "./TestCanvas.ts";
 
-// TODO: test and implement clipping
 describe("DrawRectFilled", () => {
   const c0 = SolidColor.fromRgbCssHex("#010203");
   const c1 = SolidColor.fromRgbCssHex("#040506");
