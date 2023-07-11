@@ -5,7 +5,7 @@ import { Xy, xy_ } from "../Xy.ts";
 import { DrawClear } from "./DrawClear.ts";
 import { DrawEllipse } from "./DrawEllipse.ts";
 import { DrawPixel } from "./DrawPixel.ts";
-import { DrawRectFilled } from "./DrawRectFilled.ts";
+import { DrawRect } from "./DrawRect.ts";
 
 type DrawApiOptions = {
   // TODO: better name to indicate in-out nature of this param? Or some info in JSDoc?
@@ -24,12 +24,12 @@ export class DrawApi {
 
   readonly #clear: DrawClear;
   readonly #pixel: DrawPixel;
-  readonly #rectFilled: DrawRectFilled;
+  readonly #rectFilled: DrawRect;
   readonly #ellipse: DrawEllipse;
 
   #cameraOffset: Xy = xy_(0, 0);
 
-  // Hex representation of a Color is used as this map's keys, because it makes it easier to retrieve mappings with use of string equality
+  // RGBA hex representation of a Color is used as this map's keys, because it makes it easier to retrieve mappings with use of string equality
   readonly #spriteColorMapping: Map<string, Color> = new Map();
 
   constructor(options: DrawApiOptions) {
@@ -39,7 +39,7 @@ export class DrawApi {
 
     this.#clear = new DrawClear(this.#canvasBytes, this.#canvasSize);
     this.#pixel = new DrawPixel(this.#canvasBytes, this.#canvasSize);
-    this.#rectFilled = new DrawRectFilled(this.#canvasBytes, this.#canvasSize);
+    this.#rectFilled = new DrawRect(this.#canvasBytes, this.#canvasSize);
     this.#ellipse = new DrawEllipse(this.#canvasBytes, this.#canvasSize);
   }
 
@@ -56,11 +56,21 @@ export class DrawApi {
     this.#pixel.draw(xy.sub(this.#cameraOffset).round(), color);
   }
 
+  rect(xy1: Xy, xy2: Xy, color: SolidColor): void {
+    this.#rectFilled.draw(
+      xy1.sub(this.#cameraOffset).round(),
+      xy2.sub(this.#cameraOffset).round(),
+      color,
+      false
+    );
+  }
+
   rectFilled(xy1: Xy, xy2: Xy, color: SolidColor): void {
     this.#rectFilled.draw(
       xy1.sub(this.#cameraOffset).round(),
       xy2.sub(this.#cameraOffset).round(),
-      color
+      color,
+      true
     );
   }
 

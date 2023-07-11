@@ -58,6 +58,7 @@ export class DrawEllipse {
         Xy.forEachIntXyWithinRectOf(
           xy_(x0 + 1, y0),
           xy_(x1 - 1, y0).add(1),
+          true,
           (xy) => {
             this.#pixel.draw(xy, color);
           }
@@ -66,6 +67,7 @@ export class DrawEllipse {
         Xy.forEachIntXyWithinRectOf(
           xy_(x0 + 1, y1),
           xy_(x1 - 1, y1).add(1),
+          true,
           (xy) => {
             this.#pixel.draw(xy, color);
           }

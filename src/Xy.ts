@@ -11,6 +11,7 @@ export class Xy implements PrintDebug {
   static forEachIntXyWithinRectOf(
     xy1: Xy,
     xy2: Xy,
+    fill: boolean,
     callback: (xy: Xy) => void
   ): void {
     xy1 = xy1.round();
@@ -25,7 +26,15 @@ export class Xy implements PrintDebug {
     ];
     for (let x = xMinInclusive; x < xMaxExclusive; x += 1) {
       for (let y = yMinInclusive; y < yMaxExclusive; y += 1) {
-        callback(xy_(x, y));
+        if (
+          fill ||
+          x === xMinInclusive ||
+          x === xMaxExclusive - 1 ||
+          y === yMinInclusive ||
+          y === yMaxExclusive - 1
+        ) {
+          callback(xy_(x, y));
+        }
       }
     }
   }
