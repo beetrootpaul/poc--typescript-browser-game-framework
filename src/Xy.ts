@@ -8,6 +8,37 @@ export function xy_(x: number, y: number): Xy {
 export class Xy implements PrintDebug {
   static zero = new Xy(0, 0);
 
+  static forEachIntXyWithinRectOf(
+    xy1: Xy,
+    xy2: Xy,
+    fill: boolean,
+    callback: (xy: Xy) => void
+  ): void {
+    xy1 = xy1.round();
+    xy2 = xy2.round();
+    const [xMinInclusive, xMaxExclusive] = [
+      Math.min(xy1.x, xy2.x),
+      Math.max(xy1.x, xy2.x),
+    ];
+    const [yMinInclusive, yMaxExclusive] = [
+      Math.min(xy1.y, xy2.y),
+      Math.max(xy1.y, xy2.y),
+    ];
+    for (let x = xMinInclusive; x < xMaxExclusive; x += 1) {
+      for (let y = yMinInclusive; y < yMaxExclusive; y += 1) {
+        if (
+          fill ||
+          x === xMinInclusive ||
+          x === xMaxExclusive - 1 ||
+          y === yMinInclusive ||
+          y === yMaxExclusive - 1
+        ) {
+          callback(xy_(x, y));
+        }
+      }
+    }
+  }
+
   readonly x: number;
   readonly y: number;
 
@@ -35,6 +66,22 @@ export class Xy implements PrintDebug {
 
   min(): number {
     return Math.min(this.x, this.y);
+  }
+
+  gt(other: Xy): boolean {
+    return this.x > other.x && this.y > other.y;
+  }
+
+  gte(other: Xy): boolean {
+    return this.x >= other.x && this.y >= other.y;
+  }
+
+  lt(other: Xy): boolean {
+    return this.x < other.x && this.y < other.y;
+  }
+
+  lte(other: Xy): boolean {
+    return this.x <= other.x && this.y <= other.y;
   }
 
   clamp(xy1: Xy, xy2: Xy): Xy {

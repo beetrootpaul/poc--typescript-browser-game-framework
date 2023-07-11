@@ -21,3 +21,5 @@ export class FpsLoggerAverage implements FpsLogger {
     }
   }
 }
+
+// TODO: expose FPS to the game so it can print it on screen if needed

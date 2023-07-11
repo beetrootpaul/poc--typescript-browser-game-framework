@@ -1,5 +1,6 @@
+import { Assets, AssetsToLoad } from "./Assets.ts";
 import { SolidColor } from "./Color.ts";
-import { DrawApi } from "./DrawApi.ts";
+import { DrawApi } from "./draw_api/DrawApi.ts";
 import { FullScreen } from "./FullScreen.ts";
 import { GameInput } from "./game_input/GameInput.ts";
 import { GameLoop } from "./game_loop/GameLoop.ts";
@@ -11,7 +12,6 @@ import { Xy } from "./Xy.ts";
 export type FrameworkOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
-  htmlOffscreenCanvasFallbackSelector: string;
   htmlControlsFullscreenSelector: string;
   htmlCanvasBackground: SolidColor;
   gameCanvasSize: Xy;
@@ -39,15 +39,15 @@ export class Framework {
   readonly #htmlCanvasBackground: SolidColor;
 
   readonly #htmlCanvasContext: CanvasRenderingContext2D;
-  readonly #offscreenContext:
-    | OffscreenCanvasRenderingContext2D
-    | CanvasRenderingContext2D;
+  readonly #offscreenContext: OffscreenCanvasRenderingContext2D;
   readonly #offscreenImageData: ImageData;
 
   readonly #loading: Loading;
   readonly #gameInput: GameInput;
   readonly #gameLoop: GameLoop;
   readonly #fullScreen: FullScreen;
+
+  readonly #assets: Assets;
 
   readonly #drawApi: DrawApi;
   readonly #storageApi: StorageApi;
@@ -87,48 +87,19 @@ export class Framework {
     }
     this.#htmlCanvasContext = htmlCanvasContext;
 
-    if (typeof OffscreenCanvas == "undefined") {
-      console.warn(
-        "No OffscreenCanvas support. Falling back to a regular <canvas>."
-      );
-      const htmlOffscreenCanvasFallback =
-        document.querySelector<HTMLCanvasElement>(
-          options.htmlOffscreenCanvasFallbackSelector
-        );
-      if (!htmlOffscreenCanvasFallback) {
-        throw Error(
-          `Was unable to find a fallback offscreen <canvas> by selector '${options.htmlOffscreenCanvasFallbackSelector}'`
-        );
-      }
-      htmlOffscreenCanvasFallback.width = options.gameCanvasSize.x;
-      htmlOffscreenCanvasFallback.height = options.gameCanvasSize.y;
-      const fallbackOffscreenContext = htmlOffscreenCanvasFallback.getContext(
-        "2d",
-        {
-          // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#turn_off_transparency
-          alpha: false,
-        }
-      );
-      if (!fallbackOffscreenContext) {
-        throw Error(
-          "Was unable to obtain fallback offscreen canvas' 2D context"
-        );
-      }
-      this.#offscreenContext = fallbackOffscreenContext;
-    } else {
-      const offscreenCanvas = new OffscreenCanvas(
-        options.gameCanvasSize.x,
-        options.gameCanvasSize.y
-      );
-      const offscreenContext = offscreenCanvas.getContext("2d", {
-        // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#turn_off_transparency
-        alpha: false,
-      });
-      if (!offscreenContext) {
-        throw Error("Was unable to obtain OffscreenCanvas' 2D context");
-      }
-      this.#offscreenContext = offscreenContext;
+    const offscreenCanvas = document
+      .createElement("canvas")
+      .transferControlToOffscreen();
+    offscreenCanvas.width = options.gameCanvasSize.x;
+    offscreenCanvas.height = options.gameCanvasSize.y;
+    const offscreenContext = offscreenCanvas.getContext("2d", {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas#turn_off_transparency
+      alpha: false,
+    });
+    if (!offscreenContext) {
+      throw Error("Was unable to obtain OffscreenCanvas' 2D context");
     }
+    this.#offscreenContext = offscreenContext;
 
     this.#gameInput = new GameInput({
       debugToggleKey: this.#debugOptions?.toggleKey,
@@ -137,6 +108,7 @@ export class Framework {
     this.#gameLoop = new GameLoop({
       desiredFps: options.desiredFps,
       logActualFps: options.logActualFps ?? false,
+      requestAnimationFrameFn: window.requestAnimationFrame.bind(window),
     });
 
     this.#fullScreen = FullScreen.newFor(
@@ -144,19 +116,31 @@ export class Framework {
       options.htmlControlsFullscreenSelector
     );
 
+    this.#assets = new Assets();
+
     this.#offscreenImageData = this.#offscreenContext.createImageData(
       this.#offscreenContext.canvas.width,
       this.#offscreenContext.canvas.height
     );
-    this.#drawApi = new DrawApi(
-      this.#gameCanvasSize,
-      this.#offscreenImageData.data
-    );
+    this.#drawApi = new DrawApi({
+      canvasBytes: this.#offscreenImageData.data,
+      canvasSize: this.#gameCanvasSize,
+      assets: this.#assets,
+    });
 
     this.#storageApi = new StorageApi();
 
     PocTsBGFramework.drawApi = this.#drawApi;
     PocTsBGFramework.storageApi = this.#storageApi;
+  }
+
+  // TODO: type the startGame fn or the entire object inside resolved Promise
+  loadAssets(
+    assetsToLoad: AssetsToLoad
+  ): Promise<{ startGame: (onStart?: () => void) => void }> {
+    return this.#assets.loadImages(assetsToLoad.images).then(() => ({
+      startGame: this.#startGame.bind(this),
+    }));
   }
 
   setOnUpdate(onUpdate: () => void) {
@@ -168,7 +152,7 @@ export class Framework {
   }
 
   // TODO: How to prevent an error of calling startGame twice? What would happen if called twice?
-  startGame(onStart?: () => void): void {
+  #startGame(onStart?: () => void): void {
     this.#setupHtmlCanvas();
     window.addEventListener("resize", (_event) => {
       this.#setupHtmlCanvas();
