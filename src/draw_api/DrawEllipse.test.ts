@@ -9,8 +9,6 @@ describe("DrawEllipse", () => {
   const c1 = SolidColor.fromRgbCssHex("#111213");
 
   describe("regular", () => {
-    // TODO: clipping same as for rect
-
     test("0-size", () => {
       // given
       const canvas = new TestCanvas(3, 3, c0);
@@ -114,7 +112,7 @@ describe("DrawEllipse", () => {
           --##------##--
           ----######----
           --------------
-      `,
+        `,
       });
     });
 
@@ -138,14 +136,108 @@ describe("DrawEllipse", () => {
           --##------##--
           ----######----
           --------------
-      `,
+         `,
+      });
+    });
+
+    test("clipping: over the left edge", () => {
+      // given
+      const canvas = new TestCanvas(14, 7, c0);
+      const ellipse = new DrawEllipse(canvas.bytes, canvas.size);
+
+      // when
+      const xy1 = xy_(-6, 1);
+      ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, false);
+
+      //then
+      canvas.expectToEqual({
+        withMapping: { "-": c0, "#": c1 },
+        expectedImageAsAscii: `
+          --------------
+          ###-----------
+          ---##---------
+          -----#--------
+          ---##---------
+          ###-----------
+          --------------
+        `,
+      });
+    });
+
+    test("clipping: over the right edge", () => {
+      // given
+      const canvas = new TestCanvas(14, 7, c0);
+      const ellipse = new DrawEllipse(canvas.bytes, canvas.size);
+
+      // when
+      const xy1 = xy_(8, 1);
+      ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, false);
+
+      //then
+      canvas.expectToEqual({
+        withMapping: { "-": c0, "#": c1 },
+        expectedImageAsAscii: `
+          --------------
+          -----------###
+          ---------##---
+          --------#-----
+          ---------##---
+          -----------###
+          --------------
+       `,
+      });
+    });
+
+    test("clipping: over the top edge", () => {
+      // given
+      const canvas = new TestCanvas(14, 7, c0);
+      const ellipse = new DrawEllipse(canvas.bytes, canvas.size);
+
+      // when
+      const xy1 = xy_(1, -2);
+      ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, false);
+
+      //then
+      canvas.expectToEqual({
+        withMapping: { "-": c0, "#": c1 },
+        expectedImageAsAscii: `
+          -#----------#-
+          --##------##--
+          ----######----
+          --------------
+          --------------
+          --------------
+          --------------
+        `,
+      });
+    });
+
+    test("clipping: over the bottom edge", () => {
+      // given
+      const canvas = new TestCanvas(14, 7, c0);
+      const ellipse = new DrawEllipse(canvas.bytes, canvas.size);
+
+      // when
+      const xy1 = xy_(1, 4);
+      ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, false);
+
+      //then
+      canvas.expectToEqual({
+        withMapping: { "-": c0, "#": c1 },
+        expectedImageAsAscii: `
+          --------------
+          --------------
+          --------------
+          --------------
+          ----######----
+          --##------##--
+          -#----------#-
+        `,
       });
     });
   });
 
   describe("filled", () => {
-    // TODO: clipping same as for rect
-
     test("0-size", () => {
       // given
       const canvas = new TestCanvas(3, 3, c0);
@@ -249,7 +341,7 @@ describe("DrawEllipse", () => {
           --##########--
           ----######----
           --------------
-      `,
+        `,
       });
     });
 
@@ -273,7 +365,103 @@ describe("DrawEllipse", () => {
           --##########--
           ----######----
           --------------
-      `,
+       `,
+      });
+    });
+
+    test("clipping: over the left edge", () => {
+      // given
+      const canvas = new TestCanvas(14, 7, c0);
+      const ellipse = new DrawEllipse(canvas.bytes, canvas.size);
+
+      // when
+      const xy1 = xy_(-6, 1);
+      ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, true);
+
+      //then
+      canvas.expectToEqual({
+        withMapping: { "-": c0, "#": c1 },
+        expectedImageAsAscii: `
+          --------------
+          ###-----------
+          #####---------
+          ######--------
+          #####---------
+          ###-----------
+          --------------
+       `,
+      });
+    });
+
+    test("clipping: over the right edge", () => {
+      // given
+      const canvas = new TestCanvas(14, 7, c0);
+      const ellipse = new DrawEllipse(canvas.bytes, canvas.size);
+
+      // when
+      const xy1 = xy_(8, 1);
+      ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, true);
+
+      //then
+      canvas.expectToEqual({
+        withMapping: { "-": c0, "#": c1 },
+        expectedImageAsAscii: `
+          --------------
+          -----------###
+          ---------#####
+          --------######
+          ---------#####
+          -----------###
+          --------------
+        `,
+      });
+    });
+
+    test("clipping: over the top edge", () => {
+      // given
+      const canvas = new TestCanvas(14, 7, c0);
+      const ellipse = new DrawEllipse(canvas.bytes, canvas.size);
+
+      // when
+      const xy1 = xy_(1, -2);
+      ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, true);
+
+      //then
+      canvas.expectToEqual({
+        withMapping: { "-": c0, "#": c1 },
+        expectedImageAsAscii: `
+          -############-
+          --##########--
+          ----######----
+          --------------
+          --------------
+          --------------
+          --------------
+        `,
+      });
+    });
+
+    test("clipping: over the bottom edge", () => {
+      // given
+      const canvas = new TestCanvas(14, 7, c0);
+      const ellipse = new DrawEllipse(canvas.bytes, canvas.size);
+
+      // when
+      const xy1 = xy_(1, 4);
+      ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, true);
+
+      //then
+      canvas.expectToEqual({
+        withMapping: { "-": c0, "#": c1 },
+        expectedImageAsAscii: `
+          --------------
+          --------------
+          --------------
+          --------------
+          ----######----
+          --##########--
+          -############-
+        `,
       });
     });
   });
