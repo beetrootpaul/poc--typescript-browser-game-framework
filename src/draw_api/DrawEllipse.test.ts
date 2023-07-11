@@ -9,7 +9,6 @@ describe("DrawEllipse", () => {
   const c1 = SolidColor.fromRgbCssHex("#111213");
 
   describe("regular", () => {
-    // TODO: test negative size
     // TODO: clipping same as for rect
 
     test("0-size", () => {
@@ -118,10 +117,33 @@ describe("DrawEllipse", () => {
       `,
       });
     });
+
+    test("negative 12x5", () => {
+      // given
+      const canvas = new TestCanvas(14, 7, c0);
+      const ellipse = new DrawEllipse(canvas.bytes, canvas.size);
+
+      // when
+      const xy1 = xy_(13, 6);
+      ellipse.draw(xy1, xy1.add(xy_(-12, -5)), c1, false);
+
+      //then
+      canvas.expectToEqual({
+        withMapping: { "-": c0, "#": c1 },
+        expectedImageAsAscii: `
+          --------------
+          ----######----
+          --##------##--
+          -#----------#-
+          --##------##--
+          ----######----
+          --------------
+      `,
+      });
+    });
   });
 
   describe("filled", () => {
-    // TODO: test negative size
     // TODO: clipping same as for rect
 
     test("0-size", () => {
@@ -215,6 +237,30 @@ describe("DrawEllipse", () => {
       // when
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, true);
+
+      //then
+      canvas.expectToEqual({
+        withMapping: { "-": c0, "#": c1 },
+        expectedImageAsAscii: `
+          --------------
+          ----######----
+          --##########--
+          -############-
+          --##########--
+          ----######----
+          --------------
+      `,
+      });
+    });
+
+    test("negative 12x5", () => {
+      // given
+      const canvas = new TestCanvas(14, 7, c0);
+      const ellipse = new DrawEllipse(canvas.bytes, canvas.size);
+
+      // when
+      const xy1 = xy_(13, 6);
+      ellipse.draw(xy1, xy1.add(xy_(-12, -5)), c1, true);
 
       //then
       canvas.expectToEqual({

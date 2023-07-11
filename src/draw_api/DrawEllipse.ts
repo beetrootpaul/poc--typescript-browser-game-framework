@@ -22,10 +22,10 @@ export class DrawEllipse {
       return;
     }
 
-    let x0 = xy1.x;
-    let x1 = xy2.x - 1;
-    let y0 = xy1.y;
-    let y1 = xy2.y - 1;
+    let x0 = Math.min(xy1.x, xy2.x);
+    let x1 = Math.max(xy1.x, xy2.x) - 1;
+    let y0 = Math.min(xy1.y, xy2.y);
+    let y1 = Math.max(xy1.y, xy2.y) - 1;
     const h = y1 - y0 + 1;
 
     // diameter
