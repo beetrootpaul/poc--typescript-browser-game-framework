@@ -6,7 +6,7 @@ type AssetToLoad = {
   url: string;
 };
 
-type ImageAsset = {
+export type ImageAsset = {
   width: number;
   height: number;
   rgba8bitData: Uint8ClampedArray;

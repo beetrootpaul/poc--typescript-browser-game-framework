@@ -6,6 +6,7 @@ import { DrawClear } from "./DrawClear.ts";
 import { DrawEllipse } from "./DrawEllipse.ts";
 import { DrawPixel } from "./DrawPixel.ts";
 import { DrawRect } from "./DrawRect.ts";
+import { DrawSprite } from "./DrawSprite.ts";
 
 type DrawApiOptions = {
   // TODO: better name to indicate in-out nature of this param? Or some info in JSDoc?
@@ -16,16 +17,13 @@ type DrawApiOptions = {
 
 export class DrawApi {
   // TODO: still needed as a separate field?
-  readonly #canvasBytes: Uint8ClampedArray;
-  // TODO: still needed as a separate field?
-  readonly #canvasSize: Xy;
-  // TODO: still needed as a separate field?
   readonly #assets: Assets;
 
   readonly #clear: DrawClear;
   readonly #pixel: DrawPixel;
   readonly #rectFilled: DrawRect;
   readonly #ellipse: DrawEllipse;
+  readonly #sprite: DrawSprite;
 
   #cameraOffset: Xy = xy_(0, 0);
 
@@ -33,29 +31,47 @@ export class DrawApi {
   readonly #spriteColorMapping: Map<string, Color> = new Map();
 
   constructor(options: DrawApiOptions) {
-    this.#canvasBytes = options.canvasBytes;
-    this.#canvasSize = options.canvasSize.round();
     this.#assets = options.assets;
 
-    this.#clear = new DrawClear(this.#canvasBytes, this.#canvasSize);
-    this.#pixel = new DrawPixel(this.#canvasBytes, this.#canvasSize);
-    this.#rectFilled = new DrawRect(this.#canvasBytes, this.#canvasSize);
-    this.#ellipse = new DrawEllipse(this.#canvasBytes, this.#canvasSize);
+    this.#clear = new DrawClear(
+      options.canvasBytes,
+      options.canvasSize.round()
+    );
+    this.#pixel = new DrawPixel(
+      options.canvasBytes,
+      options.canvasSize.round()
+    );
+    this.#rectFilled = new DrawRect(
+      options.canvasBytes,
+      options.canvasSize.round()
+    );
+    this.#ellipse = new DrawEllipse(
+      options.canvasBytes,
+      options.canvasSize.round()
+    );
+    this.#sprite = new DrawSprite(
+      options.canvasBytes,
+      options.canvasSize.round()
+    );
   }
 
   // TODO: cover it with tests
+  // noinspection JSUnusedGlobalSymbols
   setCameraOffset(offset: Xy): void {
     this.#cameraOffset = offset.round();
   }
 
+  // noinspection JSUnusedGlobalSymbols
   clear(color: SolidColor): void {
     this.#clear.draw(color);
   }
 
+  // noinspection JSUnusedGlobalSymbols
   pixel(xy: Xy, color: SolidColor): void {
     this.#pixel.draw(xy.sub(this.#cameraOffset).round(), color);
   }
 
+  // noinspection JSUnusedGlobalSymbols
   rect(xy1: Xy, xy2: Xy, color: SolidColor): void {
     this.#rectFilled.draw(
       xy1.sub(this.#cameraOffset).round(),
@@ -65,6 +81,7 @@ export class DrawApi {
     );
   }
 
+  // noinspection JSUnusedGlobalSymbols
   rectFilled(xy1: Xy, xy2: Xy, color: SolidColor): void {
     this.#rectFilled.draw(
       xy1.sub(this.#cameraOffset).round(),
@@ -74,6 +91,7 @@ export class DrawApi {
     );
   }
 
+  // noinspection JSUnusedGlobalSymbols
   ellipse(xy1: Xy, xy2: Xy, color: SolidColor): void {
     this.#ellipse.draw(
       xy1.sub(this.#cameraOffset).round(),
@@ -83,6 +101,7 @@ export class DrawApi {
     );
   }
 
+  // noinspection JSUnusedGlobalSymbols
   ellipseFilled(xy1: Xy, xy2: Xy, color: SolidColor): void {
     this.#ellipse.draw(
       xy1.sub(this.#cameraOffset).round(),
@@ -93,7 +112,7 @@ export class DrawApi {
   }
 
   // TODO: cover it with tests
-  // TODO: maybe pass mapping as param to sprite drawing instead of setting it independently and having to reset it afterwards?
+  // noinspection JSUnusedGlobalSymbols
   mapSpriteColor(from: Color, to: Color): void {
     // TODO: consider writing a custom equality check function
     if (from.asRgbaCssHex() === to.asRgbaCssHex()) {
@@ -103,54 +122,14 @@ export class DrawApi {
     }
   }
 
-  // TODO: implement clipping of the desired sprite size to the real source image area
-  // TODO: cover it with tests
-  // TODO: make sure the case of sprite.xy2 < sprite.xy1 is handled correctly
+  // noinspection JSUnusedGlobalSymbols
   sprite(spriteImageUrl: string, sprite: Sprite, targetXy1: Xy): void {
-    const {
-      width: imgW,
-      height: imgH,
-      rgba8bitData: imgBytes,
-    } = this.#assets.getImage(spriteImageUrl);
-    const imgBytesPerColor = 4;
-    const baseOffset =
-      (targetXy1.y - sprite.xy1.y) * this.#canvasSize.x +
-      (targetXy1.x - sprite.xy1.x);
-    for (let px = 0; px < imgBytes.length / imgBytesPerColor; px += 1) {
-      const imgX = px % imgW;
-      const imgY = Math.floor(px / imgW);
-      if (
-        imgX >= sprite.xy1.x &&
-        imgX < sprite.xy2.x &&
-        imgY >= sprite.xy1.y &&
-        imgY < sprite.xy2.y
-      ) {
-        const offset = baseOffset + imgY * this.#canvasSize.x;
-        const target = (offset + imgX) * 4;
-        const idx = px * imgBytesPerColor;
-        // TODO: how to make it clearer that we simplify transparency here to below and above 127?
-        if (imgBytes[idx + 3] > 127) {
-          // TODO: refactor?
-          let c: Color = new SolidColor(
-            imgBytes[idx],
-            imgBytes[idx + 1],
-            imgBytes[idx + 2]
-          );
-          c = this.#spriteColorMapping.get(c.asRgbaCssHex()) ?? c;
-          if (c instanceof SolidColor) {
-            // TODO: consider reusing this.pixel(…)
-            const adjustedTarget =
-              target -
-              (this.#cameraOffset.y * this.#canvasSize.x +
-                this.#cameraOffset.x) *
-                4;
-            this.#canvasBytes[adjustedTarget] = c.r;
-            this.#canvasBytes[adjustedTarget + 1] = c.g;
-            this.#canvasBytes[adjustedTarget + 2] = c.b;
-            this.#canvasBytes[adjustedTarget + 3] = 255;
-          }
-        }
-      }
-    }
+    const sourceImageAsset = this.#assets.getImage(spriteImageUrl);
+    this.#sprite.draw(
+      sourceImageAsset,
+      sprite,
+      targetXy1.sub(this.#cameraOffset).round(),
+      this.#spriteColorMapping
+    );
   }
 }

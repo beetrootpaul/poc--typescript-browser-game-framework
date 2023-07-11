@@ -5,7 +5,7 @@ export {
   TransparentColor,
   transparent,
 } from "./Color.ts";
-export { Sprite, spr_ } from "./Sprite.ts";
+export { type Sprite } from "./Sprite.ts";
 export { Utils } from "./Utils.ts";
 export { Xy, xy_ } from "./Xy.ts";
 
