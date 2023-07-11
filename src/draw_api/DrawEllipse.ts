@@ -49,15 +49,27 @@ export class DrawEllipse {
     b1 = 8 * b * b;
 
     while (true) {
+      this.#pixel.draw(xy_(x1, y0), color); //   I. Quadrant
+      this.#pixel.draw(xy_(x0, y0), color); //  II. Quadrant
+      this.#pixel.draw(xy_(x0, y1), color); // III. Quadrant
+      this.#pixel.draw(xy_(x1, y1), color); //  IV. Quadrant
       if (fill) {
-        // Self::draw_horizontal_line(ctx, ivec2(x0, y0), x1 - x0 + 1, color); //  I. & II. Quadrant
-        // Self::draw_horizontal_line(ctx, ivec2(x0, y1), x1 - x0 + 1, color);
+        //  I. & II. Quadrant
+        Xy.forEachIntXyWithinRectOf(
+          xy_(x0 + 1, y0),
+          xy_(x1 - 1, y0).add(1),
+          (xy) => {
+            this.#pixel.draw(xy, color);
+          }
+        );
         //  III. & IV. Quadrant
-      } else {
-        this.#pixel.draw(xy_(x1, y0), color); //   I. Quadrant
-        this.#pixel.draw(xy_(x0, y0), color); //  II. Quadrant
-        this.#pixel.draw(xy_(x0, y1), color); // III. Quadrant
-        this.#pixel.draw(xy_(x1, y1), color); //  IV. Quadrant
+        Xy.forEachIntXyWithinRectOf(
+          xy_(x0 + 1, y1),
+          xy_(x1 - 1, y1).add(1),
+          (xy) => {
+            this.#pixel.draw(xy, color);
+          }
+        );
       }
 
       e2 = 2 * err;

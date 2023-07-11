@@ -14,7 +14,7 @@ export class DrawRectFilled {
   draw(xy1: Xy, xy2: Xy, color: SolidColor): void {
     xy1 = xy1.clamp(Xy.zero, this.#canvasSize);
     xy2 = xy2.clamp(Xy.zero, this.#canvasSize);
-    Xy.forEachIntXyBetween(xy1, xy2, (xy) => {
+    Xy.forEachIntXyWithinRectOf(xy1, xy2, (xy) => {
       const i = 4 * (xy.y * this.#canvasSize.x + xy.x);
       this.#canvasBytes[i] = color.r;
       this.#canvasBytes[i + 1] = color.g;
