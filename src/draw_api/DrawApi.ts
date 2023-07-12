@@ -1,5 +1,6 @@
-import { Assets } from "../Assets.ts";
+import { Assets, FontAsset } from "../Assets.ts";
 import { Color, CompositeColor, SolidColor } from "../Color.ts";
+import { Font } from "../font/Font.ts";
 import { Sprite } from "../Sprite.ts";
 import { Xy, xy_ } from "../Xy.ts";
 import { DrawClear } from "./DrawClear.ts";
@@ -31,6 +32,8 @@ export class DrawApi {
 
   #fillPattern: FillPattern = FillPattern.primaryOnly;
 
+  #fontAsset: FontAsset | null = null;
+
   readonly #spriteColorMapping: Map<string, Color> = new Map();
 
   constructor(options: DrawApiOptions) {
@@ -53,7 +56,7 @@ export class DrawApi {
       options.canvasBytes,
       options.canvasSize.round()
     );
-    this.#text = new DrawText();
+    this.#text = new DrawText(options.canvasBytes, options.canvasSize.round());
   }
 
   // TODO: cover it with tests, e.g. make sure that fill pattern is applied on a canvas from its left-top in (0,0), no matter what the camera offset is
@@ -77,6 +80,17 @@ export class DrawApi {
     } else {
       this.#spriteColorMapping.set(from.id(), to);
     }
+  }
+
+  // TODO: cover it with tests
+  // noinspection JSUnusedGlobalSymbols
+  setFont(fontImageUrl: string | null): void {
+    this.#fontAsset = fontImageUrl ? this.#assets.getFont(fontImageUrl) : null;
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  getFont(): Font | null {
+    return this.#fontAsset?.font ?? null;
   }
 
   // noinspection JSUnusedGlobalSymbols
@@ -147,6 +161,19 @@ export class DrawApi {
 
   // TODO: cover with tests
   print(text: string, canvasXy1: Xy, color: SolidColor): void {
-    this.#text.draw(text, canvasXy1.sub(this.#cameraOffset).round(), color);
+    if (this.#fontAsset) {
+      this.#text.draw(
+        text,
+        canvasXy1.sub(this.#cameraOffset).round(),
+        this.#fontAsset,
+        color
+      );
+    } else {
+      console.info(
+        `print: (${canvasXy1.x},${
+          canvasXy1.y
+        }) [${color.asRgbCssHex()}] ${text}`
+      );
+    }
   }
 }

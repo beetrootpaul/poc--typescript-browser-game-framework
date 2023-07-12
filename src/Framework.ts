@@ -138,7 +138,7 @@ export class Framework {
   loadAssets(
     assetsToLoad: AssetsToLoad
   ): Promise<{ startGame: (onStart?: () => void) => void }> {
-    return this.#assets.loadImages(assetsToLoad.images).then(() => ({
+    return this.#assets.loadAssets(assetsToLoad).then(() => ({
       startGame: this.#startGame.bind(this),
     }));
   }
