@@ -24,9 +24,9 @@ describe("DrawPixel", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1 },
       expectedImageAsAscii: `
-        ---
-        -#-
-        ---
+        - - -
+        - # -
+        - - -
       `,
     });
   });
@@ -46,9 +46,9 @@ describe("DrawPixel", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, "*": c2, $: c3, "%": c4 },
       expectedImageAsAscii: `
-        #-*
-        ---
-        $-%
+        # - *
+        - - -
+        $ - %
       `,
     });
   });
@@ -68,9 +68,9 @@ describe("DrawPixel", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1 },
       expectedImageAsAscii: `
-        ---
-        ---
-        ---
+        - - -
+        - - -
+        - - -
       `,
     });
   });

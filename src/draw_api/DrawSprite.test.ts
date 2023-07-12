@@ -5,6 +5,8 @@ import { DrawSprite } from "./DrawSprite.ts";
 import { TestCanvas } from "./TestCanvas.ts";
 import { TestImage } from "./TestImage.ts";
 
+// TODO: tests for fill pattern
+
 describe("DrawSprite", () => {
   const ct = transparent;
   const c0 = SolidColor.fromRgbCssHex("#010203");
@@ -33,9 +35,9 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1 },
       expectedImageAsAscii: `
-        ---
-        -#-
-        ---
+        - - -
+        - # -
+        - - -
       `,
     });
   });
@@ -47,9 +49,9 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #####
-        #:%:*
-        *****
+        # # # # #
+        # : % : *
+        * * * * *
       `,
     });
 
@@ -61,12 +63,12 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        ---------
-        ---------
-        ---#####-
-        ---#:%:*-
-        ---*****-
-        ---------
+        - - - - - - - - -
+        - - - - - - - - -
+        - - - # # # # # -
+        - - - # : % : * -
+        - - - * * * * * -
+        - - - - - - - - -
       `,
     });
   });
@@ -78,10 +80,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -93,10 +95,10 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        -----
-        --:*-
-        --%:-
-        -----
+        - - - - -
+        - - : * -
+        - - % : -
+        - - - - -
       `,
     });
   });
@@ -108,10 +110,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -123,10 +125,10 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        -----
-        -----
-        -----
-        -----
+        - - - - -
+        - - - - -
+        - - - - -
+        - - - - -
       `,
     });
   });
@@ -138,10 +140,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -153,10 +155,10 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        -----
-        --:*-
-        --%:-
-        -----
+        - - - - -
+        - - : * -
+        - - % : -
+        - - - - -
       `,
     });
   });
@@ -168,10 +170,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -183,14 +185,14 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        --------
-        --------
-        --------
-        ---#:---
-        ---#%---
-        --------
-        --------
-        --------
+        - - - - - - - -
+        - - - - - - - -
+        - - - - - - - -
+        - - - # : - - -
+        - - - # % - - -
+        - - - - - - - -
+        - - - - - - - -
+        - - - - - - - -
       `,
     });
   });
@@ -202,10 +204,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -217,14 +219,14 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        --------
-        --------
-        --------
-        ---*%---
-        ---:*---
-        --------
-        --------
-        --------
+        - - - - - - - -
+        - - - - - - - -
+        - - - - - - - -
+        - - - * % - - -
+        - - - : * - - -
+        - - - - - - - -
+        - - - - - - - -
+        - - - - - - - -
       `,
     });
   });
@@ -236,10 +238,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -251,14 +253,14 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        --------
-        --------
-        --------
-        ---:%---
-        ---:*---
-        --------
-        --------
-        --------
+        - - - - - - - -
+        - - - - - - - -
+        - - - - - - - -
+        - - - : % - - -
+        - - - : * - - -
+        - - - - - - - -
+        - - - - - - - -
+        - - - - - - - -
       `,
     });
   });
@@ -270,10 +272,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -285,14 +287,14 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        --------
-        --------
-        --------
-        ---%:---
-        ---*:---
-        --------
-        --------
-        --------
+        - - - - - - - -
+        - - - - - - - -
+        - - - - - - - -
+        - - - % : - - -
+        - - - * : - - -
+        - - - - - - - -
+        - - - - - - - -
+        - - - - - - - -
       `,
     });
   });
@@ -304,10 +306,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -319,12 +321,12 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        ------
-        %*----
-        *%----
-        :*----
-        :%----
-        ------
+        - - - - - -
+        % * - - - -
+        * % - - - -
+        : * - - - -
+        : % - - - -
+        - - - - - -
       `,
     });
   });
@@ -336,10 +338,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -351,12 +353,12 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        ------
-        ----#:
-        ----#:
-        ----#%
-        ----#*
-        ------
+        - - - - - -
+        - - - - # :
+        - - - - # :
+        - - - - # %
+        - - - - # *
+        - - - - - -
       `,
     });
   });
@@ -368,10 +370,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -383,12 +385,12 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        -#%:*-
-        -#*:%-
-        ------
-        ------
-        ------
-        ------
+        - # % : * -
+        - # * : % -
+        - - - - - -
+        - - - - - -
+        - - - - - -
+        - - - - - -
       `,
     });
   });
@@ -400,10 +402,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       image: `
-        #:%*
-        #:*%
-        #%:*
-        #*:%
+        # : % *
+        # : * %
+        # % : *
+        # * : %
       `,
     });
 
@@ -415,12 +417,12 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        ------
-        ------
-        ------
-        ------
-        -#:%*-
-        -#:*%-
+        - - - - - -
+        - - - - - -
+        - - - - - -
+        - - - - - -
+        - # : % * -
+        - # : * % -
       `,
     });
   });
@@ -432,10 +434,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4, ".": ct },
       image: `
-        ####:..:.%..*..*
-        #..#....%....**.
-        #..#.......%*..*
-        ####:..:..%..**.
+        # # # # : . . : . % . . * . . *
+        # . . # . . . . % . . . . * * .
+        # . . # . . . . . . . % * . . *
+        # # # # : . . : . . % . . * * .
       `,
     });
 
@@ -453,10 +455,10 @@ describe("DrawSprite", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4 },
       expectedImageAsAscii: `
-        *%#*
-        %**#
-        *--*
-        :**:
+        * % # *
+        % * * #
+        * - - *
+        : * * :
       `,
     });
   });
@@ -468,10 +470,10 @@ describe("DrawSprite", () => {
     const image = new TestImage({
       withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, ".": ct },
       image: `
-        :##:
-        %..%
-        :%%:
-        #..#
+        : # # :
+        % . . %
+        : % % :
+        # . . #
       `,
     });
 
@@ -486,12 +488,12 @@ describe("DrawSprite", () => {
 
     //then
     canvas.expectToEqual({
-      withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4, $: c5 },
+      withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "*": c4, "^": c5 },
       expectedImageAsAscii: `
-        $**$
-        ----
-        $--$
-        *--*
+        ^ * * ^
+        - - - -
+        ^ - - ^
+        * - - *
       `,
     });
   });

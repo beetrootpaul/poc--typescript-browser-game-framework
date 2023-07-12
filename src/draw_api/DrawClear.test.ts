@@ -19,9 +19,9 @@ describe("DrawClear", () => {
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1 },
       expectedImageAsAscii: `
-        ####
-        ####
-        ####
+        # # # #
+        # # # #
+        # # # #
       `,
     });
   });

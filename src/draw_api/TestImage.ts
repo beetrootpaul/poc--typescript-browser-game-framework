@@ -11,7 +11,13 @@ export class TestImage {
     const normalizedAsciiImageLines = asciiImage
       .trim()
       .split("\n")
-      .map((line) => line.trim())
+      .map((line) =>
+        line
+          .trim()
+          .split("")
+          .filter((char) => char !== " ")
+          .join("")
+      )
       .filter((line) => line.length > 0);
     const normalizedAsciiImage = normalizedAsciiImageLines.join("");
 

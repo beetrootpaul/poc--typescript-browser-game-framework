@@ -24,9 +24,9 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ---
-        -#-
-        ---
+        - - -
+        - # -
+        - - -
       `,
       });
     });
@@ -44,11 +44,11 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ------
-        -####-
-        -#--#-
-        -####-
-        ------
+        - - - - - -
+        - # # # # -
+        - # - - # -
+        - # # # # -
+        - - - - - -
       `,
       });
     });
@@ -66,9 +66,9 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ####
-        #--#
-        ####
+        # # # #
+        # - - #
+        # # # #
       `,
       });
     });
@@ -86,9 +86,9 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ---
-        ---
-        ---
+        - - -
+        - - -
+        - - -
       `,
       });
     });
@@ -106,9 +106,9 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        -#-
-        ##-
-        ---
+        - # -
+        # # -
+        - - -
       `,
       });
     });
@@ -126,11 +126,11 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ------
-        -####-
-        -#--#-
-        -####-
-        ------
+        - - - - - -
+        - # # # # -
+        - # - - # -
+        - # # # # -
+        - - - - - -
       `,
       });
     });
@@ -148,12 +148,12 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ------
-        ##----
-        -#----
-        -#----
-        ##----
-        ------
+        - - - - - -
+        # # - - - -
+        - # - - - -
+        - # - - - -
+        # # - - - -
+        - - - - - -
       `,
       });
     });
@@ -171,12 +171,12 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ------
-        ----##
-        ----#-
-        ----#-
-        ----##
-        ------
+        - - - - - -
+        - - - - # #
+        - - - - # -
+        - - - - # -
+        - - - - # #
+        - - - - - -
       `,
       });
     });
@@ -194,12 +194,12 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        -#--#-
-        -####-
-        ------
-        ------
-        ------
-        ------
+        - # - - # -
+        - # # # # -
+        - - - - - -
+        - - - - - -
+        - - - - - -
+        - - - - - -
       `,
       });
     });
@@ -217,12 +217,12 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ------
-        ------
-        ------
-        ------
-        -####-
-        -#--#-
+        - - - - - -
+        - - - - - -
+        - - - - - -
+        - - - - - -
+        - # # # # -
+        - # - - # -
       `,
       });
     });
@@ -242,9 +242,9 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ---
-        -#-
-        ---
+        - - -
+        - # -
+        - - -
       `,
       });
     });
@@ -262,11 +262,11 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ------
-        -####-
-        -####-
-        -####-
-        ------
+        - - - - - -
+        - # # # # -
+        - # # # # -
+        - # # # # -
+        - - - - - -
       `,
       });
     });
@@ -284,9 +284,9 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ####
-        ####
-        ####
+        # # # #
+        # # # #
+        # # # #
       `,
       });
     });
@@ -304,9 +304,9 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ---
-        ---
-        ---
+        - - -
+        - - -
+        - - -
       `,
       });
     });
@@ -324,9 +324,9 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ##-
-        ##-
-        ---
+        # # -
+        # # -
+        - - -
       `,
       });
     });
@@ -344,11 +344,11 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ------
-        -####-
-        -####-
-        -####-
-        ------
+        - - - - - -
+        - # # # # -
+        - # # # # -
+        - # # # # -
+        - - - - - -
       `,
       });
     });
@@ -366,12 +366,12 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ------
-        ##----
-        ##----
-        ##----
-        ##----
-        ------
+        - - - - - -
+        # # - - - -
+        # # - - - -
+        # # - - - -
+        # # - - - -
+        - - - - - -
       `,
       });
     });
@@ -389,12 +389,12 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ------
-        ----##
-        ----##
-        ----##
-        ----##
-        ------
+        - - - - - -
+        - - - - # #
+        - - - - # #
+        - - - - # #
+        - - - - # #
+        - - - - - -
       `,
       });
     });
@@ -412,12 +412,12 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        -####-
-        -####-
-        ------
-        ------
-        ------
-        ------
+        - # # # # -
+        - # # # # -
+        - - - - - -
+        - - - - - -
+        - - - - - -
+        - - - - - -
       `,
       });
     });
@@ -435,12 +435,12 @@ describe("DrawRect", () => {
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
-        ------
-        ------
-        ------
-        ------
-        -####-
-        -####-
+        - - - - - -
+        - - - - - -
+        - - - - - -
+        - - - - - -
+        - # # # # -
+        - # # # # -
       `,
       });
     });
