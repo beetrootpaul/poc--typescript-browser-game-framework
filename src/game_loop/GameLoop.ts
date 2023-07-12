@@ -1,3 +1,4 @@
+import { PocTsBGFramework } from "../PocTsBGFramework.ts";
 import { FpsLogger, FpsLoggerAverage, FpsLoggerNoop } from "./FpsLogger.ts";
 
 export type GameLoopCallbacks = {
@@ -66,11 +67,15 @@ export class GameLoop {
     this.#accumulatedTimeStep += deltaTime;
     // A safety net in case of a long time spent on another tab, letting delta accumulate a lot in this one:
     if (this.#accumulatedTimeStep > this.#safetyMaxTimeStep) {
-      console.debug(
-        `Accumulated time step of ${
-          this.#accumulatedTimeStep
-        } was greater than safety max time step of ${this.#safetyMaxTimeStep}.`
-      );
+      if (PocTsBGFramework.debug) {
+        console.debug(
+          `Accumulated time step of ${
+            this.#accumulatedTimeStep
+          } was greater than safety max time step of ${
+            this.#safetyMaxTimeStep
+          }.`
+        );
+      }
       this.#accumulatedTimeStep = this.#safetyMaxTimeStep;
     }
 
@@ -85,18 +90,22 @@ export class GameLoop {
       ) {
         this.#adjustedFps -= 1;
         this.#expectedTimeStep = 1000 / this.#adjustedFps;
-        console.debug(
-          `Decreasing the adjusted FPS by 1. New = ${this.#adjustedFps}`
-        );
+        if (PocTsBGFramework.debug) {
+          console.debug(
+            `Decreasing the adjusted FPS by 1. New = ${this.#adjustedFps}`
+          );
+        }
       } else if (
         actualFps < this.#desiredFps / 1.1 &&
         this.#adjustedFps < this.#desiredFps * 2
       ) {
         this.#adjustedFps += 1;
         this.#expectedTimeStep = 1000 / this.#adjustedFps;
-        console.debug(
-          `Increasing the adjusted FPS by 1. New = ${this.#adjustedFps}`
-        );
+        if (PocTsBGFramework.debug) {
+          console.debug(
+            `Increasing the adjusted FPS by 1. New = ${this.#adjustedFps}`
+          );
+        }
       }
     }
 

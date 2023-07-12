@@ -1,9 +1,20 @@
+import { Font } from "./font/Font.ts";
+import { Utils } from "./Utils.ts";
+
 export type AssetsToLoad = {
-  images: AssetToLoad[];
+  images: ImageAssetToLoad[];
+  fonts: FontAssetToLoad[];
 };
 
-type AssetToLoad = {
-  url: string;
+type ImageUrl = string;
+
+type ImageAssetToLoad = {
+  url: ImageUrl;
+};
+
+type FontAssetToLoad = {
+  url: ImageUrl;
+  font: Font;
 };
 
 export type ImageAsset = {
@@ -12,14 +23,27 @@ export type ImageAsset = {
   rgba8bitData: Uint8ClampedArray;
 };
 
+export type FontAsset = {
+  font: Font;
+  image: ImageAsset;
+};
+
 export class Assets {
-  // key: url
-  #images: Map<string, ImageAsset> = new Map();
+  #images: Map<ImageUrl, ImageAsset> = new Map();
+  #fonts: Map<ImageUrl, Font> = new Map();
 
   // TODO: game loading screen during assets loading?
-  async loadImages(imagesToLoad: AssetsToLoad["images"]): Promise<void> {
+  async loadAssets(assetsToLoad: AssetsToLoad): Promise<void> {
+    assetsToLoad.fonts.forEach(({ url, font }) => {
+      this.#fonts.set(url, font);
+    });
+
+    const imageUrls = [
+      ...assetsToLoad.images.map(({ url }) => url),
+      ...assetsToLoad.fonts.map(({ url }) => url),
+    ];
     await Promise.all(
-      imagesToLoad.map(async ({ url }) => {
+      imageUrls.map(async (url) => {
         const htmlImage = new Image();
         htmlImage.src = url;
         await htmlImage.decode();
@@ -47,12 +71,24 @@ export class Assets {
   }
 
   // call `loadImages` before this one
-  getImage(urlOfAlreadyLoadedImage: string): ImageAsset {
+  getImage(urlOfAlreadyLoadedImage: ImageUrl): ImageAsset {
     const imageAsset = this.#images.get(urlOfAlreadyLoadedImage);
     if (!imageAsset) {
       // TODO: refine this error message
       throw Error(`There is no image loaded for: ${urlOfAlreadyLoadedImage}`);
     }
     return imageAsset;
+  }
+
+  // call `loadImages` before this one
+  getFont(urlOfAlreadyLoadedFontImage: ImageUrl): FontAsset {
+    return {
+      font:
+        this.#fonts.get(urlOfAlreadyLoadedFontImage) ??
+        Utils.throwError(
+          `Assets: font descriptor is missing for font image URL "${urlOfAlreadyLoadedFontImage}"`
+        ),
+      image: this.getImage(urlOfAlreadyLoadedFontImage),
+    };
   }
 }

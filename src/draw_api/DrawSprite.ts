@@ -1,6 +1,7 @@
 import { ImageAsset } from "../Assets.ts";
 import { type Color, SolidColor, transparent } from "../Color.ts";
-import { Sprite } from "../Sprite.ts";
+import { spr_, Sprite } from "../Sprite.ts";
+import { Utils } from "../Utils.ts";
 import { Xy, xy_ } from "../Xy.ts";
 import { DrawPixel } from "./DrawPixel.ts";
 
@@ -22,7 +23,7 @@ export class DrawSprite {
     sprite: Sprite,
     targetXy1: Xy,
     // RGBA hex representation of a Color is used as this map's keys, because it makes it easier to retrieve mappings with use of string equality
-    colorMapping: Map<string, Color>
+    colorMapping: Map<string, Color> = new Map()
   ): void {
     const {
       width: imgW,
@@ -31,22 +32,20 @@ export class DrawSprite {
     } = sourceImageAsset;
 
     // make sure xy1 is top-left and xy2 is bottom right
-    sprite = {
-      xy1: xy_(
-        Math.min(sprite.xy1.x, sprite.xy2.x),
-        Math.min(sprite.xy1.y, sprite.xy2.y)
-      ),
-      xy2: xy_(
-        Math.max(sprite.xy1.x, sprite.xy2.x),
-        Math.max(sprite.xy1.y, sprite.xy2.y)
-      ),
-    };
+    sprite = spr_(
+      Math.min(sprite.xy1.x, sprite.xy2.x),
+      Math.min(sprite.xy1.y, sprite.xy2.y),
+      Math.max(sprite.xy1.x, sprite.xy2.x),
+      Math.max(sprite.xy1.y, sprite.xy2.y)
+    );
 
     // clip sprite by image edges
-    sprite = {
-      xy1: sprite.xy1.clamp(Xy.zero, xy_(imgW, imgH)),
-      xy2: sprite.xy2.clamp(Xy.zero, xy_(imgW, imgH)),
-    };
+    sprite = spr_(
+      Utils.clamp(0, sprite.xy1.x, imgW),
+      Utils.clamp(0, sprite.xy1.y, imgH),
+      Utils.clamp(0, sprite.xy2.x, imgW),
+      Utils.clamp(0, sprite.xy2.y, imgH)
+    );
 
     for (let imgY = sprite.xy1.y; imgY < sprite.xy2.y; imgY += 1) {
       for (let imgX = sprite.xy1.x; imgX < sprite.xy2.x; imgX += 1) {

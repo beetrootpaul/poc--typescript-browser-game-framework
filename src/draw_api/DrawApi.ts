@@ -1,5 +1,6 @@
-import { Assets } from "../Assets.ts";
+import { Assets, FontAsset } from "../Assets.ts";
 import { Color, CompositeColor, SolidColor } from "../Color.ts";
+import { Font } from "../font/Font.ts";
 import { Sprite } from "../Sprite.ts";
 import { Xy, xy_ } from "../Xy.ts";
 import { DrawClear } from "./DrawClear.ts";
@@ -7,6 +8,7 @@ import { DrawEllipse } from "./DrawEllipse.ts";
 import { DrawPixel } from "./DrawPixel.ts";
 import { DrawRect } from "./DrawRect.ts";
 import { DrawSprite } from "./DrawSprite.ts";
+import { DrawText } from "./DrawText.ts";
 import { FillPattern } from "./FillPattern.ts";
 
 type DrawApiOptions = {
@@ -21,13 +23,16 @@ export class DrawApi {
 
   readonly #clear: DrawClear;
   readonly #pixel: DrawPixel;
-  readonly #rectFilled: DrawRect;
+  readonly #rect: DrawRect;
   readonly #ellipse: DrawEllipse;
   readonly #sprite: DrawSprite;
+  readonly #text: DrawText;
 
   #cameraOffset: Xy = xy_(0, 0);
 
   #fillPattern: FillPattern = FillPattern.primaryOnly;
+
+  #fontAsset: FontAsset | null = null;
 
   readonly #spriteColorMapping: Map<string, Color> = new Map();
 
@@ -42,10 +47,7 @@ export class DrawApi {
       options.canvasBytes,
       options.canvasSize.round()
     );
-    this.#rectFilled = new DrawRect(
-      options.canvasBytes,
-      options.canvasSize.round()
-    );
+    this.#rect = new DrawRect(options.canvasBytes, options.canvasSize.round());
     this.#ellipse = new DrawEllipse(
       options.canvasBytes,
       options.canvasSize.round()
@@ -54,6 +56,7 @@ export class DrawApi {
       options.canvasBytes,
       options.canvasSize.round()
     );
+    this.#text = new DrawText(options.canvasBytes, options.canvasSize.round());
   }
 
   // TODO: cover it with tests, e.g. make sure that fill pattern is applied on a canvas from its left-top in (0,0), no matter what the camera offset is
@@ -79,6 +82,17 @@ export class DrawApi {
     }
   }
 
+  // TODO: cover it with tests
+  // noinspection JSUnusedGlobalSymbols
+  setFont(fontImageUrl: string | null): void {
+    this.#fontAsset = fontImageUrl ? this.#assets.getFont(fontImageUrl) : null;
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  getFont(): Font | null {
+    return this.#fontAsset?.font ?? null;
+  }
+
   // noinspection JSUnusedGlobalSymbols
   clear(color: SolidColor): void {
     this.#clear.draw(color);
@@ -91,7 +105,7 @@ export class DrawApi {
 
   // noinspection JSUnusedGlobalSymbols
   rect(xy1: Xy, xy2: Xy, color: SolidColor): void {
-    this.#rectFilled.draw(
+    this.#rect.draw(
       xy1.sub(this.#cameraOffset).round(),
       xy2.sub(this.#cameraOffset).round(),
       color,
@@ -102,7 +116,7 @@ export class DrawApi {
 
   // noinspection JSUnusedGlobalSymbols
   rectFilled(xy1: Xy, xy2: Xy, color: SolidColor | CompositeColor): void {
-    this.#rectFilled.draw(
+    this.#rect.draw(
       xy1.sub(this.#cameraOffset).round(),
       xy2.sub(this.#cameraOffset).round(),
       color,
@@ -135,13 +149,31 @@ export class DrawApi {
 
   // TODO: make sprite make use of fillPattern as well, same as rect and ellipse etc.
   // noinspection JSUnusedGlobalSymbols
-  sprite(spriteImageUrl: string, sprite: Sprite, targetXy1: Xy): void {
+  sprite(spriteImageUrl: string, sprite: Sprite, canvasXy1: Xy): void {
     const sourceImageAsset = this.#assets.getImage(spriteImageUrl);
     this.#sprite.draw(
       sourceImageAsset,
       sprite,
-      targetXy1.sub(this.#cameraOffset).round(),
+      canvasXy1.sub(this.#cameraOffset).round(),
       this.#spriteColorMapping
     );
+  }
+
+  // TODO: cover with tests
+  print(text: string, canvasXy1: Xy, color: SolidColor): void {
+    if (this.#fontAsset) {
+      this.#text.draw(
+        text,
+        canvasXy1.sub(this.#cameraOffset).round(),
+        this.#fontAsset,
+        color
+      );
+    } else {
+      console.info(
+        `print: (${canvasXy1.x},${
+          canvasXy1.y
+        }) [${color.asRgbCssHex()}] ${text}`
+      );
+    }
   }
 }

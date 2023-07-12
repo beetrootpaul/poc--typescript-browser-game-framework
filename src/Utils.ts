@@ -1,3 +1,6 @@
+import { PocTsBGFramework } from "./PocTsBGFramework.ts";
+import { Xy } from "./Xy.ts";
+
 export class Utils {
   // Returns the middle number. Example usage: `clamp(min, value, max)`
   //   in order to find a value which is:
@@ -15,11 +18,9 @@ export class Utils {
 end
 */
 
-  static measureTextWidth(text: string): number {
-    // TODO: remove tmp impl and migrate from Lua
-    return 123;
-    // local y_to_print_outside_screen = a.camera_y - u.text_height_px
-    // return print(text, 0, y_to_print_outside_screen) - 1
+  static measureTextSize(text: string): Xy {
+    const font = PocTsBGFramework.drawApi.getFont();
+    return font?.sizeOf(text) ?? Xy.zero;
   }
 
   // TODO: migrate from Lua
@@ -45,4 +46,9 @@ end
     return result
 end
 */
+
+  // to be used as a value, e.g. in `definedValue: maybeUndefined() ?? throwError("…")`
+  static throwError(message: string): never {
+    throw Error(message);
+  }
 }

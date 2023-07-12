@@ -1,5 +1,6 @@
 import { describe, test } from "@jest/globals";
-import { Color, SolidColor, transparent } from "../Color.ts";
+import { SolidColor, transparent } from "../Color.ts";
+import { spr_ } from "../Sprite.ts";
 import { xy_ } from "../Xy.ts";
 import { DrawSprite } from "./DrawSprite.ts";
 import { TestCanvas } from "./TestCanvas.ts";
@@ -28,8 +29,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(0, 0), xy2: xy_(1, 1) };
-    sprite.draw(image.asset, spr, xy_(1, 1), new Map());
+    sprite.draw(image.asset, spr_(0, 0, 1, 1), xy_(1, 1), new Map());
 
     // then
     canvas.expectToEqual({
@@ -56,8 +56,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(0, 0), xy2: xy_(5, 3) };
-    sprite.draw(image.asset, spr, xy_(3, 2), new Map());
+    sprite.draw(image.asset, spr_(0, 0, 5, 3), xy_(3, 2), new Map());
 
     // then
     canvas.expectToEqual({
@@ -88,8 +87,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(1, 1), xy2: xy_(3, 3) };
-    sprite.draw(image.asset, spr, xy_(2, 1), new Map());
+    sprite.draw(image.asset, spr_(1, 1, 3, 3), xy_(2, 1), new Map());
 
     // then
     canvas.expectToEqual({
@@ -118,8 +116,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(1, 1), xy2: xy_(1, 1) };
-    sprite.draw(image.asset, spr, xy_(2, 1), new Map());
+    sprite.draw(image.asset, spr_(1, 1, 1, 1), xy_(2, 1), new Map());
 
     // then
     canvas.expectToEqual({
@@ -148,8 +145,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(3, 3), xy2: xy_(1, 1) };
-    sprite.draw(image.asset, spr, xy_(2, 1), new Map());
+    sprite.draw(image.asset, spr_(3, 3, 1, 1), xy_(2, 1), new Map());
 
     // then
     canvas.expectToEqual({
@@ -178,8 +174,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(-2, 1), xy2: xy_(2, 3) };
-    sprite.draw(image.asset, spr, xy_(3, 3), new Map());
+    sprite.draw(image.asset, spr_(-2, 1, 2, 3), xy_(3, 3), new Map());
 
     // then
     canvas.expectToEqual({
@@ -212,8 +207,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(2, 1), xy2: xy_(6, 3) };
-    sprite.draw(image.asset, spr, xy_(3, 3), new Map());
+    sprite.draw(image.asset, spr_(2, 1, 6, 3), xy_(3, 3), new Map());
 
     // then
     canvas.expectToEqual({
@@ -246,8 +240,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(1, -2), xy2: xy_(3, 2) };
-    sprite.draw(image.asset, spr, xy_(3, 3), new Map());
+    sprite.draw(image.asset, spr_(1, -2, 3, 2), xy_(3, 3), new Map());
 
     // then
     canvas.expectToEqual({
@@ -280,8 +273,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(1, 2), xy2: xy_(3, 6) };
-    sprite.draw(image.asset, spr, xy_(3, 3), new Map());
+    sprite.draw(image.asset, spr_(1, 2, 3, 6), xy_(3, 3), new Map());
 
     // then
     canvas.expectToEqual({
@@ -314,8 +306,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(0, 0), xy2: xy_(4, 4) };
-    sprite.draw(image.asset, spr, xy_(-2, 1), new Map());
+    sprite.draw(image.asset, spr_(0, 0, 4, 4), xy_(-2, 1), new Map());
 
     // then
     canvas.expectToEqual({
@@ -346,8 +337,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(0, 0), xy2: xy_(4, 4) };
-    sprite.draw(image.asset, spr, xy_(4, 1), new Map());
+    sprite.draw(image.asset, spr_(0, 0, 4, 4), xy_(4, 1), new Map());
 
     // then
     canvas.expectToEqual({
@@ -378,8 +368,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(0, 0), xy2: xy_(4, 4) };
-    sprite.draw(image.asset, spr, xy_(1, -2), new Map());
+    sprite.draw(image.asset, spr_(0, 0, 4, 4), xy_(1, -2), new Map());
 
     // then
     canvas.expectToEqual({
@@ -410,8 +399,7 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(0, 0), xy2: xy_(4, 4) };
-    sprite.draw(image.asset, spr, xy_(1, 4), new Map());
+    sprite.draw(image.asset, spr_(0, 0, 4, 4), xy_(1, 4), new Map());
 
     // then
     canvas.expectToEqual({
@@ -442,14 +430,10 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr1 = { xy1: xy_(0, 0), xy2: xy_(4, 4) };
-    const spr2 = { xy1: xy_(4, 0), xy2: xy_(8, 4) };
-    const spr3 = { xy1: xy_(8, 0), xy2: xy_(12, 4) };
-    const spr4 = { xy1: xy_(12, 0), xy2: xy_(16, 4) };
-    sprite.draw(image.asset, spr1, xy_(0, 0), new Map());
-    sprite.draw(image.asset, spr2, xy_(0, 0), new Map());
-    sprite.draw(image.asset, spr3, xy_(0, 0), new Map());
-    sprite.draw(image.asset, spr4, xy_(0, 0), new Map());
+    sprite.draw(image.asset, spr_(0, 0, 4, 4), xy_(0, 0), new Map());
+    sprite.draw(image.asset, spr_(4, 0, 8, 4), xy_(0, 0), new Map());
+    sprite.draw(image.asset, spr_(8, 0, 12, 4), xy_(0, 0), new Map());
+    sprite.draw(image.asset, spr_(12, 0, 16, 4), xy_(0, 0), new Map());
 
     // then
     canvas.expectToEqual({
@@ -478,13 +462,16 @@ describe("DrawSprite", () => {
     });
 
     // when
-    const spr = { xy1: xy_(0, 0), xy2: xy_(4, 4) };
-    const colorMapping: Map<string, Color> = new Map([
-      [c1.id(), c4],
-      [c2.id(), c5],
-      [c3.id(), ct],
-    ]);
-    sprite.draw(image.asset, spr, xy_(0, 0), colorMapping);
+    sprite.draw(
+      image.asset,
+      spr_(0, 0, 4, 4),
+      xy_(0, 0),
+      new Map([
+        [c1.id(), c4],
+        [c2.id(), c5],
+        [c3.id(), ct],
+      ])
+    );
 
     // then
     canvas.expectToEqual({
