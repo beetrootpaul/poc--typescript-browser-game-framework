@@ -95,6 +95,12 @@ export class Xy implements PrintDebug {
     );
   }
 
+  mod(other: Xy | number): Xy {
+    return typeof other === "number"
+      ? new Xy(this.x % other, this.y % other)
+      : new Xy(this.x % other.x, this.y % other.y);
+  }
+
   add(other: Xy | number): Xy {
     return typeof other === "number"
       ? new Xy(this.x + other, this.y + other)

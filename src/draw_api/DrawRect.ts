@@ -25,13 +25,21 @@ export class DrawRect {
     fillPattern: FillPattern = FillPattern.primaryOnly
   ): void {
     Xy.forEachIntXyWithinRectOf(xy1, xy2, fill, (xy) => {
-      // TODO: update the implementation below to honor fill pattern
-      if (color instanceof CompositeColor) {
-        if (color.primary instanceof SolidColor) {
-          this.#pixel.draw(xy, color.primary);
+      // TODO: make sure all these branches are covered with tests
+      if (fillPattern.hasPrimaryColorAt(xy)) {
+        if (color instanceof CompositeColor) {
+          if (color.primary instanceof SolidColor) {
+            this.#pixel.draw(xy, color.primary);
+          }
+        } else {
+          this.#pixel.draw(xy, color);
         }
       } else {
-        this.#pixel.draw(xy, color);
+        if (color instanceof CompositeColor) {
+          if (color.secondary instanceof SolidColor) {
+            this.#pixel.draw(xy, color.secondary);
+          }
+        }
       }
     });
   }

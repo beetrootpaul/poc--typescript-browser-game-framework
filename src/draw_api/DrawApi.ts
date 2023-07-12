@@ -56,7 +56,7 @@ export class DrawApi {
     );
   }
 
-  // TODO: cover it with tests
+  // TODO: cover it with tests, e.g. make sure that fill pattern is applied on a canvas from its left-top in (0,0), no matter what the camera offset is
   // noinspection JSUnusedGlobalSymbols
   setCameraOffset(offset: Xy): void {
     this.#cameraOffset = offset.round();

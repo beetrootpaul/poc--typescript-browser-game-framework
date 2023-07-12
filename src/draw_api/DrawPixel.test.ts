@@ -20,7 +20,7 @@ describe("DrawPixel", () => {
     const xy1 = xy_(1, 1);
     pixel.draw(xy_(1, 1), c1);
 
-    //then
+    // then
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1 },
       expectedImageAsAscii: `
@@ -42,13 +42,13 @@ describe("DrawPixel", () => {
     pixel.draw(xy_(0, 2), c3);
     pixel.draw(xy_(2, 2), c4);
 
-    //then
+    // then
     canvas.expectToEqual({
-      withMapping: { "-": c0, "#": c1, "*": c2, $: c3, "%": c4 },
+      withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4 },
       expectedImageAsAscii: `
-        # - *
+        # - :
         - - -
-        $ - %
+        % - =
       `,
     });
   });
@@ -64,7 +64,7 @@ describe("DrawPixel", () => {
     pixel.draw(xy_(1, -1), c1);
     pixel.draw(xy_(1, 3), c1);
 
-    //then
+    // then
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1 },
       expectedImageAsAscii: `

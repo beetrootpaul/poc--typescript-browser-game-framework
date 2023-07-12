@@ -20,7 +20,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1, c1, false);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -40,7 +40,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1.add(1), c1, false);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -60,7 +60,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1.add(2), c1, false);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -81,7 +81,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1.add(xy_(4, 3)), c1, false);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -103,7 +103,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, false);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -127,7 +127,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(13, 6);
       ellipse.draw(xy1, xy1.add(xy_(-12, -5)), c1, false);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -151,7 +151,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(-6, 1);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, false);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -175,7 +175,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(8, 1);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, false);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -199,7 +199,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, -2);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, false);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -223,7 +223,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 4);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, false);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -249,7 +249,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1, c1, true);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -269,7 +269,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1.add(1), c1, true);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -289,7 +289,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1.add(2), c1, true);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -310,7 +310,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1.add(xy_(4, 3)), c1, true);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -332,7 +332,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 1);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, true);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -356,7 +356,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(13, 6);
       ellipse.draw(xy1, xy1.add(xy_(-12, -5)), c1, true);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -380,7 +380,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(-6, 1);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, true);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -404,7 +404,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(8, 1);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, true);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -428,7 +428,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, -2);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, true);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
@@ -452,7 +452,7 @@ describe("DrawEllipse", () => {
       const xy1 = xy_(1, 4);
       ellipse.draw(xy1, xy1.add(xy_(12, 5)), c1, true);
 
-      //then
+      // then
       canvas.expectToEqual({
         withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
