@@ -7,6 +7,7 @@ import { DrawEllipse } from "./DrawEllipse.ts";
 import { DrawPixel } from "./DrawPixel.ts";
 import { DrawRect } from "./DrawRect.ts";
 import { DrawSprite } from "./DrawSprite.ts";
+import { DrawText } from "./DrawText.ts";
 import { FillPattern } from "./FillPattern.ts";
 
 type DrawApiOptions = {
@@ -24,6 +25,7 @@ export class DrawApi {
   readonly #rect: DrawRect;
   readonly #ellipse: DrawEllipse;
   readonly #sprite: DrawSprite;
+  readonly #text: DrawText;
 
   #cameraOffset: Xy = xy_(0, 0);
 
@@ -42,10 +44,7 @@ export class DrawApi {
       options.canvasBytes,
       options.canvasSize.round()
     );
-    this.#rect = new DrawRect(
-      options.canvasBytes,
-      options.canvasSize.round()
-    );
+    this.#rect = new DrawRect(options.canvasBytes, options.canvasSize.round());
     this.#ellipse = new DrawEllipse(
       options.canvasBytes,
       options.canvasSize.round()
@@ -54,6 +53,7 @@ export class DrawApi {
       options.canvasBytes,
       options.canvasSize.round()
     );
+    this.#text = new DrawText();
   }
 
   // TODO: cover it with tests, e.g. make sure that fill pattern is applied on a canvas from its left-top in (0,0), no matter what the camera offset is
@@ -135,13 +135,18 @@ export class DrawApi {
 
   // TODO: make sprite make use of fillPattern as well, same as rect and ellipse etc.
   // noinspection JSUnusedGlobalSymbols
-  sprite(spriteImageUrl: string, sprite: Sprite, targetXy1: Xy): void {
+  sprite(spriteImageUrl: string, sprite: Sprite, canvasXy1: Xy): void {
     const sourceImageAsset = this.#assets.getImage(spriteImageUrl);
     this.#sprite.draw(
       sourceImageAsset,
       sprite,
-      targetXy1.sub(this.#cameraOffset).round(),
+      canvasXy1.sub(this.#cameraOffset).round(),
       this.#spriteColorMapping
     );
+  }
+
+  // TODO: cover with tests
+  print(text: string, canvasXy1: Xy, color: SolidColor): void {
+    this.#text.draw(text, canvasXy1.sub(this.#cameraOffset).round(), color);
   }
 }
