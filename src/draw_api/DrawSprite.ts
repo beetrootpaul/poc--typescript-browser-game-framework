@@ -52,15 +52,20 @@ export class DrawSprite {
       for (let imgX = sprite.xy1.x; imgX < sprite.xy2.x; imgX += 1) {
         const imgBytesIndex = (imgY * imgW + imgX) * 4;
 
+        if (imgBytes.length < imgBytesIndex + 4) {
+          throw Error(
+            `DrawSprite: there are less image bytes (${imgBytes.length}) than accessed byte index (${imgBytesIndex})`
+          );
+        }
         let color =
-          imgBytes[imgBytesIndex + 3] > 0xff / 2
+          imgBytes[imgBytesIndex + 3]! > 0xff / 2
             ? new SolidColor(
-                imgBytes[imgBytesIndex],
-                imgBytes[imgBytesIndex + 1],
-                imgBytes[imgBytesIndex + 2]
+                imgBytes[imgBytesIndex]!,
+                imgBytes[imgBytesIndex + 1]!,
+                imgBytes[imgBytesIndex + 2]!
               )
             : transparent;
-        color = colorMapping.get(color.asRgbaCssHex()) ?? color;
+        color = colorMapping.get(color.id()) ?? color;
 
         if (color instanceof SolidColor) {
           const canvasXy = targetXy1.add(

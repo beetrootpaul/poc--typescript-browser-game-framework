@@ -7,7 +7,7 @@ import { GameLoop } from "./game_loop/GameLoop.ts";
 import { Loading } from "./Loading.ts";
 import { PocTsBGFramework } from "./PocTsBGFramework.ts";
 import { StorageApi } from "./StorageApi.ts";
-import { Xy } from "./Xy.ts";
+import { Xy, xy_ } from "./Xy.ts";
 
 export type FrameworkOptions = {
   htmlDisplaySelector: string;
@@ -214,7 +214,7 @@ export class Framework {
   #render(): void {
     this.#offscreenContext.putImageData(this.#offscreenImageData, 0, 0);
 
-    const htmlCanvasSize = new Xy(
+    const htmlCanvasSize = xy_(
       this.#htmlCanvasContext.canvas.width,
       this.#htmlCanvasContext.canvas.height
     );

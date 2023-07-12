@@ -1,5 +1,5 @@
 import { ImageAsset } from "../Assets.ts";
-import { type Color, SolidColor, TransparentColor } from "../Color.ts";
+import { type Color, SolidColor } from "../Color.ts";
 
 export class TestImage {
   readonly asset: ImageAsset;
@@ -11,19 +11,24 @@ export class TestImage {
     const normalizedAsciiImageLines = asciiImage
       .trim()
       .split("\n")
-      .map((line) => line.trim())
+      .map((line) =>
+        line
+          .trim()
+          .split("")
+          .filter((char) => char !== " ")
+          .join("")
+      )
       .filter((line) => line.length > 0);
     const normalizedAsciiImage = normalizedAsciiImageLines.join("");
 
     this.asset = {
-      width: normalizedAsciiImageLines[0].length,
+      width: normalizedAsciiImageLines[0]!.length,
       height: normalizedAsciiImageLines.length,
       rgba8bitData: new Uint8ClampedArray(4 * normalizedAsciiImage.length),
     };
 
     for (let i = 0; i < this.asset.width * this.asset.height; i += 1) {
-      const color: SolidColor | TransparentColor | undefined =
-        asciiToColor[normalizedAsciiImage[i]];
+      const color = asciiToColor[normalizedAsciiImage[i]!];
       if (!color) {
         throw Error(
           `TestImage: Missing color mapping for "${normalizedAsciiImage[i]}"`

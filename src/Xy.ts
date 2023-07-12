@@ -68,6 +68,10 @@ export class Xy implements PrintDebug {
     return Math.min(this.x, this.y);
   }
 
+  eq(other: Xy): boolean {
+    return this.x === other.x && this.y === other.y;
+  }
+
   gt(other: Xy): boolean {
     return this.x > other.x && this.y > other.y;
   }
@@ -89,6 +93,12 @@ export class Xy implements PrintDebug {
       Utils.clamp(xy1.x, this.x, xy2.x),
       Utils.clamp(xy1.y, this.y, xy2.y)
     );
+  }
+
+  mod(other: Xy | number): Xy {
+    return typeof other === "number"
+      ? new Xy(this.x % other, this.y % other)
+      : new Xy(this.x % other.x, this.y % other.y);
   }
 
   add(other: Xy | number): Xy {

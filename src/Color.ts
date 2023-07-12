@@ -1,11 +1,11 @@
 export interface Color {
-  // TODO: really needed in a common interface? Or we can use another way to, for example, identify colors in mappings?
-  asRgbaCssHex(): string;
+  // meant to be used e.g. as textual key in `Map()`
+  id(): string;
 }
 
 export class TransparentColor implements Color {
-  asRgbaCssHex(): string {
-    return "#00000000";
+  id(): string {
+    return "transparent";
   }
 }
 
@@ -28,8 +28,8 @@ export class SolidColor implements Color {
     this.b = b;
   }
 
-  asRgbaCssHex(): string {
-    return this.asRgbCssHex() + "ff";
+  id(): string {
+    return "solid-" + this.asRgbCssHex();
   }
 
   // TODO: still used?
@@ -53,5 +53,22 @@ export class SolidColor implements Color {
       parseInt(cssHex.slice(3, 5), 16),
       parseInt(cssHex.slice(5, 7), 16)
     );
+  }
+}
+
+export class CompositeColor implements Color {
+  readonly primary: SolidColor | TransparentColor;
+  readonly secondary: SolidColor | TransparentColor;
+
+  constructor(
+    primary: SolidColor | TransparentColor,
+    secondary: SolidColor | TransparentColor
+  ) {
+    this.primary = primary;
+    this.secondary = secondary;
+  }
+
+  id(): string {
+    return `composite:${this.primary.id()}:${this.secondary.id()}`;
   }
 }

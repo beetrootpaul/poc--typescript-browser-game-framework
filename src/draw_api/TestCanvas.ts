@@ -42,7 +42,13 @@ export class TestCanvas {
       params.expectedImageAsAscii
         .trim()
         .split("\n")
-        .map((line) => line.trim())
+        .map((line) =>
+          line
+            .trim()
+            .split("")
+            .filter((char) => char !== " ")
+            .join(" ")
+        )
         .filter((line) => line.length > 0)
         .join("\n") + "\n";
 
@@ -60,9 +66,9 @@ export class TestCanvas {
           asciiImage += "!";
         } else {
           const color = new SolidColor(
-            colorBytes[0],
-            colorBytes[1],
-            colorBytes[2]
+            colorBytes[0]!,
+            colorBytes[1]!,
+            colorBytes[2]!
           );
           asciiImage += rgbHexToAscii.get(color.asRgbCssHex()) ?? "?";
         }
@@ -70,6 +76,9 @@ export class TestCanvas {
       asciiImage += "\n";
     }
 
-    return asciiImage;
+    return asciiImage
+      .split("\n")
+      .map((line) => line.split("").join(" "))
+      .join("\n");
   }
 }

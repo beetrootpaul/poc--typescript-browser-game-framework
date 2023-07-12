@@ -16,7 +16,7 @@
   "scripts": {
     "prepare": "husky install",
     "test": "jest",
-    "start": "npm run typecheck:watch",
+    "start": "npm run cleanup && npm run typecheck:watch",
     "typecheck": "tsc",
     "typecheck:watch": "tsc --watch",
     "format": "prettier --ignore-path .gitignore --write src/",

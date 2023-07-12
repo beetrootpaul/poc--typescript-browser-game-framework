@@ -15,13 +15,13 @@ describe("DrawClear", () => {
     // when
     clear.draw(c1);
 
-    //then
+    // then
     canvas.expectToEqual({
       withMapping: { "-": c0, "#": c1 },
       expectedImageAsAscii: `
-        ####
-        ####
-        ####
+        # # # #
+        # # # #
+        # # # #
       `,
     });
   });
