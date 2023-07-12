@@ -1,5 +1,5 @@
 import { Assets } from "../Assets.ts";
-import { Color, SolidColor } from "../Color.ts";
+import { Color, CompositeColor, SolidColor } from "../Color.ts";
 import { Sprite } from "../Sprite.ts";
 import { Xy, xy_ } from "../Xy.ts";
 import { DrawClear } from "./DrawClear.ts";
@@ -7,6 +7,7 @@ import { DrawEllipse } from "./DrawEllipse.ts";
 import { DrawPixel } from "./DrawPixel.ts";
 import { DrawRect } from "./DrawRect.ts";
 import { DrawSprite } from "./DrawSprite.ts";
+import { FillPattern } from "./FillPattern.ts";
 
 type DrawApiOptions = {
   // TODO: better name to indicate in-out nature of this param? Or some info in JSDoc?
@@ -25,6 +26,8 @@ export class DrawApi {
   readonly #sprite: DrawSprite;
 
   #cameraOffset: Xy = xy_(0, 0);
+
+  #fillPattern: FillPattern = FillPattern.primaryOnly;
 
   readonly #spriteColorMapping: Map<string, Color> = new Map();
 
@@ -59,6 +62,23 @@ export class DrawApi {
     this.#cameraOffset = offset.round();
   }
 
+  // TODO: cover it with tests
+  // noinspection JSUnusedGlobalSymbols
+  setFillPattern(fillPattern: FillPattern): void {
+    this.#fillPattern = fillPattern;
+  }
+
+  // TODO: cover it with tests
+  // noinspection JSUnusedGlobalSymbols
+  mapSpriteColor(from: Color, to: Color): void {
+    // TODO: consider writing a custom equality check function
+    if (from.id() === to.id()) {
+      this.#spriteColorMapping.delete(from.id());
+    } else {
+      this.#spriteColorMapping.set(from.id(), to);
+    }
+  }
+
   // noinspection JSUnusedGlobalSymbols
   clear(color: SolidColor): void {
     this.#clear.draw(color);
@@ -75,17 +95,19 @@ export class DrawApi {
       xy1.sub(this.#cameraOffset).round(),
       xy2.sub(this.#cameraOffset).round(),
       color,
-      false
+      false,
+      this.#fillPattern
     );
   }
 
   // noinspection JSUnusedGlobalSymbols
-  rectFilled(xy1: Xy, xy2: Xy, color: SolidColor): void {
+  rectFilled(xy1: Xy, xy2: Xy, color: SolidColor | CompositeColor): void {
     this.#rectFilled.draw(
       xy1.sub(this.#cameraOffset).round(),
       xy2.sub(this.#cameraOffset).round(),
       color,
-      true
+      true,
+      this.#fillPattern
     );
   }
 
@@ -95,7 +117,8 @@ export class DrawApi {
       xy1.sub(this.#cameraOffset).round(),
       xy2.sub(this.#cameraOffset).round(),
       color,
-      false
+      false,
+      this.#fillPattern
     );
   }
 
@@ -105,21 +128,12 @@ export class DrawApi {
       xy1.sub(this.#cameraOffset).round(),
       xy2.sub(this.#cameraOffset).round(),
       color,
-      true
+      true,
+      this.#fillPattern
     );
   }
 
-  // TODO: cover it with tests
-  // noinspection JSUnusedGlobalSymbols
-  mapSpriteColor(from: Color, to: Color): void {
-    // TODO: consider writing a custom equality check function
-    if (from.id() === to.id()) {
-      this.#spriteColorMapping.delete(from.id());
-    } else {
-      this.#spriteColorMapping.set(from.id(), to);
-    }
-  }
-
+  // TODO: make sprite make use of fillPattern as well, same as rect and ellipse etc.
   // noinspection JSUnusedGlobalSymbols
   sprite(spriteImageUrl: string, sprite: Sprite, targetXy1: Xy): void {
     const sourceImageAsset = this.#assets.getImage(spriteImageUrl);

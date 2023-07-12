@@ -1,5 +1,5 @@
 import { ImageAsset } from "../Assets.ts";
-import { type Color, SolidColor, TransparentColor } from "../Color.ts";
+import { type Color, SolidColor } from "../Color.ts";
 
 export class TestImage {
   readonly asset: ImageAsset;
@@ -22,8 +22,7 @@ export class TestImage {
     };
 
     for (let i = 0; i < this.asset.width * this.asset.height; i += 1) {
-      const color =
-        asciiToColor[normalizedAsciiImage[i]!];
+      const color = asciiToColor[normalizedAsciiImage[i]!];
       if (!color) {
         throw Error(
           `TestImage: Missing color mapping for "${normalizedAsciiImage[i]}"`

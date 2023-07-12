@@ -55,3 +55,20 @@ export class SolidColor implements Color {
     );
   }
 }
+
+export class CompositeColor implements Color {
+  readonly primary: SolidColor | TransparentColor;
+  readonly secondary: SolidColor | TransparentColor;
+
+  constructor(
+    primary: SolidColor | TransparentColor,
+    secondary: SolidColor | TransparentColor
+  ) {
+    this.primary = primary;
+    this.secondary = secondary;
+  }
+
+  id(): string {
+    return `composite:${this.primary.id()}:${this.secondary.id()}`;
+  }
+}

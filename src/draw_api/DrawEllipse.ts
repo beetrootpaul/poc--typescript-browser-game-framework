@@ -1,6 +1,7 @@
 import { SolidColor } from "../Color.ts";
 import { Xy, xy_ } from "../Xy.ts";
 import { DrawPixel } from "./DrawPixel.ts";
+import { FillPattern } from "./FillPattern.ts";
 
 export class DrawEllipse {
   readonly #canvasBytes: Uint8ClampedArray;
@@ -17,7 +18,13 @@ export class DrawEllipse {
 
   // TEST: for switched order of xy1 and xy2 (and soltion maybe this? -> [xy1,xy2]=[Math.min(…),Math.max(…)]
   // Based on https://github.com/aseprite/aseprite/blob/25fbe786f8353a2ddb57de3bcc5db00066cc9ca6/src/doc/algo.cpp#L216-L315
-  draw(xy1: Xy, xy2: Xy, color: SolidColor, fill: boolean): void {
+  draw(
+    xy1: Xy,
+    xy2: Xy,
+    color: SolidColor,
+    fill: boolean,
+    fillPattern: FillPattern = FillPattern.primaryOnly
+  ): void {
     if (Math.abs(xy2.x - xy1.x) <= 0 || Math.abs(xy2.y - xy1.y) <= 0) {
       return;
     }
@@ -49,11 +56,13 @@ export class DrawEllipse {
     b1 = 8 * b * b;
 
     while (true) {
+      // TODO: update the implementation below to honor fill pattern
       this.#pixel.draw(xy_(x1, y0), color); //   I. Quadrant
       this.#pixel.draw(xy_(x0, y0), color); //  II. Quadrant
       this.#pixel.draw(xy_(x0, y1), color); // III. Quadrant
       this.#pixel.draw(xy_(x1, y1), color); //  IV. Quadrant
       if (fill) {
+        // TODO: update the implementation below to honor fill pattern
         //  I. & II. Quadrant
         Xy.forEachIntXyWithinRectOf(
           xy_(x0 + 1, y0),
@@ -63,6 +72,7 @@ export class DrawEllipse {
             this.#pixel.draw(xy, color);
           }
         );
+        // TODO: update the implementation below to honor fill pattern
         //  III. & IV. Quadrant
         Xy.forEachIntXyWithinRectOf(
           xy_(x0 + 1, y1),
@@ -95,8 +105,9 @@ export class DrawEllipse {
       }
     }
 
-    // TODO: cover this with a tests
+    // TODO: cover this with tests
     while (y0 - y1 < h) {
+      // TODO: update the implementation below to honor fill pattern
       // too early stop of flat ellipses a=1
       this.#pixel.draw(xy_(x0 - 1, y0), color);
       this.#pixel.draw(xy_(x1 + 1, y0), color);

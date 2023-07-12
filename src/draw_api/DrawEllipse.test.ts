@@ -4,6 +4,8 @@ import { xy_ } from "../Xy.ts";
 import { DrawEllipse } from "./DrawEllipse.ts";
 import { TestCanvas } from "./TestCanvas.ts";
 
+// TODO: tests for fill pattern
+
 describe("DrawEllipse", () => {
   const c0 = SolidColor.fromRgbCssHex("#010203");
   const c1 = SolidColor.fromRgbCssHex("#111213");
