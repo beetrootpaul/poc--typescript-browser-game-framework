@@ -68,6 +68,10 @@ export class Xy implements PrintDebug {
     return Math.min(this.x, this.y);
   }
 
+  eq(other: Xy): boolean {
+    return this.x === other.x && this.y === other.y;
+  }
+
   gt(other: Xy): boolean {
     return this.x > other.x && this.y > other.y;
   }
