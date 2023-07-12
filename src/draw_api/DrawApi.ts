@@ -21,7 +21,7 @@ export class DrawApi {
 
   readonly #clear: DrawClear;
   readonly #pixel: DrawPixel;
-  readonly #rectFilled: DrawRect;
+  readonly #rect: DrawRect;
   readonly #ellipse: DrawEllipse;
   readonly #sprite: DrawSprite;
 
@@ -42,7 +42,7 @@ export class DrawApi {
       options.canvasBytes,
       options.canvasSize.round()
     );
-    this.#rectFilled = new DrawRect(
+    this.#rect = new DrawRect(
       options.canvasBytes,
       options.canvasSize.round()
     );
@@ -91,7 +91,7 @@ export class DrawApi {
 
   // noinspection JSUnusedGlobalSymbols
   rect(xy1: Xy, xy2: Xy, color: SolidColor): void {
-    this.#rectFilled.draw(
+    this.#rect.draw(
       xy1.sub(this.#cameraOffset).round(),
       xy2.sub(this.#cameraOffset).round(),
       color,
@@ -102,7 +102,7 @@ export class DrawApi {
 
   // noinspection JSUnusedGlobalSymbols
   rectFilled(xy1: Xy, xy2: Xy, color: SolidColor | CompositeColor): void {
-    this.#rectFilled.draw(
+    this.#rect.draw(
       xy1.sub(this.#cameraOffset).round(),
       xy2.sub(this.#cameraOffset).round(),
       color,

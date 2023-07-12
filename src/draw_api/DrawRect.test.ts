@@ -18,11 +18,11 @@ describe("DrawRect", () => {
     test("simple 1x1", () => {
       // given
       const canvas = new TestCanvas(3, 3, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(1, 1);
-      rectFilled.draw(xy1, xy1.add(1), c1, false);
+      rect.draw(xy1, xy1.add(1), c1, false);
 
       // then
       canvas.expectToEqual({
@@ -38,11 +38,11 @@ describe("DrawRect", () => {
     test("simple 4x3", () => {
       // given
       const canvas = new TestCanvas(6, 5, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(1, 1);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 3)), c1, false);
+      rect.draw(xy1, xy1.add(xy_(4, 3)), c1, false);
 
       // then
       canvas.expectToEqual({
@@ -60,11 +60,11 @@ describe("DrawRect", () => {
     test("drawing on very edges of a canvas", () => {
       // given
       const canvas = new TestCanvas(4, 3, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(0, 0);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 3)), c1, false);
+      rect.draw(xy1, xy1.add(xy_(4, 3)), c1, false);
 
       // then
       canvas.expectToEqual({
@@ -80,11 +80,11 @@ describe("DrawRect", () => {
     test("0-size", () => {
       // given
       const canvas = new TestCanvas(3, 3, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(1, 1);
-      rectFilled.draw(xy1, xy1, c1, false);
+      rect.draw(xy1, xy1, c1, false);
 
       // then
       canvas.expectToEqual({
@@ -100,11 +100,11 @@ describe("DrawRect", () => {
     test("negative left-top corner", () => {
       // given
       const canvas = new TestCanvas(3, 3, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(-1, -1);
-      rectFilled.draw(xy1, xy1.add(3), c1, false);
+      rect.draw(xy1, xy1.add(3), c1, false);
 
       // then
       canvas.expectToEqual({
@@ -120,11 +120,11 @@ describe("DrawRect", () => {
     test("negative size", () => {
       // given
       const canvas = new TestCanvas(6, 5, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(5, 4);
-      rectFilled.draw(xy1, xy1.add(xy_(-4, -3)), c1, false);
+      rect.draw(xy1, xy1.add(xy_(-4, -3)), c1, false);
 
       // then
       canvas.expectToEqual({
@@ -142,11 +142,11 @@ describe("DrawRect", () => {
     test("clipping: over the left edge", () => {
       // given
       const canvas = new TestCanvas(6, 6, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(-2, 1);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
+      rect.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
 
       // then
       canvas.expectToEqual({
@@ -165,11 +165,11 @@ describe("DrawRect", () => {
     test("clipping: over the right edge", () => {
       // given
       const canvas = new TestCanvas(6, 6, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(4, 1);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
+      rect.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
 
       // then
       canvas.expectToEqual({
@@ -188,11 +188,11 @@ describe("DrawRect", () => {
     test("clipping: over the top edge", () => {
       // given
       const canvas = new TestCanvas(6, 6, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(1, -2);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
+      rect.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
 
       // then
       canvas.expectToEqual({
@@ -211,11 +211,11 @@ describe("DrawRect", () => {
     test("clipping: over the bottom edge", () => {
       // given
       const canvas = new TestCanvas(6, 6, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(1, 4);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
+      rect.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
 
       // then
       canvas.expectToEqual({
@@ -234,10 +234,10 @@ describe("DrawRect", () => {
     test("fill pattern: simple one, with a single solid color", () => {
       // given
       const canvas = new TestCanvas(4, 4, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 0),
         xy_(4, 4),
         c1,
@@ -247,7 +247,7 @@ describe("DrawRect", () => {
 
       // then
       canvas.expectToEqual({
-        withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
+        withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
           # # # #
           # - - -
@@ -260,10 +260,10 @@ describe("DrawRect", () => {
     test("fill pattern: simple one, with two solid colors", () => {
       // given
       const canvas = new TestCanvas(4, 4, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 0),
         xy_(4, 4),
         new CompositeColor(c1, c2),
@@ -273,7 +273,7 @@ describe("DrawRect", () => {
 
       // then
       canvas.expectToEqual({
-        withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
+        withMapping: { "-": c0, "#": c1, ":": c2 },
         expectedImageAsAscii: `
           # # # #
           # - - :
@@ -286,10 +286,10 @@ describe("DrawRect", () => {
     test("fill pattern: various 4x4 patterns", () => {
       // given
       const canvas = new TestCanvas(10, 10, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 0),
         xy_(10, 10),
         new CompositeColor(c4, c1),
@@ -315,7 +315,7 @@ describe("DrawRect", () => {
       });
 
       // and when
-      rectFilled.draw(
+      rect.draw(
         xy_(2, 2),
         xy_(8, 8),
         new CompositeColor(c4, c2),
@@ -341,7 +341,7 @@ describe("DrawRect", () => {
       });
 
       // and when
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 0),
         xy_(10, 10),
         new CompositeColor(c3, ct),
@@ -367,14 +367,14 @@ describe("DrawRect", () => {
       });
 
       // and when
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 0),
         xy_(10, 5),
         new CompositeColor(c5, ct),
         false,
         FillPattern.of(0b0011_0011_0011_0011)
       );
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 5),
         xy_(10, 10),
         new CompositeColor(c5, c1),
@@ -393,7 +393,7 @@ describe("DrawRect", () => {
           ^ ^ : - ^ ^ - : ^ ^
           # # ^ ^ # # ^ ^ # #
           # - : - - - - : - #
-          # - : :  : : : - #
+          # - : : : : : : - #
           # - - - - - - - - #
           # # ^ ^ # # ^ ^ # #
         `,
@@ -403,10 +403,10 @@ describe("DrawRect", () => {
     test("fill pattern: 4x4 pattern is aligned with canvas' top-left corner", () => {
       // given
       const canvas = new TestCanvas(11, 11, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
-      rectFilled.draw(
+      rect.draw(
         xy_(1, 1),
         xy_(10, 10),
         new CompositeColor(c1, ct),
@@ -416,7 +416,7 @@ describe("DrawRect", () => {
 
       // then
       canvas.expectToEqual({
-        withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
+        withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
           - - - - - - - - - - -
           - # # - # # # - # # -
@@ -438,11 +438,11 @@ describe("DrawRect", () => {
     test("simple 1x1", () => {
       // given
       const canvas = new TestCanvas(3, 3, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(1, 1);
-      rectFilled.draw(xy1, xy1.add(1), c1, true);
+      rect.draw(xy1, xy1.add(1), c1, true);
 
       // then
       canvas.expectToEqual({
@@ -458,11 +458,11 @@ describe("DrawRect", () => {
     test("simple 4x3", () => {
       // given
       const canvas = new TestCanvas(6, 5, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(1, 1);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 3)), c1, true);
+      rect.draw(xy1, xy1.add(xy_(4, 3)), c1, true);
 
       // then
       canvas.expectToEqual({
@@ -480,11 +480,11 @@ describe("DrawRect", () => {
     test("drawing on very edges of a canvas", () => {
       // given
       const canvas = new TestCanvas(4, 3, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(0, 0);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 3)), c1, true);
+      rect.draw(xy1, xy1.add(xy_(4, 3)), c1, true);
 
       // then
       canvas.expectToEqual({
@@ -500,11 +500,11 @@ describe("DrawRect", () => {
     test("0-size", () => {
       // given
       const canvas = new TestCanvas(3, 3, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(1, 1);
-      rectFilled.draw(xy1, xy1, c1, true);
+      rect.draw(xy1, xy1, c1, true);
 
       // then
       canvas.expectToEqual({
@@ -520,11 +520,11 @@ describe("DrawRect", () => {
     test("negative left-top corner", () => {
       // given
       const canvas = new TestCanvas(3, 3, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(-1, -1);
-      rectFilled.draw(xy1, xy1.add(3), c1, true);
+      rect.draw(xy1, xy1.add(3), c1, true);
 
       // then
       canvas.expectToEqual({
@@ -540,11 +540,11 @@ describe("DrawRect", () => {
     test("negative size", () => {
       // given
       const canvas = new TestCanvas(6, 5, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(5, 4);
-      rectFilled.draw(xy1, xy1.add(xy_(-4, -3)), c1, true);
+      rect.draw(xy1, xy1.add(xy_(-4, -3)), c1, true);
 
       // then
       canvas.expectToEqual({
@@ -562,11 +562,11 @@ describe("DrawRect", () => {
     test("clipping: over the left edge", () => {
       // given
       const canvas = new TestCanvas(6, 6, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(-2, 1);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
+      rect.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
 
       // then
       canvas.expectToEqual({
@@ -585,11 +585,11 @@ describe("DrawRect", () => {
     test("clipping: over the right edge", () => {
       // given
       const canvas = new TestCanvas(6, 6, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(4, 1);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
+      rect.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
 
       // then
       canvas.expectToEqual({
@@ -608,11 +608,11 @@ describe("DrawRect", () => {
     test("clipping: over the top edge", () => {
       // given
       const canvas = new TestCanvas(6, 6, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(1, -2);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
+      rect.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
 
       // then
       canvas.expectToEqual({
@@ -631,11 +631,11 @@ describe("DrawRect", () => {
     test("clipping: over the bottom edge", () => {
       // given
       const canvas = new TestCanvas(6, 6, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
       const xy1 = xy_(1, 4);
-      rectFilled.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
+      rect.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
 
       // then
       canvas.expectToEqual({
@@ -654,10 +654,10 @@ describe("DrawRect", () => {
     test("fill pattern: simple one, with a single solid color", () => {
       // given
       const canvas = new TestCanvas(4, 4, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 0),
         xy_(4, 4),
         c1,
@@ -667,7 +667,7 @@ describe("DrawRect", () => {
 
       // then
       canvas.expectToEqual({
-        withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
+        withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
           # # # #
           # # # -
@@ -680,10 +680,10 @@ describe("DrawRect", () => {
     test("fill pattern: simple one, with two solid colors", () => {
       // given
       const canvas = new TestCanvas(4, 4, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 0),
         xy_(4, 4),
         new CompositeColor(c1, c2),
@@ -693,7 +693,7 @@ describe("DrawRect", () => {
 
       // then
       canvas.expectToEqual({
-        withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
+        withMapping: { "-": c0, "#": c1, ":": c2 },
         expectedImageAsAscii: `
           # # # #
           # # # :
@@ -706,10 +706,10 @@ describe("DrawRect", () => {
     test("fill pattern: various 4x4 patterns", () => {
       // given
       const canvas = new TestCanvas(10, 10, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 0),
         xy_(10, 10),
         new CompositeColor(c4, c1),
@@ -735,7 +735,7 @@ describe("DrawRect", () => {
       });
 
       // and when
-      rectFilled.draw(
+      rect.draw(
         xy_(2, 2),
         xy_(8, 8),
         new CompositeColor(c4, c2),
@@ -761,7 +761,7 @@ describe("DrawRect", () => {
       });
 
       // and when
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 0),
         xy_(10, 10),
         new CompositeColor(c3, ct),
@@ -787,14 +787,14 @@ describe("DrawRect", () => {
       });
 
       // and when
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 0),
         xy_(10, 5),
         new CompositeColor(c5, ct),
         true,
         FillPattern.of(0b0011_0011_0011_0011)
       );
-      rectFilled.draw(
+      rect.draw(
         xy_(0, 5),
         xy_(10, 10),
         new CompositeColor(c5, c1),
@@ -823,10 +823,10 @@ describe("DrawRect", () => {
     test("fill pattern: 4x4 pattern is aligned with canvas' top-left corner", () => {
       // given
       const canvas = new TestCanvas(11, 11, c0);
-      const rectFilled = new DrawRect(canvas.bytes, canvas.size);
+      const rect = new DrawRect(canvas.bytes, canvas.size);
 
       // when
-      rectFilled.draw(
+      rect.draw(
         xy_(1, 1),
         xy_(10, 10),
         new CompositeColor(c1, ct),
@@ -836,7 +836,7 @@ describe("DrawRect", () => {
 
       // then
       canvas.expectToEqual({
-        withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
+        withMapping: { "-": c0, "#": c1 },
         expectedImageAsAscii: `
           - - - - - - - - - - -
           - # # - # # # - # # -
