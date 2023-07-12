@@ -16,7 +16,6 @@ type DrawApiOptions = {
 };
 
 export class DrawApi {
-  // TODO: still needed as a separate field?
   readonly #assets: Assets;
 
   readonly #clear: DrawClear;

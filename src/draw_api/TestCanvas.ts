@@ -60,9 +60,9 @@ export class TestCanvas {
           asciiImage += "!";
         } else {
           const color = new SolidColor(
-            colorBytes[0],
-            colorBytes[1],
-            colorBytes[2]
+            colorBytes[0]!,
+            colorBytes[1]!,
+            colorBytes[2]!
           );
           asciiImage += rgbHexToAscii.get(color.asRgbCssHex()) ?? "?";
         }

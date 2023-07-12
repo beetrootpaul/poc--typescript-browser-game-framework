@@ -18,7 +18,7 @@ describe("Utils", () => {
     { params: [0.2, 0.3, 0.1], result: 0.2 },
   ].forEach(({ params, result }) => {
     test(`#clamp(${params[0]},${params[1]},${params[2]})`, () => {
-      expect(Utils.clamp(params[0], params[1], params[2])).toEqual(result);
+      expect(Utils.clamp(params[0]!, params[1]!, params[2]!)).toEqual(result);
     });
   });
 });

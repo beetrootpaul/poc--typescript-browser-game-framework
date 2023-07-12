@@ -16,14 +16,14 @@ export class TestImage {
     const normalizedAsciiImage = normalizedAsciiImageLines.join("");
 
     this.asset = {
-      width: normalizedAsciiImageLines[0].length,
+      width: normalizedAsciiImageLines[0]!.length,
       height: normalizedAsciiImageLines.length,
       rgba8bitData: new Uint8ClampedArray(4 * normalizedAsciiImage.length),
     };
 
     for (let i = 0; i < this.asset.width * this.asset.height; i += 1) {
-      const color: SolidColor | TransparentColor | undefined =
-        asciiToColor[normalizedAsciiImage[i]];
+      const color =
+        asciiToColor[normalizedAsciiImage[i]!];
       if (!color) {
         throw Error(
           `TestImage: Missing color mapping for "${normalizedAsciiImage[i]}"`

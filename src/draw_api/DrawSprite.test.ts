@@ -14,8 +14,6 @@ describe("DrawSprite", () => {
   const c4 = SolidColor.fromRgbCssHex("#414243");
   const c5 = SolidColor.fromRgbCssHex("#515253");
 
-  // TODO: more tests
-
   test("1x1 image", () => {
     // given
     const canvas = new TestCanvas(3, 3, c0);
