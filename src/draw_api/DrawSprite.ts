@@ -65,7 +65,7 @@ export class DrawSprite {
                 imgBytes[imgBytesIndex + 2]!
               )
             : transparent;
-        color = colorMapping.get(color.asRgbaCssHex()) ?? color;
+        color = colorMapping.get(color.id()) ?? color;
 
         if (color instanceof SolidColor) {
           const canvasXy = targetXy1.add(

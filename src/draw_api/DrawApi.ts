@@ -26,7 +26,6 @@ export class DrawApi {
 
   #cameraOffset: Xy = xy_(0, 0);
 
-  // RGBA hex representation of a Color is used as this map's keys, because it makes it easier to retrieve mappings with use of string equality
   readonly #spriteColorMapping: Map<string, Color> = new Map();
 
   constructor(options: DrawApiOptions) {
@@ -114,10 +113,10 @@ export class DrawApi {
   // noinspection JSUnusedGlobalSymbols
   mapSpriteColor(from: Color, to: Color): void {
     // TODO: consider writing a custom equality check function
-    if (from.asRgbaCssHex() === to.asRgbaCssHex()) {
-      this.#spriteColorMapping.delete(from.asRgbaCssHex());
+    if (from.id() === to.id()) {
+      this.#spriteColorMapping.delete(from.id());
     } else {
-      this.#spriteColorMapping.set(from.asRgbaCssHex(), to);
+      this.#spriteColorMapping.set(from.id(), to);
     }
   }
 

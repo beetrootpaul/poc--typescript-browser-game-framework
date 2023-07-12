@@ -478,9 +478,9 @@ describe("DrawSprite", () => {
     // when
     const spr = { xy1: xy_(0, 0), xy2: xy_(4, 4) };
     const colorMapping: Map<string, Color> = new Map([
-      [c1.asRgbaCssHex(), c4],
-      [c2.asRgbaCssHex(), c5],
-      [c3.asRgbaCssHex(), ct],
+      [c1.id(), c4],
+      [c2.id(), c5],
+      [c3.id(), ct],
     ]);
     sprite.draw(image.asset, spr, xy_(0, 0), colorMapping);
 
