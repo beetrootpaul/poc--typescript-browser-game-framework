@@ -27,7 +27,7 @@ export class TouchGameInput {
     }
   }
 
-  startListening() {
+  startListening(): void {
     document
       // TODO: externalize this selector
       .querySelectorAll<HTMLElement>(".touch_controls")
