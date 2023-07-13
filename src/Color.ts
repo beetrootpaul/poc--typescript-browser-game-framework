@@ -34,7 +34,6 @@ export class SolidColor implements Color {
     return "solid-" + this.asRgbCssHex();
   }
 
-  // TODO: still used?
   asRgbCssHex(): string {
     return (
       "#" +

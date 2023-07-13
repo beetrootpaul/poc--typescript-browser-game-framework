@@ -3,7 +3,6 @@ import { Xy } from "../Xy.ts";
 import { DrawPixel } from "./DrawPixel.ts";
 import { FillPattern } from "./FillPattern.ts";
 
-// TODO: rename to DrawRect and provide a way to draw both filled and not filled rects
 export class DrawRect {
   readonly #canvasBytes: Uint8ClampedArray;
   readonly #canvasSize: Xy;
@@ -25,7 +24,6 @@ export class DrawRect {
     fillPattern: FillPattern = FillPattern.primaryOnly
   ): void {
     Xy.forEachIntXyWithinRectOf(xy1, xy2, fill, (xy) => {
-      // TODO: make sure all these branches are covered with tests
       if (fillPattern.hasPrimaryColorAt(xy)) {
         if (color instanceof CompositeColor) {
           if (color.primary instanceof SolidColor) {

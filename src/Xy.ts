@@ -1,6 +1,8 @@
 import { PrintDebug } from "./debug/PrintDebug.ts";
 import { Utils } from "./Utils.ts";
 
+// TODO: Consider Vector2d and v_
+
 export function xy_(x: number, y: number): Xy {
   return new Xy(x, y);
 }
