@@ -1,10 +1,12 @@
+export type ColorId = string;
+
 export interface Color {
   // meant to be used e.g. as textual key in `Map()`
-  id(): string;
+  id(): ColorId;
 }
 
 export class TransparentColor implements Color {
-  id(): string {
+  id(): ColorId {
     return "transparent";
   }
 }
@@ -28,7 +30,7 @@ export class SolidColor implements Color {
     this.b = b;
   }
 
-  id(): string {
+  id(): ColorId {
     return "solid-" + this.asRgbCssHex();
   }
 
@@ -68,7 +70,7 @@ export class CompositeColor implements Color {
     this.secondary = secondary;
   }
 
-  id(): string {
+  id(): ColorId {
     return `composite:${this.primary.id()}:${this.secondary.id()}`;
   }
 }

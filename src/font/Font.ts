@@ -1,3 +1,4 @@
+import { type Color, ColorId, SolidColor } from "../Color.ts";
 import { Sprite } from "../Sprite.ts";
 import { Xy } from "../Xy.ts";
 

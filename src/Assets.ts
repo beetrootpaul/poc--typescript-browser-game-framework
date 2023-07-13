@@ -1,3 +1,4 @@
+import { SolidColor } from "./Color.ts";
 import { Font } from "./font/Font.ts";
 import { Utils } from "./Utils.ts";
 
@@ -13,8 +14,10 @@ type ImageAssetToLoad = {
 };
 
 type FontAssetToLoad = {
-  url: ImageUrl;
   font: Font;
+  url: ImageUrl;
+  imageTextColor: SolidColor;
+  imageBgColor: SolidColor;
 };
 
 export type ImageAsset = {
@@ -26,17 +29,28 @@ export type ImageAsset = {
 export type FontAsset = {
   font: Font;
   image: ImageAsset;
+  imageTextColor: SolidColor;
+  imageBgColor: SolidColor;
 };
 
 export class Assets {
   #images: Map<ImageUrl, ImageAsset> = new Map();
-  #fonts: Map<ImageUrl, Font> = new Map();
+  #fonts: Map<
+    ImageUrl,
+    {
+      font: Font;
+      imageTextColor: SolidColor;
+      imageBgColor: SolidColor;
+    }
+  > = new Map();
 
   // TODO: game loading screen during assets loading?
   async loadAssets(assetsToLoad: AssetsToLoad): Promise<void> {
-    assetsToLoad.fonts.forEach(({ url, font }) => {
-      this.#fonts.set(url, font);
-    });
+    assetsToLoad.fonts.forEach(
+      ({ url, font, imageTextColor, imageBgColor }) => {
+        this.#fonts.set(url, { font, imageTextColor, imageBgColor });
+      }
+    );
 
     const imageUrls = [
       ...assetsToLoad.images.map(({ url }) => url),
@@ -82,13 +96,16 @@ export class Assets {
 
   // call `loadImages` before this one
   getFont(urlOfAlreadyLoadedFontImage: ImageUrl): FontAsset {
+    const { font, imageTextColor, imageBgColor } =
+      this.#fonts.get(urlOfAlreadyLoadedFontImage) ??
+      Utils.throwError(
+        `Assets: font descriptor is missing for font image URL "${urlOfAlreadyLoadedFontImage}"`
+      );
     return {
-      font:
-        this.#fonts.get(urlOfAlreadyLoadedFontImage) ??
-        Utils.throwError(
-          `Assets: font descriptor is missing for font image URL "${urlOfAlreadyLoadedFontImage}"`
-        ),
+      font,
       image: this.getImage(urlOfAlreadyLoadedFontImage),
+      imageTextColor,
+      imageBgColor,
     };
   }
 }

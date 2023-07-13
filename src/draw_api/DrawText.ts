@@ -1,5 +1,5 @@
 import { FontAsset } from "../Assets.ts";
-import { SolidColor } from "../Color.ts";
+import { SolidColor, transparent } from "../Color.ts";
 import { Xy, xy_ } from "../Xy.ts";
 import { DrawSprite } from "./DrawSprite.ts";
 
@@ -21,14 +21,21 @@ export class DrawText {
     text: string,
     canvasXy1: Xy,
     fontAsset: FontAsset,
-    // TODO: use this param
     color: SolidColor
   ): void {
     let xy = canvasXy1;
     for (let i = 0; i < text.length; i += 1) {
       const sprite = fontAsset.font.spriteFor(text[i]!);
       if (sprite) {
-        this.#sprite.draw(fontAsset.image, sprite, xy);
+        this.#sprite.draw(
+          fontAsset.image,
+          sprite,
+          xy,
+          new Map([
+            [fontAsset.imageTextColor.id(), color],
+            [fontAsset.imageBgColor.id(), transparent],
+          ])
+        );
         xy = xy.add(xy_(sprite.w + fontAsset.font.letterSpacingW, 0));
       } else {
         xy = xy.add(
