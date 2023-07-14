@@ -37,6 +37,17 @@ export class Audio {
   }
 
   toggle(): void {
+    if (this.audioCtx.state === "suspended") {
+      this.audioCtx.resume().catch(err => {
+        console.error(err);
+      });
+      this.#globalGainNode.gain.setTargetAtTime(
+        1,
+        this.audioContext.currentTime,
+        this.#muteUnmuteExponentialTimeConstant
+      );
+      return;
+    }
     if (this.#isMuted) {
       this.#isMuted = false;
       this.#globalGainNode.gain.setTargetAtTime(
