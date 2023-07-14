@@ -219,7 +219,10 @@ export class Framework {
       this.#htmlCanvasContext.canvas.height
     );
     // TODO: encapsulate this calculation and related fields
-    this.#scaleToFill = htmlCanvasSize.div(this.#gameCanvasSize).floor().min();
+    this.#scaleToFill = Math.min(
+      htmlCanvasSize.div(this.#gameCanvasSize).floor().x,
+      htmlCanvasSize.div(this.#gameCanvasSize).floor().y
+    );
     this.#centeringOffset = htmlCanvasSize
       .sub(this.#gameCanvasSize.mul(this.#scaleToFill))
       .div(2)

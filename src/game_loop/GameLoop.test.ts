@@ -9,7 +9,6 @@ describe("GameLoop", () => {
     jest.fn<AnimationFrameProvider["requestAnimationFrame"]>();
 
   beforeEach(() => {
-    // TODO: consider turning it on for all tests by default. See: https://jestjs.io/docs/configuration#resetmocks-boolean
     jest.resetAllMocks();
   });
 

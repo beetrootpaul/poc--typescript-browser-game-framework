@@ -1,5 +1,5 @@
 import { ImageAsset } from "../Assets.ts";
-import { type Color, SolidColor, transparent } from "../Color.ts";
+import { type Color, ColorId, SolidColor, transparent } from "../Color.ts";
 import { spr_, Sprite } from "../Sprite.ts";
 import { Utils } from "../Utils.ts";
 import { Xy, xy_ } from "../Xy.ts";
@@ -22,8 +22,7 @@ export class DrawSprite {
     sourceImageAsset: ImageAsset,
     sprite: Sprite,
     targetXy1: Xy,
-    // RGBA hex representation of a Color is used as this map's keys, because it makes it easier to retrieve mappings with use of string equality
-    colorMapping: Map<string, Color> = new Map()
+    colorMapping: Map<ColorId, Color> = new Map()
   ): void {
     const {
       width: imgW,

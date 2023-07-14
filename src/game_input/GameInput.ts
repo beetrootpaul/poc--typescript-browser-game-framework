@@ -34,7 +34,7 @@ export class GameInput {
     this.#gamepadGameInput = new GamepadGameInput();
   }
 
-  startListening() {
+  startListening(): void {
     this.#keyboardGameInput.startListening();
     this.#touchGameInput.startListening();
   }

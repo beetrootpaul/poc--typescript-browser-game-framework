@@ -1,5 +1,5 @@
 import { Assets, FontAsset } from "../Assets.ts";
-import { Color, CompositeColor, SolidColor } from "../Color.ts";
+import { Color, ColorId, CompositeColor, SolidColor } from "../Color.ts";
 import { Font } from "../font/Font.ts";
 import { Sprite } from "../Sprite.ts";
 import { Xy, xy_ } from "../Xy.ts";
@@ -34,7 +34,7 @@ export class DrawApi {
 
   #fontAsset: FontAsset | null = null;
 
-  readonly #spriteColorMapping: Map<string, Color> = new Map();
+  readonly #spriteColorMapping: Map<ColorId, Color> = new Map();
 
   constructor(options: DrawApiOptions) {
     this.#assets = options.assets;

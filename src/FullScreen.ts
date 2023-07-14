@@ -16,8 +16,6 @@ export abstract class FullScreen {
     fullScreenSubjectSelector: string,
     buttonsSelector: string
   ): FullScreen {
-    // TODO: implement for Safari 16.4 as well, but only after testing everything else on the older Safari 16.3,
-    //       because Safari downgrade might be difficult to achieve (it updates together with macOS update).
     return document.fullscreenEnabled || document.webkitFullscreenEnabled
       ? new FullScreenSupported(fullScreenSubjectSelector, buttonsSelector)
       : new FullScreenNoop(buttonsSelector);

@@ -1,5 +1,5 @@
 import { expect } from "@jest/globals";
-import { SolidColor } from "../Color.ts";
+import { ColorId, SolidColor } from "../Color.ts";
 import { Xy, xy_ } from "../Xy.ts";
 
 export class TestCanvas {
@@ -29,14 +29,14 @@ export class TestCanvas {
 
     const { withMapping: asciiToColor, expectedImageAsAscii } = params;
 
-    const rgbHexToAscii: Map<string, string> = new Map(
+    const colorToAscii: Map<ColorId, string> = new Map(
       Object.entries(asciiToColor).map(([ascii, color]) => [
-        color.asRgbCssHex(),
+        color.id(),
         ascii,
       ])
     );
 
-    const actualAscii = this.#asAscii(rgbHexToAscii);
+    const actualAscii = this.#asAscii(colorToAscii);
 
     const expectedAscii =
       params.expectedImageAsAscii
@@ -55,7 +55,7 @@ export class TestCanvas {
     expect(actualAscii).toEqual(expectedAscii);
   }
 
-  #asAscii(rgbHexToAscii: Map<string, string>): string {
+  #asAscii(colorToAscii: Map<ColorId, string>): string {
     let asciiImage = "";
 
     for (let y = 0; y < this.size.y; y += 1) {
@@ -70,7 +70,7 @@ export class TestCanvas {
             colorBytes[1]!,
             colorBytes[2]!
           );
-          asciiImage += rgbHexToAscii.get(color.asRgbCssHex()) ?? "?";
+          asciiImage += colorToAscii.get(color.id()) ?? "?";
         }
       }
       asciiImage += "\n";
