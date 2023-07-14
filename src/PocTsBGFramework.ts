@@ -44,8 +44,8 @@ export class PocTsBGFramework {
 
   static frameNumber: number;
   static drawApi: DrawApi;
-  static gameInputEvents: Set<GameInputEvent>;
-  static gameInputEventsFireOnce: Set<GameInputEvent>;
+  static continuousInputEvents: Set<GameInputEvent>;
+  static fireOnceInputEvents: Set<GameInputEvent>;
   static storageApi: StorageApi;
 
   // Debug flag.

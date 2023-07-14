@@ -178,8 +178,8 @@ export class Framework {
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
 
         PocTsBGFramework.frameNumber = frameNumber;
-        PocTsBGFramework.gameInputEvents = continuousEvents;
-        PocTsBGFramework.gameInputEventsFireOnce = fireOnceEvents;
+        PocTsBGFramework.continuousInputEvents = continuousEvents;
+        PocTsBGFramework.fireOnceInputEvents = fireOnceEvents;
 
         this.#onUpdate?.();
       },
