@@ -136,6 +136,7 @@ export class Framework {
     this.#storageApi = new StorageApi();
 
     PocTsBGFramework.drawApi = this.#drawApi;
+    PocTsBGFramework.audio = this.#audio;
     PocTsBGFramework.storageApi = this.#storageApi;
   }
 

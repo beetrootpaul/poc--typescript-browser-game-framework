@@ -1,4 +1,5 @@
 import { AssetsToLoad } from "./Assets.ts";
+import { Audio } from "./audio/Audio.ts";
 import { DrawApi } from "./draw_api/DrawApi.ts";
 import { Framework, type FrameworkOptions } from "./Framework.ts";
 import { GameInputEvent } from "./game_input/GameInput.ts";
@@ -44,6 +45,8 @@ export class PocTsBGFramework {
 
   static frameNumber: number;
   static drawApi: DrawApi;
+  // TODO: RENAME?
+  static audio: Audio;
   static continuousInputEvents: Set<GameInputEvent>;
   static fireOnceInputEvents: Set<GameInputEvent>;
   static storageApi: StorageApi;
