@@ -179,6 +179,7 @@ export class Framework {
 
         PocTsBGFramework.frameNumber = frameNumber;
         PocTsBGFramework.gameInputEvents = continuousEvents;
+        PocTsBGFramework.gameInputEventsFireOnce = fireOnceEvents;
 
         this.#onUpdate?.();
       },
