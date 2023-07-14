@@ -12,10 +12,10 @@ export class Utils {
     return a + b + c - Math.min(a, b, c) - Math.max(a, b, c);
   }
 
-  // TODO: migrate from Lua
-  // function u.boolean_changing_every_nth_second(n)
-  //   return ceil(sin(time() * 0.5 / n) / 2) == 1
-  // end
+  // TODO: tests for edge cases
+  static booleanChangingEveryNthFrame(n: number): boolean {
+    return PocTsBGFramework.frameNumber % (n * 2) < n;
+  }
 
   // generates a list of XY to add to a given coordinate in order to get all offsets by 1 pixel in 8 directions
   static get offset8Directions(): Xy[] {
@@ -37,7 +37,10 @@ export class Utils {
       PocTsBGFramework.drawApi.getFont()?.spritesFor(text) ?? [];
     return charSprites.reduce(
       (sizeSoFar, nextSprite) =>
-        Xy.max(sizeSoFar, nextSprite.positionInText.add(nextSprite.sprite.size())),
+        Xy.max(
+          sizeSoFar,
+          nextSprite.positionInText.add(nextSprite.sprite.size())
+        ),
       Xy.zero
     );
   }
