@@ -17,16 +17,7 @@ export class Audio {
     return this.#globalGainNode;
   }
 
-  constructor(muteButtonsSelector: string) {
-    document
-      .querySelectorAll<HTMLElement>(muteButtonsSelector)
-      .forEach((button) => {
-        // TODO: consider handling it through mute_unmute_toggle game input event :thinking:
-        button.addEventListener("click", () => {
-          this.toggle();
-        });
-      });
-
+  constructor() {
     this.audioContext = new AudioContext();
 
     this.#globalGainNode = this.audioContext.createGain();
@@ -36,32 +27,41 @@ export class Audio {
     this.#isMuted = false;
   }
 
-  toggle(): void {
+  // In some browsers audio should start in result of user interaction (e.g. button click).
+  // Since we cannot assure it for every game setup, let' expose a function which tries to
+  // resume the AudioContext and call it on every user interaction detected by this framework.
+  resumeAudioContextIfNeeded(): void {
     if (this.audioCtx.state === "suspended") {
-      this.audioCtx.resume().catch(err => {
+      this.audioCtx.resume().catch((err) => {
         console.error(err);
       });
-      this.#globalGainNode.gain.setTargetAtTime(
-        1,
-        this.audioContext.currentTime,
-        this.#muteUnmuteExponentialTimeConstant
-      );
-      return;
+      this.#unmute();
     }
+  }
+
+  toggle(): void {
     if (this.#isMuted) {
-      this.#isMuted = false;
-      this.#globalGainNode.gain.setTargetAtTime(
-        1,
-        this.audioContext.currentTime,
-        this.#muteUnmuteExponentialTimeConstant
-      );
+      this.#unmute();
     } else {
-      this.#isMuted = true;
-      this.#globalGainNode.gain.setTargetAtTime(
-        0,
-        this.audioContext.currentTime,
-        this.#muteUnmuteExponentialTimeConstant
-      );
+      this.#mute();
     }
+  }
+
+  #mute(): void {
+    this.#isMuted = true;
+    this.#globalGainNode.gain.setTargetAtTime(
+      0,
+      this.audioContext.currentTime,
+      this.#muteUnmuteExponentialTimeConstant
+    );
+  }
+
+  #unmute(): void {
+    this.#isMuted = false;
+    this.#globalGainNode.gain.setTargetAtTime(
+      1,
+      this.audioContext.currentTime,
+      this.#muteUnmuteExponentialTimeConstant
+    );
   }
 }

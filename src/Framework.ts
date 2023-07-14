@@ -105,6 +105,8 @@ export class Framework {
     this.#offscreenContext = offscreenContext;
 
     this.#gameInput = new GameInput({
+      muteButtonsSelector: options.htmlControlsMuteSelector,
+      fullScreenButtonsSelector: options.htmlControlsFullscreenSelector,
       debugToggleKey: this.#debugOptions?.toggleKey,
     });
 
@@ -114,7 +116,7 @@ export class Framework {
       requestAnimationFrameFn: window.requestAnimationFrame.bind(window),
     });
 
-    this.#audio = new Audio(options.htmlControlsMuteSelector);
+    this.#audio = new Audio();
 
     this.#fullScreen = FullScreen.newFor(
       options.htmlDisplaySelector,
@@ -184,7 +186,12 @@ export class Framework {
           this.#debug = !this.#debug;
           this.#redrawDebugMargin();
         }
+
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
+
+        if (fireOnceEvents.size > 0 || continuousEvents.size > 0) {
+          this.#audio.resumeAudioContextIfNeeded();
+        }
 
         PocTsBGFramework.frameNumber = frameNumber;
         PocTsBGFramework.continuousInputEvents = continuousEvents;

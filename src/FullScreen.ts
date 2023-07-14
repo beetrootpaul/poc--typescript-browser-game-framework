@@ -17,7 +17,7 @@ export abstract class FullScreen {
     buttonsSelector: string
   ): FullScreen {
     return document.fullscreenEnabled || document.webkitFullscreenEnabled
-      ? new FullScreenSupported(fullScreenSubjectSelector, buttonsSelector)
+      ? new FullScreenSupported(fullScreenSubjectSelector)
       : new FullScreenNoop(buttonsSelector);
   }
 
@@ -43,7 +43,7 @@ class FullScreenSupported implements FullScreen {
   readonly #nativeRequestFullscreen: () => void | Promise<void>;
   readonly #nativeExitFullscreen: () => void | Promise<void>;
 
-  constructor(fullScreenSubjectSelector: string, buttonsSelector: string) {
+  constructor(fullScreenSubjectSelector: string) {
     const fullScreenSubject = document.querySelector(fullScreenSubjectSelector);
     if (!fullScreenSubject) {
       throw Error(
@@ -63,15 +63,6 @@ class FullScreenSupported implements FullScreen {
     const nativeExitFullscreen =
       document.exitFullscreen ?? document.webkitExitFullscreen ?? (() => {});
     this.#nativeExitFullscreen = nativeExitFullscreen.bind(document);
-
-    document
-      .querySelectorAll<HTMLElement>(buttonsSelector)
-      .forEach((button) => {
-        // TODO: consider handling it through full_screen game input event :thinking:
-        button.addEventListener("click", () => {
-          this.toggle();
-        });
-      });
   }
 
   toggle(): void {
