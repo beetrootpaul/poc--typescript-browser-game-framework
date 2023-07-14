@@ -43,7 +43,8 @@ export class PocTsBGFramework {
   //   Assumption: `init(…)` was called first in order to make `framework` defined.
   //
 
-  static frameNumber: number;
+  static frameNumber: number = 0;
+  static averageFps: number = 1;
   static drawApi: DrawApi;
   // TODO: RENAME?
   static audio: Audio;
