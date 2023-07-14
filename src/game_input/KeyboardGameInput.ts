@@ -21,6 +21,8 @@ export class KeyboardGameInput {
     ["D", "right"],
     ["W", "up"],
     ["S", "down"],
+    ["m", "mute_unmute_toggle"],
+    ["M", "mute_unmute_toggle"],
     ["f", "full_screen"],
     ["F", "full_screen"],
   ]);

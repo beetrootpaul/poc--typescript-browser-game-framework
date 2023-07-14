@@ -1,4 +1,5 @@
 import { Assets, AssetsToLoad } from "./Assets.ts";
+import { Audio } from "./audio/Audio.ts";
 import { SolidColor } from "./Color.ts";
 import { DrawApi } from "./draw_api/DrawApi.ts";
 import { FullScreen } from "./FullScreen.ts";
@@ -13,6 +14,7 @@ export type FrameworkOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
   htmlControlsFullscreenSelector: string;
+  htmlControlsMuteSelector: string;
   htmlCanvasBackground: SolidColor;
   gameCanvasSize: Xy;
   desiredFps: number;
@@ -45,6 +47,7 @@ export class Framework {
   readonly #loading: Loading;
   readonly #gameInput: GameInput;
   readonly #gameLoop: GameLoop;
+  readonly #audio: Audio;
   readonly #fullScreen: FullScreen;
 
   readonly #assets: Assets;
@@ -111,6 +114,8 @@ export class Framework {
       requestAnimationFrameFn: window.requestAnimationFrame.bind(window),
     });
 
+    this.#audio = new Audio(options.htmlControlsMuteSelector);
+
     this.#fullScreen = FullScreen.newFor(
       options.htmlDisplaySelector,
       options.htmlControlsFullscreenSelector
@@ -170,6 +175,9 @@ export class Framework {
         const fireOnceEvents = this.#gameInput.consumeFireOnceEvents();
         if (fireOnceEvents.has("full_screen")) {
           this.#fullScreen.toggle();
+        }
+        if (fireOnceEvents.has("mute_unmute_toggle")) {
+          this.#audio.toggle();
         }
         if (fireOnceEvents.has("debug_toggle")) {
           this.#debug = !this.#debug;

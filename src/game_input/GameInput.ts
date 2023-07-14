@@ -8,11 +8,13 @@ export type GameInputEvent =
   | "right"
   | "up"
   | "down"
+  | "mute_unmute_toggle"
   | "full_screen"
   | "debug_toggle";
 
 export const gameInputEventBehavior: Record<string, { fireOnce?: boolean }> = {
   // TODO: move full_screen out of this set OR move its handling to TouchGameInput and similar ones
+  mute_unmute_toggle: { fireOnce: true },
   full_screen: { fireOnce: true },
   debug_toggle: { fireOnce: true },
 };
