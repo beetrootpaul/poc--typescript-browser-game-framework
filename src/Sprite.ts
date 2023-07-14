@@ -14,7 +14,10 @@ export class Sprite {
     this.xy2 = xy2;
   }
 
-  get w(): number {
-    return Math.abs(this.xy2.x - this.xy1.x);
+  size(): Xy {
+    return xy_(
+      Math.abs(this.xy2.x - this.xy1.x),
+      Math.abs(this.xy2.y - this.xy1.y)
+    );
   }
 }

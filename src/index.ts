@@ -8,7 +8,7 @@ export {
   transparent,
 } from "./Color.ts";
 export { FillPattern } from "./draw_api/FillPattern.ts";
-export { type Font } from "./font/Font.ts";
+export { type CharSprite, type Font } from "./font/Font.ts";
 export { Sprite, spr_ } from "./Sprite.ts";
 export { Utils } from "./Utils.ts";
 export { Xy, xy_ } from "./Xy.ts";

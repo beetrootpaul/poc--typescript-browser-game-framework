@@ -10,6 +10,14 @@ export function xy_(x: number, y: number): Xy {
 export class Xy implements PrintDebug {
   static zero = new Xy(0, 0);
 
+  static min(xy1: Xy, xy2: Xy): Xy {
+    return new Xy(Math.min(xy1.x, xy2.x), Math.min(xy1.y, xy2.y));
+  }
+
+  static max(xy1: Xy, xy2: Xy): Xy {
+    return new Xy(Math.max(xy1.x, xy2.x), Math.max(xy1.y, xy2.y));
+  }
+
   static forEachIntXyWithinRectOf(
     xy1: Xy,
     xy2: Xy,
@@ -64,10 +72,6 @@ export class Xy implements PrintDebug {
 
   round(): Xy {
     return new Xy(Math.round(this.x), Math.round(this.y));
-  }
-
-  min(): number {
-    return Math.min(this.x, this.y);
   }
 
   eq(other: Xy): boolean {

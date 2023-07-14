@@ -31,9 +31,15 @@ export class Utils {
     ];
   }
 
+  // TODO: test size measurements, especially for text combining regular and wider glyphs, like "➡️"
   static measureTextSize(text: string): Xy {
-    const font = PocTsBGFramework.drawApi.getFont();
-    return font?.sizeOf(text) ?? Xy.zero;
+    const charSprites =
+      PocTsBGFramework.drawApi.getFont()?.spritesFor(text) ?? [];
+    return charSprites.reduce(
+      (sizeSoFar, nextSprite) =>
+        Xy.max(sizeSoFar, nextSprite.positionInText.add(nextSprite.sprite.size())),
+      Xy.zero
+    );
   }
 
   static printWithOutline(

@@ -1,13 +1,11 @@
-import { type Color, ColorId, SolidColor } from "../Color.ts";
 import { Sprite } from "../Sprite.ts";
 import { Xy } from "../Xy.ts";
 
+export type CharSprite = {
+  positionInText: Xy;
+  sprite: Sprite;
+};
+
 export interface Font {
-  spriteFor(char: string): Sprite | null;
-
-  sizeOf(text: string): Xy;
-
-  get letterSpacingW(): number;
-
-  get spaceCharW(): number;
+  spritesFor(text: string): CharSprite[];
 }
