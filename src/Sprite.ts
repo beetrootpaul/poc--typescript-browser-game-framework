@@ -1,4 +1,4 @@
-import { Xy, xy_ } from "./Xy.ts";
+import { Xy, xy_ } from "./Xy";
 
 export function spr_(x1: number, y1: number, x2: number, y2: number): Sprite {
   return new Sprite(xy_(x1, y1), xy_(x2, y2));

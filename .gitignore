@@ -1,10 +1,10 @@
-# TypeScript composite project build output
-/types/
+# TypeScript: output
+/ts_output/
 
-# Node.js dependencies
+# Node.js: dependencies
 /node_modules/
 
-# JetBrains IDE's project configuration
+# JetBrains IDEs: project configuration
 /.idea/
 
 # local playground etc.

@@ -1,5 +1,5 @@
-import { PrintDebug } from "./debug/PrintDebug.ts";
-import { Utils } from "./Utils.ts";
+import { PrintDebug } from "./debug/PrintDebug";
+import { Utils } from "./Utils";
 
 // TODO: Consider Vector2d and v_
 

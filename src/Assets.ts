@@ -1,6 +1,6 @@
-import { SolidColor } from "./Color.ts";
-import { Font } from "./font/Font.ts";
-import { Utils } from "./Utils.ts";
+import { SolidColor } from "./Color";
+import { Font } from "./font/Font";
+import { Utils } from "./Utils";
 
 export type AssetsToLoad = {
   images: ImageAssetToLoad[];
@@ -126,7 +126,9 @@ export class Assets {
   getImage(urlOfAlreadyLoadedImage: ImageUrl): ImageAsset {
     const imageAsset = this.#images.get(urlOfAlreadyLoadedImage);
     if (!imageAsset) {
-      throw Error(`Assets: There is no image loaded for: ${urlOfAlreadyLoadedImage}`);
+      throw Error(
+        `Assets: There is no image loaded for: ${urlOfAlreadyLoadedImage}`
+      );
     }
     return imageAsset;
   }
@@ -150,9 +152,10 @@ export class Assets {
   getSound(urlOfAlreadyLoadedSound: SoundUrl): SoundAsset {
     const soundAsset = this.#sounds.get(urlOfAlreadyLoadedSound);
     if (!soundAsset) {
-      throw Error(`Assets: There is no sound loaded for: ${urlOfAlreadyLoadedSound}`);
+      throw Error(
+        `Assets: There is no sound loaded for: ${urlOfAlreadyLoadedSound}`
+      );
     }
     return soundAsset;
   }
-
 }

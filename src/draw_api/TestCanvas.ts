@@ -1,6 +1,6 @@
 import { expect } from "@jest/globals";
-import { ColorId, SolidColor } from "../Color.ts";
-import { Xy, xy_ } from "../Xy.ts";
+import { ColorId, SolidColor } from "../Color";
+import { Xy, xy_ } from "../Xy";
 
 export class TestCanvas {
   readonly size: Xy;

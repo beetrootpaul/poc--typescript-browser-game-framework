@@ -1,4 +1,4 @@
-import { Xy } from "../Xy.ts";
+import { Xy } from "../Xy";
 
 export class FillPattern {
   // TODO: create a helper to generate FillPattern from ASCII

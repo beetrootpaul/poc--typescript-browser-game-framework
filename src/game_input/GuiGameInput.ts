@@ -1,4 +1,4 @@
-import { GameInputEvent } from "./GameInput.ts";
+import { GameInputEvent } from "./GameInput";
 
 type GuiGameInputParams = {
   muteButtonsSelector: string;

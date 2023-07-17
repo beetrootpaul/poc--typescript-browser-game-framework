@@ -1,4 +1,4 @@
-import { GameInputEvent } from "./GameInput.ts";
+import { GameInputEvent } from "./GameInput";
 
 // TODO: implement support for gameInputEventBehavior[gameInputEvent]?.fireOnce
 

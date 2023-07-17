@@ -1,20 +1,16 @@
-import { Assets, AssetsToLoad } from "./Assets.ts";
-import { Audio } from "./audio/Audio.ts";
-import { SolidColor } from "./Color.ts";
-import { DrawApi } from "./draw_api/DrawApi.ts";
-import { FullScreen } from "./FullScreen.ts";
-import { GameInput } from "./game_input/GameInput.ts";
-import { GameLoop } from "./game_loop/GameLoop.ts";
-import { Loading } from "./Loading.ts";
-import { PocTsBGFramework } from "./PocTsBGFramework.ts";
-import { StorageApi } from "./StorageApi.ts";
-import { Xy, xy_ } from "./Xy.ts";
+import { Assets, AssetsToLoad } from "./Assets";
+import { Audio } from "./audio/Audio";
+import { SolidColor } from "./Color";
+import { DrawApi } from "./draw_api/DrawApi";
+import { FullScreen } from "./FullScreen";
+import { GameInput } from "./game_input/GameInput";
+import { GameLoop } from "./game_loop/GameLoop";
+import { Loading } from "./Loading";
+import { PocTsBGFramework } from "./PocTsBGFramework";
+import { StorageApi } from "./StorageApi";
+import { Xy, xy_ } from "./Xy";
 
 export type FrameworkOptions = {
-  htmlDisplaySelector: string;
-  htmlCanvasSelector: string;
-  htmlControlsFullscreenSelector: string;
-  htmlControlsMuteSelector: string;
   htmlCanvasBackground: SolidColor;
   gameCanvasSize: Xy;
   desiredFps: number;
@@ -31,6 +27,11 @@ export type FrameworkOptions = {
 };
 
 export class Framework {
+  readonly #htmlDisplaySelector = "#display";
+  readonly #htmlCanvasSelector = "#canvas";
+  readonly #htmlControlsFullscreenSelector = ".controls_fullscreen_toggle";
+  readonly #htmlControlsMuteSelector = ".controls_mute_toggle";
+
   readonly #debugOptions: FrameworkOptions["debug"];
   #debug: boolean;
   get debug(): boolean {
@@ -67,17 +68,17 @@ export class Framework {
     };
     this.#debug = this.#debugOptions?.enabledOnInit;
 
-    this.#loading = new Loading(options.htmlDisplaySelector);
+    this.#loading = new Loading(this.#htmlDisplaySelector);
 
     this.#gameCanvasSize = options.gameCanvasSize.floor();
     this.#htmlCanvasBackground = options.htmlCanvasBackground;
 
     const htmlCanvas = document.querySelector<HTMLCanvasElement>(
-      options.htmlCanvasSelector
+      this.#htmlCanvasSelector
     );
     if (!htmlCanvas) {
       throw Error(
-        `Was unable to find <canvas> by selector '${options.htmlCanvasSelector}'`
+        `Was unable to find <canvas> by selector '${this.#htmlCanvasSelector}'`
       );
     }
 
@@ -105,8 +106,8 @@ export class Framework {
     this.#offscreenContext = offscreenContext;
 
     this.#gameInput = new GameInput({
-      muteButtonsSelector: options.htmlControlsMuteSelector,
-      fullScreenButtonsSelector: options.htmlControlsFullscreenSelector,
+      muteButtonsSelector: this.#htmlControlsMuteSelector,
+      fullScreenButtonsSelector: this.#htmlControlsFullscreenSelector,
       debugToggleKey: this.#debugOptions?.toggleKey,
     });
 
@@ -126,8 +127,8 @@ export class Framework {
     this.#audio = new Audio(this.#assets, audioContext);
 
     this.#fullScreen = FullScreen.newFor(
-      options.htmlDisplaySelector,
-      options.htmlControlsFullscreenSelector
+      this.#htmlDisplaySelector,
+      this.#htmlControlsFullscreenSelector
     );
 
     this.#offscreenImageData = this.#offscreenContext.createImageData(

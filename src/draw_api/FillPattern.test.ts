@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
-import { xy_ } from "../Xy.ts";
-import { FillPattern } from "./FillPattern.ts";
+import { xy_ } from "../Xy";
+import { FillPattern } from "./FillPattern";
 
 describe("FillPattern", () => {
   test("#hasPrimaryColorAt", () => {

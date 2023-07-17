@@ -1,9 +1,9 @@
 import { describe, test } from "@jest/globals";
-import { CompositeColor, SolidColor, transparent } from "../Color.ts";
-import { xy_ } from "../Xy.ts";
-import { DrawRect } from "./DrawRect.ts";
-import { FillPattern } from "./FillPattern.ts";
-import { TestCanvas } from "./TestCanvas.ts";
+import { CompositeColor, SolidColor, transparent } from "../Color";
+import { xy_ } from "../Xy";
+import { DrawRect } from "./DrawRect";
+import { FillPattern } from "./FillPattern";
+import { TestCanvas } from "./TestCanvas";
 
 describe("DrawRect", () => {
   const ct = transparent;

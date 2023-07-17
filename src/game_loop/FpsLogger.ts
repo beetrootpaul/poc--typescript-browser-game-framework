@@ -1,4 +1,4 @@
-import { PocTsBGFramework } from "../PocTsBGFramework.ts";
+import { PocTsBGFramework } from "../PocTsBGFramework";
 
 export interface FpsLogger {
   track(fps: number): void;

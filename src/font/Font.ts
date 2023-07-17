@@ -1,5 +1,5 @@
-import { Sprite } from "../Sprite.ts";
-import { Xy } from "../Xy.ts";
+import { Sprite } from "../Sprite";
+import { Xy } from "../Xy";
 
 export type CharSprite = {
   positionInText: Xy;

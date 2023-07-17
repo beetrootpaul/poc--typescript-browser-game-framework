@@ -1,10 +1,10 @@
 import { describe, test } from "@jest/globals";
-import { SolidColor, transparent } from "../Color.ts";
-import { spr_ } from "../Sprite.ts";
-import { xy_ } from "../Xy.ts";
-import { DrawSprite } from "./DrawSprite.ts";
-import { TestCanvas } from "./TestCanvas.ts";
-import { TestImage } from "./TestImage.ts";
+import { SolidColor, transparent } from "../Color";
+import { spr_ } from "../Sprite";
+import { xy_ } from "../Xy";
+import { DrawSprite } from "./DrawSprite";
+import { TestCanvas } from "./TestCanvas";
+import { TestImage } from "./TestImage";
 
 // TODO: tests for fill pattern
 

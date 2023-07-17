@@ -13,24 +13,33 @@
   "bugs": {
     "url": "https://github.com/beetrootpaul/poc--typescript-browser-game-framework/issues"
   },
+  "bin": {
+    "beetpx": "cli/beetpx-cli.js"
+  },
+  "main": "./ts_output/",
   "scripts": {
     "prepare": "husky install",
     "test": "jest",
-    "start": "npm run cleanup && npm run typecheck:watch",
-    "typecheck": "tsc",
-    "typecheck:watch": "tsc --watch",
+    "start": "npm run cleanup && npm run compile:watch",
+    "compile": "tsc",
+    "compile:watch": "tsc --watch",
     "format": "prettier --ignore-path .gitignore --write src/",
-    "cleanup": "rimraf ./types/ ./tsconfig.tsbuildinfo"
+    "cleanup": "rimraf ./ts_output/"
   },
   "lint-staged": {
     "src/**/*": [
       "prettier --ignore-unknown --ignore-path .gitignore --write"
     ]
   },
+  "dependencies": {
+    "cross-zip": "4.0.0",
+    "jquery": "3.6.4",
+    "vite": "4.3.2",
+    "yargs": "17.7.2"
+  },
   "devDependencies": {
     "@jest/globals": "29.5.0",
     "husky": "8.0.3",
-    "jest": "29.5.0",
     "lint-staged": "13.2.1",
     "prettier": "2.8.8",
     "rimraf": "5.0.0",

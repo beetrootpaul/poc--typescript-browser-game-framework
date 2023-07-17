@@ -1,5 +1,5 @@
-import { ImageAsset } from "../Assets.ts";
-import { type Color, SolidColor } from "../Color.ts";
+import { ImageAsset } from "../Assets";
+import { type Color, SolidColor } from "../Color";
 
 export class TestImage {
   readonly asset: ImageAsset;

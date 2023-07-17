@@ -1,15 +1,15 @@
-import { Assets, FontAsset, ImageUrl } from "../Assets.ts";
-import { Color, ColorId, CompositeColor, SolidColor } from "../Color.ts";
-import { Font } from "../font/Font.ts";
-import { Sprite } from "../Sprite.ts";
-import { Xy, xy_ } from "../Xy.ts";
-import { DrawClear } from "./DrawClear.ts";
-import { DrawEllipse } from "./DrawEllipse.ts";
-import { DrawPixel } from "./DrawPixel.ts";
-import { DrawRect } from "./DrawRect.ts";
-import { DrawSprite } from "./DrawSprite.ts";
-import { DrawText } from "./DrawText.ts";
-import { FillPattern } from "./FillPattern.ts";
+import { Assets, FontAsset, ImageUrl } from "../Assets";
+import { Color, ColorId, CompositeColor, SolidColor } from "../Color";
+import { Font } from "../font/Font";
+import { Sprite } from "../Sprite";
+import { Xy, xy_ } from "../Xy";
+import { DrawClear } from "./DrawClear";
+import { DrawEllipse } from "./DrawEllipse";
+import { DrawPixel } from "./DrawPixel";
+import { DrawRect } from "./DrawRect";
+import { DrawSprite } from "./DrawSprite";
+import { DrawText } from "./DrawText";
+import { FillPattern } from "./FillPattern";
 
 type DrawApiOptions = {
   // TODO: better name to indicate in-out nature of this param? Or some info in JSDoc?

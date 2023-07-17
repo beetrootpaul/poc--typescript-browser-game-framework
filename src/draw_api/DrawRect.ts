@@ -1,7 +1,7 @@
-import { CompositeColor, SolidColor } from "../Color.ts";
-import { Xy } from "../Xy.ts";
-import { DrawPixel } from "./DrawPixel.ts";
-import { FillPattern } from "./FillPattern.ts";
+import { CompositeColor, SolidColor } from "../Color";
+import { Xy } from "../Xy";
+import { DrawPixel } from "./DrawPixel";
+import { FillPattern } from "./FillPattern";
 
 export class DrawRect {
   readonly #canvasBytes: Uint8ClampedArray;

@@ -1,9 +1,9 @@
-import { ImageAsset } from "../Assets.ts";
-import { type Color, ColorId, SolidColor, transparent } from "../Color.ts";
-import { spr_, Sprite } from "../Sprite.ts";
-import { Utils } from "../Utils.ts";
-import { Xy, xy_ } from "../Xy.ts";
-import { DrawPixel } from "./DrawPixel.ts";
+import { ImageAsset } from "../Assets";
+import { type Color, ColorId, SolidColor, transparent } from "../Color";
+import { spr_, Sprite } from "../Sprite";
+import { Utils } from "../Utils";
+import { Xy, xy_ } from "../Xy";
+import { DrawPixel } from "./DrawPixel";
 
 export class DrawSprite {
   readonly #canvasBytes: Uint8ClampedArray;
