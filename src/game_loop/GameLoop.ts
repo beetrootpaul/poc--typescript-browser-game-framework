@@ -12,6 +12,8 @@ type GameLoopOptions = {
   requestAnimationFrameFn: AnimationFrameProvider["requestAnimationFrame"];
 };
 
+// TODO: consider aggregating a total time from the very beginning and then adjusting FPS to match it in order to sync with audio
+
 export class GameLoop {
   readonly #desiredFps: number;
   #adjustedFps: number;

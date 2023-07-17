@@ -1,4 +1,5 @@
 import { GamepadGameInput } from "./GamepadGameInput.ts";
+import { GuiGameInput } from "./GuiGameInput.ts";
 import { KeyboardGameInput } from "./KeyboardGameInput.ts";
 import { TouchGameInput } from "./TouchGameInput.ts";
 
@@ -8,25 +9,34 @@ export type GameInputEvent =
   | "right"
   | "up"
   | "down"
+  | "mute_unmute_toggle"
   | "full_screen"
   | "debug_toggle";
 
 export const gameInputEventBehavior: Record<string, { fireOnce?: boolean }> = {
   // TODO: move full_screen out of this set OR move its handling to TouchGameInput and similar ones
+  mute_unmute_toggle: { fireOnce: true },
   full_screen: { fireOnce: true },
   debug_toggle: { fireOnce: true },
 };
 
 type GameInputParams = {
+  muteButtonsSelector: string;
+  fullScreenButtonsSelector: string;
   debugToggleKey?: string;
 };
 
 export class GameInput {
+  readonly #guiGameInput: GuiGameInput;
   readonly #keyboardGameInput: KeyboardGameInput;
   readonly #touchGameInput: TouchGameInput;
   readonly #gamepadGameInput: GamepadGameInput;
 
   constructor(params: GameInputParams) {
+    this.#guiGameInput = new GuiGameInput({
+      muteButtonsSelector: params.muteButtonsSelector,
+      fullScreenButtonsSelector: params.fullScreenButtonsSelector,
+    });
     this.#keyboardGameInput = new KeyboardGameInput({
       debugToggleKey: params.debugToggleKey,
     });
@@ -35,12 +45,16 @@ export class GameInput {
   }
 
   startListening(): void {
+    this.#guiGameInput.startListening();
     this.#keyboardGameInput.startListening();
     this.#touchGameInput.startListening();
   }
 
   getCurrentContinuousEvents(): Set<GameInputEvent> {
     const detectedEvents = new Set<GameInputEvent>();
+    for (const event of this.#guiGameInput.getCurrentContinuousEvents()) {
+      detectedEvents.add(event);
+    }
     for (const event of this.#keyboardGameInput.getCurrentContinuousEvents()) {
       detectedEvents.add(event);
     }
@@ -55,6 +69,9 @@ export class GameInput {
 
   consumeFireOnceEvents(): Set<GameInputEvent> {
     const detectedEvents = new Set<GameInputEvent>();
+    for (const event of this.#guiGameInput.consumeFireOnceEvents()) {
+      detectedEvents.add(event);
+    }
     for (const event of this.#keyboardGameInput.consumeFireOnceEvents()) {
       detectedEvents.add(event);
     }

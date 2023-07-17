@@ -1,4 +1,5 @@
 import { AssetsToLoad } from "./Assets.ts";
+import { Audio } from "./audio/Audio.ts";
 import { DrawApi } from "./draw_api/DrawApi.ts";
 import { Framework, type FrameworkOptions } from "./Framework.ts";
 import { GameInputEvent } from "./game_input/GameInput.ts";
@@ -8,6 +9,7 @@ import { StorageApi } from "./StorageApi.ts";
 //    It serves as a public, global, statically accessible API.
 //    Inspiration: [PICO-8's API](https://www.lexaloffle.com/dl/docs/pico-8_manual.html).
 
+// TODO: flatten to have to use a single dot only. Flat API is OK
 // TODO: review the whole public API and rename from the usage point of view
 // TODO: after name for the framework gets chosen: rename this to the framework name or to its abbreviation
 export class PocTsBGFramework {
@@ -42,9 +44,13 @@ export class PocTsBGFramework {
   //   Assumption: `init(…)` was called first in order to make `framework` defined.
   //
 
-  static frameNumber: number;
+  static frameNumber: number = 0;
+  static averageFps: number = 1;
   static drawApi: DrawApi;
-  static gameInputEvents: Set<GameInputEvent>;
+  // TODO: RENAME?
+  static audio: Audio;
+  static continuousInputEvents: Set<GameInputEvent>;
+  static fireOnceInputEvents: Set<GameInputEvent>;
   static storageApi: StorageApi;
 
   // Debug flag.

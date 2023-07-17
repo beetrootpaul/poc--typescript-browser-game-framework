@@ -1,4 +1,5 @@
 import { Assets, AssetsToLoad } from "./Assets.ts";
+import { Audio } from "./audio/Audio.ts";
 import { SolidColor } from "./Color.ts";
 import { DrawApi } from "./draw_api/DrawApi.ts";
 import { FullScreen } from "./FullScreen.ts";
@@ -13,6 +14,7 @@ export type FrameworkOptions = {
   htmlDisplaySelector: string;
   htmlCanvasSelector: string;
   htmlControlsFullscreenSelector: string;
+  htmlControlsMuteSelector: string;
   htmlCanvasBackground: SolidColor;
   gameCanvasSize: Xy;
   desiredFps: number;
@@ -45,6 +47,7 @@ export class Framework {
   readonly #loading: Loading;
   readonly #gameInput: GameInput;
   readonly #gameLoop: GameLoop;
+  readonly #audio: Audio;
   readonly #fullScreen: FullScreen;
 
   readonly #assets: Assets;
@@ -102,6 +105,8 @@ export class Framework {
     this.#offscreenContext = offscreenContext;
 
     this.#gameInput = new GameInput({
+      muteButtonsSelector: options.htmlControlsMuteSelector,
+      fullScreenButtonsSelector: options.htmlControlsFullscreenSelector,
       debugToggleKey: this.#debugOptions?.toggleKey,
     });
 
@@ -111,12 +116,19 @@ export class Framework {
       requestAnimationFrameFn: window.requestAnimationFrame.bind(window),
     });
 
+    const audioContext = new AudioContext();
+
+    this.#assets = new Assets({
+      decodeAudioData: (arrayBuffer: ArrayBuffer) =>
+        audioContext.decodeAudioData(arrayBuffer),
+    });
+
+    this.#audio = new Audio(this.#assets, audioContext);
+
     this.#fullScreen = FullScreen.newFor(
       options.htmlDisplaySelector,
       options.htmlControlsFullscreenSelector
     );
-
-    this.#assets = new Assets();
 
     this.#offscreenImageData = this.#offscreenContext.createImageData(
       this.#offscreenContext.canvas.width,
@@ -131,6 +143,7 @@ export class Framework {
     this.#storageApi = new StorageApi();
 
     PocTsBGFramework.drawApi = this.#drawApi;
+    PocTsBGFramework.audio = this.#audio;
     PocTsBGFramework.storageApi = this.#storageApi;
   }
 
@@ -171,14 +184,23 @@ export class Framework {
         if (fireOnceEvents.has("full_screen")) {
           this.#fullScreen.toggle();
         }
+        if (fireOnceEvents.has("mute_unmute_toggle")) {
+          this.#audio.toggleMuteUnmute();
+        }
         if (fireOnceEvents.has("debug_toggle")) {
           this.#debug = !this.#debug;
           this.#redrawDebugMargin();
         }
+
         const continuousEvents = this.#gameInput.getCurrentContinuousEvents();
 
+        if (fireOnceEvents.size > 0 || continuousEvents.size > 0) {
+          this.#audio.resumeAudioContextIfNeeded();
+        }
+
         PocTsBGFramework.frameNumber = frameNumber;
-        PocTsBGFramework.gameInputEvents = continuousEvents;
+        PocTsBGFramework.continuousInputEvents = continuousEvents;
+        PocTsBGFramework.fireOnceInputEvents = fireOnceEvents;
 
         this.#onUpdate?.();
       },
