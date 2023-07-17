@@ -1,9 +1,11 @@
 # TypeScript composite project build output
-/tsconfig.tsbuildinfo
 /types/
 
 # Node.js dependencies
 /node_modules/
+
+# JetBrains IDE's project configuration
+/.idea/
 
 # local playground etc.
 /tmp/
