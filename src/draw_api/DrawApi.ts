@@ -1,4 +1,4 @@
-import { Assets, FontAsset } from "../Assets.ts";
+import { Assets, FontAsset, ImageUrl } from "../Assets.ts";
 import { Color, ColorId, CompositeColor, SolidColor } from "../Color.ts";
 import { Font } from "../font/Font.ts";
 import { Sprite } from "../Sprite.ts";
@@ -149,7 +149,7 @@ export class DrawApi {
 
   // TODO: make sprite make use of fillPattern as well, same as rect and ellipse etc.
   // noinspection JSUnusedGlobalSymbols
-  sprite(spriteImageUrl: string, sprite: Sprite, canvasXy1: Xy): void {
+  sprite(spriteImageUrl: ImageUrl, sprite: Sprite, canvasXy1: Xy): void {
     const sourceImageAsset = this.#assets.getImage(spriteImageUrl);
     this.#sprite.draw(
       sourceImageAsset,

@@ -116,14 +116,19 @@ export class Framework {
       requestAnimationFrameFn: window.requestAnimationFrame.bind(window),
     });
 
-    this.#audio = new Audio();
+    const audioContext = new AudioContext();
+
+    this.#assets = new Assets({
+      decodeAudioData: (arrayBuffer: ArrayBuffer) =>
+        audioContext.decodeAudioData(arrayBuffer),
+    });
+
+    this.#audio = new Audio(this.#assets, audioContext);
 
     this.#fullScreen = FullScreen.newFor(
       options.htmlDisplaySelector,
       options.htmlControlsFullscreenSelector
     );
-
-    this.#assets = new Assets();
 
     this.#offscreenImageData = this.#offscreenContext.createImageData(
       this.#offscreenContext.canvas.width,
@@ -180,7 +185,7 @@ export class Framework {
           this.#fullScreen.toggle();
         }
         if (fireOnceEvents.has("mute_unmute_toggle")) {
-          this.#audio.toggle();
+          this.#audio.toggleMuteUnmute();
         }
         if (fireOnceEvents.has("debug_toggle")) {
           this.#debug = !this.#debug;
