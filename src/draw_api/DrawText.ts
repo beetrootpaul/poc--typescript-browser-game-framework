@@ -1,7 +1,7 @@
-import { FontAsset } from "../Assets.ts";
-import { SolidColor, transparent } from "../Color.ts";
-import { Xy } from "../Xy.ts";
-import { DrawSprite } from "./DrawSprite.ts";
+import { FontAsset } from "../Assets";
+import { SolidColor, transparent } from "../Color";
+import { Xy } from "../Xy";
+import { DrawSprite } from "./DrawSprite";
 
 export class DrawText {
   readonly #canvasBytes: Uint8ClampedArray;

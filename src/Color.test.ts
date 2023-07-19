@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { SolidColor } from "./Color.ts";
+import { SolidColor } from "./Color";
 
 describe("SolidColor", () => {
   describe("constructor", () => {

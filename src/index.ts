@@ -6,11 +6,11 @@ export {
   SolidColor,
   TransparentColor,
   transparent,
-} from "./Color.ts";
-export { FillPattern } from "./draw_api/FillPattern.ts";
-export { type CharSprite, type Font } from "./font/Font.ts";
-export { Sprite, spr_ } from "./Sprite.ts";
-export { Utils } from "./Utils.ts";
-export { Xy, xy_ } from "./Xy.ts";
+} from "./Color";
+export { FillPattern } from "./draw_api/FillPattern";
+export { type CharSprite, type Font } from "./font/Font";
+export { Sprite, spr_ } from "./Sprite";
+export { Utils } from "./Utils";
+export { Xy, xy_ } from "./Xy";
 
-export { PocTsBGFramework } from "./PocTsBGFramework.ts";
+export { PocTsBGFramework } from "./PocTsBGFramework";

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
-import { GameLoop, GameLoopCallbacks } from "./GameLoop.ts";
+import { GameLoop, GameLoopCallbacks } from "./GameLoop";
 
 // TODO: write more tests to cover a complex logic of the game loop, REWORK existing ones to better describe what is happening
 describe("GameLoop", () => {

@@ -1,4 +1,4 @@
-import { GameInputEvent, gameInputEventBehavior } from "./GameInput.ts";
+import { GameInputEvent, gameInputEventBehavior } from "./GameInput";
 
 type KeyboardGameInputParams = {
   debugToggleKey?: string;

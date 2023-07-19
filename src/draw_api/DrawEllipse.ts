@@ -1,7 +1,7 @@
-import { SolidColor } from "../Color.ts";
-import { Xy, xy_ } from "../Xy.ts";
-import { DrawPixel } from "./DrawPixel.ts";
-import { FillPattern } from "./FillPattern.ts";
+import { SolidColor } from "../Color";
+import { Xy, xy_ } from "../Xy";
+import { DrawPixel } from "./DrawPixel";
+import { FillPattern } from "./FillPattern";
 
 export class DrawEllipse {
   readonly #canvasBytes: Uint8ClampedArray;

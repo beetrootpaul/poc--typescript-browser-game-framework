@@ -1,9 +1,9 @@
-import { AssetsToLoad } from "./Assets.ts";
-import { Audio } from "./audio/Audio.ts";
-import { DrawApi } from "./draw_api/DrawApi.ts";
-import { Framework, type FrameworkOptions } from "./Framework.ts";
-import { GameInputEvent } from "./game_input/GameInput.ts";
-import { StorageApi } from "./StorageApi.ts";
+import { AssetsToLoad } from "./Assets";
+import { Audio } from "./audio/Audio";
+import { DrawApi } from "./draw_api/DrawApi";
+import { Framework, type FrameworkOptions } from "./Framework";
+import { GameInputEvent } from "./game_input/GameInput";
+import { StorageApi } from "./StorageApi";
 
 //  This class is only a facade over other capabilities of this game framework.
 //    It serves as a public, global, statically accessible API.

@@ -1,8 +1,8 @@
 import { describe, test } from "@jest/globals";
-import { SolidColor } from "../Color.ts";
-import { xy_ } from "../Xy.ts";
-import { DrawEllipse } from "./DrawEllipse.ts";
-import { TestCanvas } from "./TestCanvas.ts";
+import { SolidColor } from "../Color";
+import { xy_ } from "../Xy";
+import { DrawEllipse } from "./DrawEllipse";
+import { TestCanvas } from "./TestCanvas";
 
 // TODO: tests for fill pattern
 

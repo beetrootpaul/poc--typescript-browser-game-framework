@@ -1,7 +1,7 @@
-import { GamepadGameInput } from "./GamepadGameInput.ts";
-import { GuiGameInput } from "./GuiGameInput.ts";
-import { KeyboardGameInput } from "./KeyboardGameInput.ts";
-import { TouchGameInput } from "./TouchGameInput.ts";
+import { GamepadGameInput } from "./GamepadGameInput";
+import { GuiGameInput } from "./GuiGameInput";
+import { KeyboardGameInput } from "./KeyboardGameInput";
+import { TouchGameInput } from "./TouchGameInput";
 
 export type GameInputEvent =
   | null

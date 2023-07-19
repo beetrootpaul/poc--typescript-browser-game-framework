@@ -1,7 +1,7 @@
 import { describe, test } from "@jest/globals";
-import { SolidColor } from "../Color.ts";
-import { DrawClear } from "./DrawClear.ts";
-import { TestCanvas } from "./TestCanvas.ts";
+import { SolidColor } from "../Color";
+import { DrawClear } from "./DrawClear";
+import { TestCanvas } from "./TestCanvas";
 
 describe("DrawClear", () => {
   const c0 = SolidColor.fromRgbCssHex("#010203");

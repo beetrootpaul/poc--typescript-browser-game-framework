@@ -1,6 +1,6 @@
-import { SolidColor } from "./Color.ts";
-import { PocTsBGFramework } from "./PocTsBGFramework.ts";
-import { Xy, xy_ } from "./Xy.ts";
+import { SolidColor } from "./Color";
+import { PocTsBGFramework } from "./PocTsBGFramework";
+import { Xy, xy_ } from "./Xy";
 
 export class Utils {
   // Returns the middle number. Example usage: `clamp(min, value, max)`

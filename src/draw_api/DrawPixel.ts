@@ -1,5 +1,5 @@
-import { SolidColor } from "../Color.ts";
-import { Xy } from "../Xy.ts";
+import { SolidColor } from "../Color";
+import { Xy } from "../Xy";
 
 export class DrawPixel {
   readonly #canvasBytes: Uint8ClampedArray;

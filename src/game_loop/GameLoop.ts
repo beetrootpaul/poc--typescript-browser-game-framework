@@ -1,5 +1,5 @@
-import { PocTsBGFramework } from "../PocTsBGFramework.ts";
-import { FpsLogger, FpsLoggerAverage, FpsLoggerNoop } from "./FpsLogger.ts";
+import { PocTsBGFramework } from "../PocTsBGFramework";
+import { FpsLogger, FpsLoggerAverage, FpsLoggerNoop } from "./FpsLogger";
 
 export type GameLoopCallbacks = {
   updateFn: (frameNumber: number) => void;

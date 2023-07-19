@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { Utils } from "./Utils.ts";
+import { Utils } from "./Utils";
 
 describe("Utils", () => {
   [

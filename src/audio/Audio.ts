@@ -1,4 +1,4 @@
-import { Assets, SoundUrl } from "../Assets.ts";
+import { Assets, SoundUrl } from "../Assets";
 
 export class Audio {
   readonly #assets: Assets;
