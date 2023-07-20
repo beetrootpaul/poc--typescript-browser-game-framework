@@ -15,7 +15,7 @@ export declare class DrawApi {
     setCameraOffset(offset: Xy): void;
     setFillPattern(fillPattern: FillPattern): void;
     mapSpriteColor(from: Color, to: Color): void;
-    setCurrentFont(fontImageUrl: string | null): void;
+    setFont(fontImageUrl: string | null): void;
     getFont(): Font | null;
     clear(color: SolidColor): void;
     pixel(xy: Xy, color: SolidColor): void;

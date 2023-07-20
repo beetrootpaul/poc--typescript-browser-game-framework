@@ -62,7 +62,7 @@ export class DrawApi {
     }
     // TODO: cover it with tests
     // noinspection JSUnusedGlobalSymbols
-    setCurrentFont(fontImageUrl) {
+    setFont(fontImageUrl) {
         __classPrivateFieldSet(this, _DrawApi_fontAsset, fontImageUrl ? __classPrivateFieldGet(this, _DrawApi_assets, "f").getFont(fontImageUrl) : null, "f");
     }
     // noinspection JSUnusedGlobalSymbols
