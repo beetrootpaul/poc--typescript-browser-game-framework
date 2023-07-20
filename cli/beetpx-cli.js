@@ -74,12 +74,6 @@ function runDevCommand() {
       //     <script type="module" crossOrigin src="/assets/index-<hash>.js"></script>
       //   and the latter does not work there.
       base: "./",
-      resolve: {
-        alias: {
-          // needed for itch.io simulation page to import jQuery from this codebase here instead of the game's codebase
-          jquery: path.resolve(beetPxCodebaseDir, "node_modules/jquery"),
-        },
-      },
       server: {
         open: itchIoSimulationHtml,
         hmr: true,
