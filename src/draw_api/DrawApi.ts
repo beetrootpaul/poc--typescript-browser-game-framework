@@ -84,7 +84,7 @@ export class DrawApi {
 
   // TODO: cover it with tests
   // noinspection JSUnusedGlobalSymbols
-  setCurrentFont(fontImageUrl: string | null): void {
+  setFont(fontImageUrl: string | null): void {
     this.#fontAsset = fontImageUrl ? this.#assets.getFont(fontImageUrl) : null;
   }
 
