@@ -1,3 +1,4 @@
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -10,7 +11,9 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _GuiGameInput_params, _GuiGameInput_currentContinuousEvents, _GuiGameInput_recentFireOnceEvents;
-export class GuiGameInput {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GuiGameInput = void 0;
+class GuiGameInput {
     constructor(params) {
         _GuiGameInput_params.set(this, void 0);
         _GuiGameInput_currentContinuousEvents.set(this, new Set());
@@ -42,4 +45,5 @@ export class GuiGameInput {
         return events;
     }
 }
+exports.GuiGameInput = GuiGameInput;
 _GuiGameInput_params = new WeakMap(), _GuiGameInput_currentContinuousEvents = new WeakMap(), _GuiGameInput_recentFireOnceEvents = new WeakMap();

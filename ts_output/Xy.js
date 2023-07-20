@@ -1,8 +1,12 @@
-import { Utils } from "./Utils";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Xy = exports.xy_ = void 0;
+const Utils_1 = require("./Utils");
 // TODO: Consider Vector2d and v_
-export function xy_(x, y) {
+function xy_(x, y) {
     return new Xy(x, y);
 }
+exports.xy_ = xy_;
 class Xy {
     static min(xy1, xy2) {
         return new Xy(Math.min(xy1.x, xy2.x), Math.min(xy1.y, xy2.y));
@@ -66,7 +70,7 @@ class Xy {
         return this.x <= other.x && this.y <= other.y;
     }
     clamp(xy1, xy2) {
-        return new Xy(Utils.clamp(xy1.x, this.x, xy2.x), Utils.clamp(xy1.y, this.y, xy2.y));
+        return new Xy(Utils_1.Utils.clamp(xy1.x, this.x, xy2.x), Utils_1.Utils.clamp(xy1.y, this.y, xy2.y));
     }
     mod(other) {
         return typeof other === "number"
@@ -98,4 +102,4 @@ class Xy {
     }
 }
 Xy.zero = new Xy(0, 0);
-export { Xy };
+exports.Xy = Xy;

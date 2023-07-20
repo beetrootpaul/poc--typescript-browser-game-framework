@@ -1,3 +1,4 @@
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -10,10 +11,12 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _GameLoop_desiredFps, _GameLoop_adjustedFps, _GameLoop_requestAnimationFrameFn, _GameLoop_fpsLogger, _GameLoop_previousTime, _GameLoop_expectedTimeStep, _GameLoop_safetyMaxTimeStep, _GameLoop_accumulatedTimeStep, _GameLoop_frameNumber, _GameLoop_callbacks, _GameLoop_tick;
-import { PocTsBGFramework } from "../PocTsBGFramework";
-import { FpsLoggerAverage, FpsLoggerNoop } from "./FpsLogger";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GameLoop = void 0;
+const PocTsBGFramework_1 = require("../PocTsBGFramework");
+const FpsLogger_1 = require("./FpsLogger");
 // TODO: consider aggregating a total time from the very beginning and then adjusting FPS to match it in order to sync with audio
-export class GameLoop {
+class GameLoop {
     constructor(options) {
         _GameLoop_desiredFps.set(this, void 0);
         _GameLoop_adjustedFps.set(this, void 0);
@@ -35,7 +38,7 @@ export class GameLoop {
             __classPrivateFieldSet(this, _GameLoop_accumulatedTimeStep, __classPrivateFieldGet(this, _GameLoop_accumulatedTimeStep, "f") + deltaTime, "f");
             // A safety net in case of a long time spent on another tab, letting delta accumulate a lot in this one:
             if (__classPrivateFieldGet(this, _GameLoop_accumulatedTimeStep, "f") > __classPrivateFieldGet(this, _GameLoop_safetyMaxTimeStep, "f")) {
-                if (PocTsBGFramework.debug) {
+                if (PocTsBGFramework_1.PocTsBGFramework.debug) {
                     console.debug(`Accumulated time step of ${__classPrivateFieldGet(this, _GameLoop_accumulatedTimeStep, "f")} was greater than safety max time step of ${__classPrivateFieldGet(this, _GameLoop_safetyMaxTimeStep, "f")}.`);
                 }
                 __classPrivateFieldSet(this, _GameLoop_accumulatedTimeStep, __classPrivateFieldGet(this, _GameLoop_safetyMaxTimeStep, "f"), "f");
@@ -48,7 +51,7 @@ export class GameLoop {
                     __classPrivateFieldGet(this, _GameLoop_adjustedFps, "f") > __classPrivateFieldGet(this, _GameLoop_desiredFps, "f") / 2) {
                     __classPrivateFieldSet(this, _GameLoop_adjustedFps, __classPrivateFieldGet(this, _GameLoop_adjustedFps, "f") - 1, "f");
                     __classPrivateFieldSet(this, _GameLoop_expectedTimeStep, 1000 / __classPrivateFieldGet(this, _GameLoop_adjustedFps, "f"), "f");
-                    if (PocTsBGFramework.debug) {
+                    if (PocTsBGFramework_1.PocTsBGFramework.debug) {
                         console.debug(`Decreasing the adjusted FPS by 1. New = ${__classPrivateFieldGet(this, _GameLoop_adjustedFps, "f")}`);
                     }
                 }
@@ -56,7 +59,7 @@ export class GameLoop {
                     __classPrivateFieldGet(this, _GameLoop_adjustedFps, "f") < __classPrivateFieldGet(this, _GameLoop_desiredFps, "f") * 2) {
                     __classPrivateFieldSet(this, _GameLoop_adjustedFps, __classPrivateFieldGet(this, _GameLoop_adjustedFps, "f") + 1, "f");
                     __classPrivateFieldSet(this, _GameLoop_expectedTimeStep, 1000 / __classPrivateFieldGet(this, _GameLoop_adjustedFps, "f"), "f");
-                    if (PocTsBGFramework.debug) {
+                    if (PocTsBGFramework_1.PocTsBGFramework.debug) {
                         console.debug(`Increasing the adjusted FPS by 1. New = ${__classPrivateFieldGet(this, _GameLoop_adjustedFps, "f")}`);
                     }
                 }
@@ -75,8 +78,8 @@ export class GameLoop {
         __classPrivateFieldSet(this, _GameLoop_adjustedFps, options.desiredFps, "f");
         __classPrivateFieldSet(this, _GameLoop_requestAnimationFrameFn, options.requestAnimationFrameFn, "f");
         __classPrivateFieldSet(this, _GameLoop_fpsLogger, options.logActualFps
-            ? new FpsLoggerAverage()
-            : new FpsLoggerNoop(), "f");
+            ? new FpsLogger_1.FpsLoggerAverage()
+            : new FpsLogger_1.FpsLoggerNoop(), "f");
         __classPrivateFieldSet(this, _GameLoop_expectedTimeStep, 1000 / __classPrivateFieldGet(this, _GameLoop_adjustedFps, "f"), "f");
         __classPrivateFieldSet(this, _GameLoop_safetyMaxTimeStep, 5 * __classPrivateFieldGet(this, _GameLoop_expectedTimeStep, "f"), "f");
         __classPrivateFieldSet(this, _GameLoop_accumulatedTimeStep, __classPrivateFieldGet(this, _GameLoop_expectedTimeStep, "f"), "f");
@@ -91,4 +94,5 @@ export class GameLoop {
         __classPrivateFieldGet(this, _GameLoop_requestAnimationFrameFn, "f").call(this, __classPrivateFieldGet(this, _GameLoop_tick, "f"));
     }
 }
+exports.GameLoop = GameLoop;
 _GameLoop_desiredFps = new WeakMap(), _GameLoop_adjustedFps = new WeakMap(), _GameLoop_requestAnimationFrameFn = new WeakMap(), _GameLoop_fpsLogger = new WeakMap(), _GameLoop_previousTime = new WeakMap(), _GameLoop_expectedTimeStep = new WeakMap(), _GameLoop_safetyMaxTimeStep = new WeakMap(), _GameLoop_accumulatedTimeStep = new WeakMap(), _GameLoop_frameNumber = new WeakMap(), _GameLoop_callbacks = new WeakMap(), _GameLoop_tick = new WeakMap();

@@ -1,3 +1,4 @@
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -10,6 +11,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _FillPattern_bits;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FillPattern = void 0;
 class FillPattern {
     // TODO: create a helper to generate FillPattern from ASCII
     static of(bits) {
@@ -32,4 +35,4 @@ _FillPattern_bits = new WeakMap();
 FillPattern.primaryOnly = new FillPattern(0);
 // noinspection JSUnusedGlobalSymbols
 FillPattern.secondaryOnly = new FillPattern(65535);
-export { FillPattern };
+exports.FillPattern = FillPattern;

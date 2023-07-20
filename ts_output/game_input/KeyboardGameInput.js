@@ -1,11 +1,14 @@
+"use strict";
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _KeyboardGameInput_keyMapping, _KeyboardGameInput_currentContinuousEvents, _KeyboardGameInput_recentFireOnceEvents;
-import { gameInputEventBehavior } from "./GameInput";
-export class KeyboardGameInput {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.KeyboardGameInput = void 0;
+const GameInput_1 = require("./GameInput");
+class KeyboardGameInput {
     constructor(params) {
         _KeyboardGameInput_keyMapping.set(this, new Map([
             ["ArrowLeft", "left"],
@@ -36,7 +39,7 @@ export class KeyboardGameInput {
             const gameInputEvent = __classPrivateFieldGet(this, _KeyboardGameInput_keyMapping, "f").get(keyboardEvent.key);
             if (gameInputEvent) {
                 keyboardEvent.preventDefault();
-                if (!gameInputEventBehavior[gameInputEvent]?.fireOnce) {
+                if (!GameInput_1.gameInputEventBehavior[gameInputEvent]?.fireOnce) {
                     __classPrivateFieldGet(this, _KeyboardGameInput_currentContinuousEvents, "f").add(gameInputEvent);
                 }
             }
@@ -45,7 +48,7 @@ export class KeyboardGameInput {
             const gameInputEvent = __classPrivateFieldGet(this, _KeyboardGameInput_keyMapping, "f").get(keyboardEvent.key);
             if (gameInputEvent) {
                 keyboardEvent.preventDefault();
-                if (gameInputEventBehavior[gameInputEvent]?.fireOnce) {
+                if (GameInput_1.gameInputEventBehavior[gameInputEvent]?.fireOnce) {
                     __classPrivateFieldGet(this, _KeyboardGameInput_recentFireOnceEvents, "f").add(gameInputEvent);
                 }
                 else {
@@ -63,4 +66,5 @@ export class KeyboardGameInput {
         return events;
     }
 }
+exports.KeyboardGameInput = KeyboardGameInput;
 _KeyboardGameInput_keyMapping = new WeakMap(), _KeyboardGameInput_currentContinuousEvents = new WeakMap(), _KeyboardGameInput_recentFireOnceEvents = new WeakMap();

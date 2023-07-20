@@ -1,3 +1,4 @@
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -10,8 +11,10 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _Assets_decodeAudioData, _Assets_images, _Assets_fonts, _Assets_sounds;
-import { Utils } from "./Utils";
-export class Assets {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Assets = void 0;
+const Utils_1 = require("./Utils");
+class Assets {
     constructor(params) {
         _Assets_decodeAudioData.set(this, void 0);
         _Assets_images.set(this, new Map());
@@ -71,7 +74,7 @@ export class Assets {
     // call `loadAssets` before this one
     getFont(urlOfAlreadyLoadedFontImage) {
         const { font, imageTextColor, imageBgColor } = __classPrivateFieldGet(this, _Assets_fonts, "f").get(urlOfAlreadyLoadedFontImage) ??
-            Utils.throwError(`Assets: font descriptor is missing for font image URL "${urlOfAlreadyLoadedFontImage}"`);
+            Utils_1.Utils.throwError(`Assets: font descriptor is missing for font image URL "${urlOfAlreadyLoadedFontImage}"`);
         return {
             font,
             image: this.getImage(urlOfAlreadyLoadedFontImage),
@@ -88,4 +91,5 @@ export class Assets {
         return soundAsset;
     }
 }
+exports.Assets = Assets;
 _Assets_decodeAudioData = new WeakMap(), _Assets_images = new WeakMap(), _Assets_fonts = new WeakMap(), _Assets_sounds = new WeakMap();

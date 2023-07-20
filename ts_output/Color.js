@@ -1,11 +1,15 @@
-export class TransparentColor {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CompositeColor = exports.SolidColor = exports.transparent = exports.TransparentColor = void 0;
+class TransparentColor {
     id() {
         return "transparent";
     }
 }
-export const transparent = new TransparentColor();
+exports.TransparentColor = TransparentColor;
+exports.transparent = new TransparentColor();
 // Red, green, and blue, each one as value between 0 and 255.
-export class SolidColor {
+class SolidColor {
     constructor(r, g, b) {
         if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
             throw Error(`One of color components is outside 0-255 range: r=${r}, g=${g}, b=${b}.`);
@@ -30,7 +34,8 @@ export class SolidColor {
         return new SolidColor(parseInt(cssHex.slice(1, 3), 16), parseInt(cssHex.slice(3, 5), 16), parseInt(cssHex.slice(5, 7), 16));
     }
 }
-export class CompositeColor {
+exports.SolidColor = SolidColor;
+class CompositeColor {
     constructor(primary, secondary) {
         this.primary = primary;
         this.secondary = secondary;
@@ -39,3 +44,4 @@ export class CompositeColor {
         return `composite:${this.primary.id()}:${this.secondary.id()}`;
     }
 }
+exports.CompositeColor = CompositeColor;

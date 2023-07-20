@@ -1,3 +1,4 @@
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -10,8 +11,10 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _DrawPixel_canvasBytes, _DrawPixel_canvasSize;
-import { Xy } from "../Xy";
-export class DrawPixel {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DrawPixel = void 0;
+const Xy_1 = require("../Xy");
+class DrawPixel {
     constructor(canvasBytes, canvasSize) {
         _DrawPixel_canvasBytes.set(this, void 0);
         _DrawPixel_canvasSize.set(this, void 0);
@@ -19,7 +22,7 @@ export class DrawPixel {
         __classPrivateFieldSet(this, _DrawPixel_canvasSize, canvasSize, "f");
     }
     draw(xy, color) {
-        if (xy.gte(Xy.zero) && xy.lt(__classPrivateFieldGet(this, _DrawPixel_canvasSize, "f"))) {
+        if (xy.gte(Xy_1.Xy.zero) && xy.lt(__classPrivateFieldGet(this, _DrawPixel_canvasSize, "f"))) {
             const i = 4 * (xy.y * __classPrivateFieldGet(this, _DrawPixel_canvasSize, "f").x + xy.x);
             __classPrivateFieldGet(this, _DrawPixel_canvasBytes, "f")[i] = color.r;
             __classPrivateFieldGet(this, _DrawPixel_canvasBytes, "f")[i + 1] = color.g;
@@ -28,4 +31,5 @@ export class DrawPixel {
         }
     }
 }
+exports.DrawPixel = DrawPixel;
 _DrawPixel_canvasBytes = new WeakMap(), _DrawPixel_canvasSize = new WeakMap();

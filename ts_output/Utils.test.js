@@ -1,6 +1,8 @@
-import { describe, expect, test } from "@jest/globals";
-import { Utils } from "./Utils";
-describe("Utils", () => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const globals_1 = require("@jest/globals");
+const Utils_1 = require("./Utils");
+(0, globals_1.describe)("Utils", () => {
     [
         // all values are same
         { params: [1, 1, 1], result: 1 },
@@ -16,8 +18,8 @@ describe("Utils", () => {
         // a fractional case
         { params: [0.2, 0.3, 0.1], result: 0.2 },
     ].forEach(({ params, result }) => {
-        test(`#clamp(${params[0]},${params[1]},${params[2]})`, () => {
-            expect(Utils.clamp(params[0], params[1], params[2])).toEqual(result);
+        (0, globals_1.test)(`#clamp(${params[0]},${params[1]},${params[2]})`, () => {
+            (0, globals_1.expect)(Utils_1.Utils.clamp(params[0], params[1], params[2])).toEqual(result);
         });
     });
 });

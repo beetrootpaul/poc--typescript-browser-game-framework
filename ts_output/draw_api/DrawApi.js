@@ -1,3 +1,4 @@
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -10,15 +11,17 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _DrawApi_assets, _DrawApi_clear, _DrawApi_pixel, _DrawApi_rect, _DrawApi_ellipse, _DrawApi_sprite, _DrawApi_text, _DrawApi_cameraOffset, _DrawApi_fillPattern, _DrawApi_fontAsset, _DrawApi_spriteColorMapping;
-import { xy_ } from "../Xy";
-import { DrawClear } from "./DrawClear";
-import { DrawEllipse } from "./DrawEllipse";
-import { DrawPixel } from "./DrawPixel";
-import { DrawRect } from "./DrawRect";
-import { DrawSprite } from "./DrawSprite";
-import { DrawText } from "./DrawText";
-import { FillPattern } from "./FillPattern";
-export class DrawApi {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DrawApi = void 0;
+const Xy_1 = require("../Xy");
+const DrawClear_1 = require("./DrawClear");
+const DrawEllipse_1 = require("./DrawEllipse");
+const DrawPixel_1 = require("./DrawPixel");
+const DrawRect_1 = require("./DrawRect");
+const DrawSprite_1 = require("./DrawSprite");
+const DrawText_1 = require("./DrawText");
+const FillPattern_1 = require("./FillPattern");
+class DrawApi {
     constructor(options) {
         _DrawApi_assets.set(this, void 0);
         _DrawApi_clear.set(this, void 0);
@@ -27,17 +30,17 @@ export class DrawApi {
         _DrawApi_ellipse.set(this, void 0);
         _DrawApi_sprite.set(this, void 0);
         _DrawApi_text.set(this, void 0);
-        _DrawApi_cameraOffset.set(this, xy_(0, 0));
-        _DrawApi_fillPattern.set(this, FillPattern.primaryOnly);
+        _DrawApi_cameraOffset.set(this, (0, Xy_1.xy_)(0, 0));
+        _DrawApi_fillPattern.set(this, FillPattern_1.FillPattern.primaryOnly);
         _DrawApi_fontAsset.set(this, null);
         _DrawApi_spriteColorMapping.set(this, new Map());
         __classPrivateFieldSet(this, _DrawApi_assets, options.assets, "f");
-        __classPrivateFieldSet(this, _DrawApi_clear, new DrawClear(options.canvasBytes, options.canvasSize.round()), "f");
-        __classPrivateFieldSet(this, _DrawApi_pixel, new DrawPixel(options.canvasBytes, options.canvasSize.round()), "f");
-        __classPrivateFieldSet(this, _DrawApi_rect, new DrawRect(options.canvasBytes, options.canvasSize.round()), "f");
-        __classPrivateFieldSet(this, _DrawApi_ellipse, new DrawEllipse(options.canvasBytes, options.canvasSize.round()), "f");
-        __classPrivateFieldSet(this, _DrawApi_sprite, new DrawSprite(options.canvasBytes, options.canvasSize.round()), "f");
-        __classPrivateFieldSet(this, _DrawApi_text, new DrawText(options.canvasBytes, options.canvasSize.round()), "f");
+        __classPrivateFieldSet(this, _DrawApi_clear, new DrawClear_1.DrawClear(options.canvasBytes, options.canvasSize.round()), "f");
+        __classPrivateFieldSet(this, _DrawApi_pixel, new DrawPixel_1.DrawPixel(options.canvasBytes, options.canvasSize.round()), "f");
+        __classPrivateFieldSet(this, _DrawApi_rect, new DrawRect_1.DrawRect(options.canvasBytes, options.canvasSize.round()), "f");
+        __classPrivateFieldSet(this, _DrawApi_ellipse, new DrawEllipse_1.DrawEllipse(options.canvasBytes, options.canvasSize.round()), "f");
+        __classPrivateFieldSet(this, _DrawApi_sprite, new DrawSprite_1.DrawSprite(options.canvasBytes, options.canvasSize.round()), "f");
+        __classPrivateFieldSet(this, _DrawApi_text, new DrawText_1.DrawText(options.canvasBytes, options.canvasSize.round()), "f");
     }
     // TODO: cover it with tests, e.g. make sure that fill pattern is applied on a canvas from its left-top in (0,0), no matter what the camera offset is
     // noinspection JSUnusedGlobalSymbols
@@ -109,4 +112,5 @@ export class DrawApi {
         }
     }
 }
+exports.DrawApi = DrawApi;
 _DrawApi_assets = new WeakMap(), _DrawApi_clear = new WeakMap(), _DrawApi_pixel = new WeakMap(), _DrawApi_rect = new WeakMap(), _DrawApi_ellipse = new WeakMap(), _DrawApi_sprite = new WeakMap(), _DrawApi_text = new WeakMap(), _DrawApi_cameraOffset = new WeakMap(), _DrawApi_fillPattern = new WeakMap(), _DrawApi_fontAsset = new WeakMap(), _DrawApi_spriteColorMapping = new WeakMap();

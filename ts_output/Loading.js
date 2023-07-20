@@ -1,3 +1,4 @@
+"use strict";
 // TODO: When the loading of assets gets implemented, we will have to wait a bit more for the game to start.
 //      We will need a minimum wait then in order to avoid a case when game loads super fast, making the loading screen flicker.
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
@@ -7,7 +8,9 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
 var _Loading_displayElement;
-export class Loading {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Loading = void 0;
+class Loading {
     constructor(htmlDisplaySelector) {
         _Loading_displayElement.set(this, void 0);
         const displayElement = document.querySelector(htmlDisplaySelector);
@@ -22,4 +25,5 @@ export class Loading {
         document.body.classList.add("app_loaded");
     }
 }
+exports.Loading = Loading;
 _Loading_displayElement = new WeakMap();

@@ -1,3 +1,4 @@
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -10,13 +11,16 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _FullScreenSupported_instances, _FullScreenSupported_fullScreenSubject, _FullScreenSupported_nativeRequestFullscreen, _FullScreenSupported_nativeExitFullscreen, _FullScreenSupported_fullScreenOn, _FullScreenSupported_fullScreenOff;
-export class FullScreen {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FullScreen = void 0;
+class FullScreen {
     static newFor(fullScreenSubjectSelector, buttonsSelector) {
         return document.fullscreenEnabled || document.webkitFullscreenEnabled
             ? new FullScreenSupported(fullScreenSubjectSelector)
             : new FullScreenNoop(buttonsSelector);
     }
 }
+exports.FullScreen = FullScreen;
 class FullScreenNoop {
     constructor(buttonsSelector) {
         document

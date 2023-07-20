@@ -1,5 +1,8 @@
-import { SolidColor } from "../Color";
-export class TestImage {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TestImage = void 0;
+const Color_1 = require("../Color");
+class TestImage {
     constructor(params) {
         const asciiImage = params.image;
         const asciiToColor = params.withMapping;
@@ -23,7 +26,7 @@ export class TestImage {
             if (!color) {
                 throw Error(`TestImage: Missing color mapping for "${normalizedAsciiImage[i]}"`);
             }
-            else if (color instanceof SolidColor) {
+            else if (color instanceof Color_1.SolidColor) {
                 this.asset.rgba8bitData[4 * i] = color.r;
                 this.asset.rgba8bitData[4 * i + 1] = color.g;
                 this.asset.rgba8bitData[4 * i + 2] = color.b;
@@ -38,3 +41,4 @@ export class TestImage {
         }
     }
 }
+exports.TestImage = TestImage;

@@ -1,24 +1,26 @@
-import { describe, test } from "@jest/globals";
-import { CompositeColor, SolidColor, transparent } from "../Color";
-import { xy_ } from "../Xy";
-import { DrawRect } from "./DrawRect";
-import { FillPattern } from "./FillPattern";
-import { TestCanvas } from "./TestCanvas";
-describe("DrawRect", () => {
-    const ct = transparent;
-    const c0 = SolidColor.fromRgbCssHex("#010203");
-    const c1 = SolidColor.fromRgbCssHex("#111213");
-    const c2 = SolidColor.fromRgbCssHex("#212223");
-    const c3 = SolidColor.fromRgbCssHex("#313233");
-    const c4 = SolidColor.fromRgbCssHex("#414243");
-    const c5 = SolidColor.fromRgbCssHex("#515253");
-    describe("regular", () => {
-        test("simple 1x1", () => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const globals_1 = require("@jest/globals");
+const Color_1 = require("../Color");
+const Xy_1 = require("../Xy");
+const DrawRect_1 = require("./DrawRect");
+const FillPattern_1 = require("./FillPattern");
+const TestCanvas_1 = require("./TestCanvas");
+(0, globals_1.describe)("DrawRect", () => {
+    const ct = Color_1.transparent;
+    const c0 = Color_1.SolidColor.fromRgbCssHex("#010203");
+    const c1 = Color_1.SolidColor.fromRgbCssHex("#111213");
+    const c2 = Color_1.SolidColor.fromRgbCssHex("#212223");
+    const c3 = Color_1.SolidColor.fromRgbCssHex("#313233");
+    const c4 = Color_1.SolidColor.fromRgbCssHex("#414243");
+    const c5 = Color_1.SolidColor.fromRgbCssHex("#515253");
+    (0, globals_1.describe)("regular", () => {
+        (0, globals_1.test)("simple 1x1", () => {
             // given
-            const canvas = new TestCanvas(3, 3, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(3, 3, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(1, 1);
+            const xy1 = (0, Xy_1.xy_)(1, 1);
             rect.draw(xy1, xy1.add(1), c1, false);
             // then
             canvas.expectToEqual({
@@ -30,13 +32,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("simple 4x3", () => {
+        (0, globals_1.test)("simple 4x3", () => {
             // given
-            const canvas = new TestCanvas(6, 5, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 5, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(1, 1);
-            rect.draw(xy1, xy1.add(xy_(4, 3)), c1, false);
+            const xy1 = (0, Xy_1.xy_)(1, 1);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 3)), c1, false);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -49,13 +51,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("drawing on very edges of a canvas", () => {
+        (0, globals_1.test)("drawing on very edges of a canvas", () => {
             // given
-            const canvas = new TestCanvas(4, 3, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(4, 3, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(0, 0);
-            rect.draw(xy1, xy1.add(xy_(4, 3)), c1, false);
+            const xy1 = (0, Xy_1.xy_)(0, 0);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 3)), c1, false);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -66,12 +68,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("0-size", () => {
+        (0, globals_1.test)("0-size", () => {
             // given
-            const canvas = new TestCanvas(3, 3, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(3, 3, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(1, 1);
+            const xy1 = (0, Xy_1.xy_)(1, 1);
             rect.draw(xy1, xy1, c1, false);
             // then
             canvas.expectToEqual({
@@ -83,12 +85,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("negative left-top corner", () => {
+        (0, globals_1.test)("negative left-top corner", () => {
             // given
-            const canvas = new TestCanvas(3, 3, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(3, 3, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(-1, -1);
+            const xy1 = (0, Xy_1.xy_)(-1, -1);
             rect.draw(xy1, xy1.add(3), c1, false);
             // then
             canvas.expectToEqual({
@@ -100,13 +102,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("negative size", () => {
+        (0, globals_1.test)("negative size", () => {
             // given
-            const canvas = new TestCanvas(6, 5, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 5, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(5, 4);
-            rect.draw(xy1, xy1.add(xy_(-4, -3)), c1, false);
+            const xy1 = (0, Xy_1.xy_)(5, 4);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(-4, -3)), c1, false);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -119,13 +121,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("clipping: over the left edge", () => {
+        (0, globals_1.test)("clipping: over the left edge", () => {
             // given
-            const canvas = new TestCanvas(6, 6, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 6, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(-2, 1);
-            rect.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
+            const xy1 = (0, Xy_1.xy_)(-2, 1);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 4)), c1, false);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -139,13 +141,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("clipping: over the right edge", () => {
+        (0, globals_1.test)("clipping: over the right edge", () => {
             // given
-            const canvas = new TestCanvas(6, 6, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 6, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(4, 1);
-            rect.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
+            const xy1 = (0, Xy_1.xy_)(4, 1);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 4)), c1, false);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -159,13 +161,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("clipping: over the top edge", () => {
+        (0, globals_1.test)("clipping: over the top edge", () => {
             // given
-            const canvas = new TestCanvas(6, 6, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 6, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(1, -2);
-            rect.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
+            const xy1 = (0, Xy_1.xy_)(1, -2);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 4)), c1, false);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -179,13 +181,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("clipping: over the bottom edge", () => {
+        (0, globals_1.test)("clipping: over the bottom edge", () => {
             // given
-            const canvas = new TestCanvas(6, 6, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 6, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(1, 4);
-            rect.draw(xy1, xy1.add(xy_(4, 4)), c1, false);
+            const xy1 = (0, Xy_1.xy_)(1, 4);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 4)), c1, false);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -199,12 +201,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("fill pattern: simple one, with a single solid color", () => {
+        (0, globals_1.test)("fill pattern: simple one, with a single solid color", () => {
             // given
-            const canvas = new TestCanvas(4, 4, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(4, 4, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            rect.draw(xy_(0, 0), xy_(4, 4), c1, false, FillPattern.of(311));
+            rect.draw((0, Xy_1.xy_)(0, 0), (0, Xy_1.xy_)(4, 4), c1, false, FillPattern_1.FillPattern.of(311));
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -216,12 +218,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("fill pattern: simple one, with two solid colors", () => {
+        (0, globals_1.test)("fill pattern: simple one, with two solid colors", () => {
             // given
-            const canvas = new TestCanvas(4, 4, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(4, 4, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            rect.draw(xy_(0, 0), xy_(4, 4), new CompositeColor(c1, c2), false, FillPattern.of(311));
+            rect.draw((0, Xy_1.xy_)(0, 0), (0, Xy_1.xy_)(4, 4), new Color_1.CompositeColor(c1, c2), false, FillPattern_1.FillPattern.of(311));
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1, ":": c2 },
@@ -233,12 +235,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("fill pattern: various 4x4 patterns", () => {
+        (0, globals_1.test)("fill pattern: various 4x4 patterns", () => {
             // given
-            const canvas = new TestCanvas(10, 10, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(10, 10, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            rect.draw(xy_(0, 0), xy_(10, 10), new CompositeColor(c4, c1), false, FillPattern.primaryOnly);
+            rect.draw((0, Xy_1.xy_)(0, 0), (0, Xy_1.xy_)(10, 10), new Color_1.CompositeColor(c4, c1), false, FillPattern_1.FillPattern.primaryOnly);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
@@ -256,7 +258,7 @@ describe("DrawRect", () => {
         `,
             });
             // and when
-            rect.draw(xy_(2, 2), xy_(8, 8), new CompositeColor(c4, c2), false, FillPattern.secondaryOnly);
+            rect.draw((0, Xy_1.xy_)(2, 2), (0, Xy_1.xy_)(8, 8), new Color_1.CompositeColor(c4, c2), false, FillPattern_1.FillPattern.secondaryOnly);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
@@ -274,7 +276,7 @@ describe("DrawRect", () => {
         `,
             });
             // and when
-            rect.draw(xy_(0, 0), xy_(10, 10), new CompositeColor(c3, ct), false, FillPattern.of(311));
+            rect.draw((0, Xy_1.xy_)(0, 0), (0, Xy_1.xy_)(10, 10), new Color_1.CompositeColor(c3, ct), false, FillPattern_1.FillPattern.of(311));
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
@@ -292,8 +294,8 @@ describe("DrawRect", () => {
         `,
             });
             // and when
-            rect.draw(xy_(0, 0), xy_(10, 5), new CompositeColor(c5, ct), false, FillPattern.of(13107));
-            rect.draw(xy_(0, 5), xy_(10, 10), new CompositeColor(c5, c1), false, FillPattern.of(52428));
+            rect.draw((0, Xy_1.xy_)(0, 0), (0, Xy_1.xy_)(10, 5), new Color_1.CompositeColor(c5, ct), false, FillPattern_1.FillPattern.of(13107));
+            rect.draw((0, Xy_1.xy_)(0, 5), (0, Xy_1.xy_)(10, 10), new Color_1.CompositeColor(c5, c1), false, FillPattern_1.FillPattern.of(52428));
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
@@ -311,12 +313,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("fill pattern: 4x4 pattern is aligned with canvas' top-left corner", () => {
+        (0, globals_1.test)("fill pattern: 4x4 pattern is aligned with canvas' top-left corner", () => {
             // given
-            const canvas = new TestCanvas(11, 11, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(11, 11, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            rect.draw(xy_(1, 1), xy_(10, 10), new CompositeColor(c1, ct), false, FillPattern.of(311));
+            rect.draw((0, Xy_1.xy_)(1, 1), (0, Xy_1.xy_)(10, 10), new Color_1.CompositeColor(c1, ct), false, FillPattern_1.FillPattern.of(311));
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -336,13 +338,13 @@ describe("DrawRect", () => {
             });
         });
     });
-    describe("filled", () => {
-        test("simple 1x1", () => {
+    (0, globals_1.describe)("filled", () => {
+        (0, globals_1.test)("simple 1x1", () => {
             // given
-            const canvas = new TestCanvas(3, 3, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(3, 3, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(1, 1);
+            const xy1 = (0, Xy_1.xy_)(1, 1);
             rect.draw(xy1, xy1.add(1), c1, true);
             // then
             canvas.expectToEqual({
@@ -354,13 +356,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("simple 4x3", () => {
+        (0, globals_1.test)("simple 4x3", () => {
             // given
-            const canvas = new TestCanvas(6, 5, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 5, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(1, 1);
-            rect.draw(xy1, xy1.add(xy_(4, 3)), c1, true);
+            const xy1 = (0, Xy_1.xy_)(1, 1);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 3)), c1, true);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -373,13 +375,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("drawing on very edges of a canvas", () => {
+        (0, globals_1.test)("drawing on very edges of a canvas", () => {
             // given
-            const canvas = new TestCanvas(4, 3, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(4, 3, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(0, 0);
-            rect.draw(xy1, xy1.add(xy_(4, 3)), c1, true);
+            const xy1 = (0, Xy_1.xy_)(0, 0);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 3)), c1, true);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -390,12 +392,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("0-size", () => {
+        (0, globals_1.test)("0-size", () => {
             // given
-            const canvas = new TestCanvas(3, 3, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(3, 3, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(1, 1);
+            const xy1 = (0, Xy_1.xy_)(1, 1);
             rect.draw(xy1, xy1, c1, true);
             // then
             canvas.expectToEqual({
@@ -407,12 +409,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("negative left-top corner", () => {
+        (0, globals_1.test)("negative left-top corner", () => {
             // given
-            const canvas = new TestCanvas(3, 3, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(3, 3, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(-1, -1);
+            const xy1 = (0, Xy_1.xy_)(-1, -1);
             rect.draw(xy1, xy1.add(3), c1, true);
             // then
             canvas.expectToEqual({
@@ -424,13 +426,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("negative size", () => {
+        (0, globals_1.test)("negative size", () => {
             // given
-            const canvas = new TestCanvas(6, 5, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 5, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(5, 4);
-            rect.draw(xy1, xy1.add(xy_(-4, -3)), c1, true);
+            const xy1 = (0, Xy_1.xy_)(5, 4);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(-4, -3)), c1, true);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -443,13 +445,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("clipping: over the left edge", () => {
+        (0, globals_1.test)("clipping: over the left edge", () => {
             // given
-            const canvas = new TestCanvas(6, 6, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 6, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(-2, 1);
-            rect.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
+            const xy1 = (0, Xy_1.xy_)(-2, 1);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 4)), c1, true);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -463,13 +465,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("clipping: over the right edge", () => {
+        (0, globals_1.test)("clipping: over the right edge", () => {
             // given
-            const canvas = new TestCanvas(6, 6, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 6, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(4, 1);
-            rect.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
+            const xy1 = (0, Xy_1.xy_)(4, 1);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 4)), c1, true);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -483,13 +485,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("clipping: over the top edge", () => {
+        (0, globals_1.test)("clipping: over the top edge", () => {
             // given
-            const canvas = new TestCanvas(6, 6, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 6, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(1, -2);
-            rect.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
+            const xy1 = (0, Xy_1.xy_)(1, -2);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 4)), c1, true);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -503,13 +505,13 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("clipping: over the bottom edge", () => {
+        (0, globals_1.test)("clipping: over the bottom edge", () => {
             // given
-            const canvas = new TestCanvas(6, 6, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(6, 6, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            const xy1 = xy_(1, 4);
-            rect.draw(xy1, xy1.add(xy_(4, 4)), c1, true);
+            const xy1 = (0, Xy_1.xy_)(1, 4);
+            rect.draw(xy1, xy1.add((0, Xy_1.xy_)(4, 4)), c1, true);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -523,12 +525,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("fill pattern: simple one, with a single solid color", () => {
+        (0, globals_1.test)("fill pattern: simple one, with a single solid color", () => {
             // given
-            const canvas = new TestCanvas(4, 4, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(4, 4, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            rect.draw(xy_(0, 0), xy_(4, 4), c1, true, FillPattern.of(311));
+            rect.draw((0, Xy_1.xy_)(0, 0), (0, Xy_1.xy_)(4, 4), c1, true, FillPattern_1.FillPattern.of(311));
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },
@@ -540,12 +542,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("fill pattern: simple one, with two solid colors", () => {
+        (0, globals_1.test)("fill pattern: simple one, with two solid colors", () => {
             // given
-            const canvas = new TestCanvas(4, 4, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(4, 4, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            rect.draw(xy_(0, 0), xy_(4, 4), new CompositeColor(c1, c2), true, FillPattern.of(311));
+            rect.draw((0, Xy_1.xy_)(0, 0), (0, Xy_1.xy_)(4, 4), new Color_1.CompositeColor(c1, c2), true, FillPattern_1.FillPattern.of(311));
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1, ":": c2 },
@@ -557,12 +559,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("fill pattern: various 4x4 patterns", () => {
+        (0, globals_1.test)("fill pattern: various 4x4 patterns", () => {
             // given
-            const canvas = new TestCanvas(10, 10, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(10, 10, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            rect.draw(xy_(0, 0), xy_(10, 10), new CompositeColor(c4, c1), true, FillPattern.primaryOnly);
+            rect.draw((0, Xy_1.xy_)(0, 0), (0, Xy_1.xy_)(10, 10), new Color_1.CompositeColor(c4, c1), true, FillPattern_1.FillPattern.primaryOnly);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
@@ -580,7 +582,7 @@ describe("DrawRect", () => {
         `,
             });
             // and when
-            rect.draw(xy_(2, 2), xy_(8, 8), new CompositeColor(c4, c2), true, FillPattern.secondaryOnly);
+            rect.draw((0, Xy_1.xy_)(2, 2), (0, Xy_1.xy_)(8, 8), new Color_1.CompositeColor(c4, c2), true, FillPattern_1.FillPattern.secondaryOnly);
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
@@ -598,7 +600,7 @@ describe("DrawRect", () => {
         `,
             });
             // and when
-            rect.draw(xy_(0, 0), xy_(10, 10), new CompositeColor(c3, ct), true, FillPattern.of(311));
+            rect.draw((0, Xy_1.xy_)(0, 0), (0, Xy_1.xy_)(10, 10), new Color_1.CompositeColor(c3, ct), true, FillPattern_1.FillPattern.of(311));
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
@@ -616,8 +618,8 @@ describe("DrawRect", () => {
         `,
             });
             // and when
-            rect.draw(xy_(0, 0), xy_(10, 5), new CompositeColor(c5, ct), true, FillPattern.of(13107));
-            rect.draw(xy_(0, 5), xy_(10, 10), new CompositeColor(c5, c1), true, FillPattern.of(52428));
+            rect.draw((0, Xy_1.xy_)(0, 0), (0, Xy_1.xy_)(10, 5), new Color_1.CompositeColor(c5, ct), true, FillPattern_1.FillPattern.of(13107));
+            rect.draw((0, Xy_1.xy_)(0, 5), (0, Xy_1.xy_)(10, 10), new Color_1.CompositeColor(c5, c1), true, FillPattern_1.FillPattern.of(52428));
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1, ":": c2, "%": c3, "=": c4, "^": c5 },
@@ -635,12 +637,12 @@ describe("DrawRect", () => {
         `,
             });
         });
-        test("fill pattern: 4x4 pattern is aligned with canvas' top-left corner", () => {
+        (0, globals_1.test)("fill pattern: 4x4 pattern is aligned with canvas' top-left corner", () => {
             // given
-            const canvas = new TestCanvas(11, 11, c0);
-            const rect = new DrawRect(canvas.bytes, canvas.size);
+            const canvas = new TestCanvas_1.TestCanvas(11, 11, c0);
+            const rect = new DrawRect_1.DrawRect(canvas.bytes, canvas.size);
             // when
-            rect.draw(xy_(1, 1), xy_(10, 10), new CompositeColor(c1, ct), true, FillPattern.of(311));
+            rect.draw((0, Xy_1.xy_)(1, 1), (0, Xy_1.xy_)(10, 10), new Color_1.CompositeColor(c1, ct), true, FillPattern_1.FillPattern.of(311));
             // then
             canvas.expectToEqual({
                 withMapping: { "-": c0, "#": c1 },

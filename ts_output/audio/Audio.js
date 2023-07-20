@@ -1,3 +1,4 @@
+"use strict";
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
@@ -10,7 +11,9 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
 var _Audio_instances, _Audio_assets, _Audio_audioContext, _Audio_globalGainNode, _Audio_muteUnmuteExponentialTimeConstant, _Audio_isGloballyMuted, _Audio_loopedSounds, _Audio_muteUnmuteTimeConstant, _Audio_mute, _Audio_unmute;
-export class Audio {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Audio = void 0;
+class Audio {
     // TODO: REMOVE
     get audioContext() {
         return __classPrivateFieldGet(this, _Audio_audioContext, "f");
@@ -88,6 +91,7 @@ export class Audio {
         }
     }
 }
+exports.Audio = Audio;
 _Audio_assets = new WeakMap(), _Audio_audioContext = new WeakMap(), _Audio_globalGainNode = new WeakMap(), _Audio_muteUnmuteExponentialTimeConstant = new WeakMap(), _Audio_isGloballyMuted = new WeakMap(), _Audio_loopedSounds = new WeakMap(), _Audio_muteUnmuteTimeConstant = new WeakMap(), _Audio_instances = new WeakSet(), _Audio_mute = function _Audio_mute() {
     __classPrivateFieldSet(this, _Audio_isGloballyMuted, true, "f");
     __classPrivateFieldGet(this, _Audio_globalGainNode, "f").gain.setTargetAtTime(0, __classPrivateFieldGet(this, _Audio_audioContext, "f").currentTime, __classPrivateFieldGet(this, _Audio_muteUnmuteExponentialTimeConstant, "f"));

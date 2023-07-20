@@ -1,3 +1,4 @@
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -10,31 +11,33 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _GameInput_guiGameInput, _GameInput_keyboardGameInput, _GameInput_touchGameInput, _GameInput_gamepadGameInput;
-import { GamepadGameInput } from "./GamepadGameInput";
-import { GuiGameInput } from "./GuiGameInput";
-import { KeyboardGameInput } from "./KeyboardGameInput";
-import { TouchGameInput } from "./TouchGameInput";
-export const gameInputEventBehavior = {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GameInput = exports.gameInputEventBehavior = void 0;
+const GamepadGameInput_1 = require("./GamepadGameInput");
+const GuiGameInput_1 = require("./GuiGameInput");
+const KeyboardGameInput_1 = require("./KeyboardGameInput");
+const TouchGameInput_1 = require("./TouchGameInput");
+exports.gameInputEventBehavior = {
     // TODO: move full_screen out of this set OR move its handling to TouchGameInput and similar ones
     mute_unmute_toggle: { fireOnce: true },
     full_screen: { fireOnce: true },
     debug_toggle: { fireOnce: true },
 };
-export class GameInput {
+class GameInput {
     constructor(params) {
         _GameInput_guiGameInput.set(this, void 0);
         _GameInput_keyboardGameInput.set(this, void 0);
         _GameInput_touchGameInput.set(this, void 0);
         _GameInput_gamepadGameInput.set(this, void 0);
-        __classPrivateFieldSet(this, _GameInput_guiGameInput, new GuiGameInput({
+        __classPrivateFieldSet(this, _GameInput_guiGameInput, new GuiGameInput_1.GuiGameInput({
             muteButtonsSelector: params.muteButtonsSelector,
             fullScreenButtonsSelector: params.fullScreenButtonsSelector,
         }), "f");
-        __classPrivateFieldSet(this, _GameInput_keyboardGameInput, new KeyboardGameInput({
+        __classPrivateFieldSet(this, _GameInput_keyboardGameInput, new KeyboardGameInput_1.KeyboardGameInput({
             debugToggleKey: params.debugToggleKey,
         }), "f");
-        __classPrivateFieldSet(this, _GameInput_touchGameInput, new TouchGameInput(), "f");
-        __classPrivateFieldSet(this, _GameInput_gamepadGameInput, new GamepadGameInput(), "f");
+        __classPrivateFieldSet(this, _GameInput_touchGameInput, new TouchGameInput_1.TouchGameInput(), "f");
+        __classPrivateFieldSet(this, _GameInput_gamepadGameInput, new GamepadGameInput_1.GamepadGameInput(), "f");
     }
     startListening() {
         __classPrivateFieldGet(this, _GameInput_guiGameInput, "f").startListening();
@@ -68,4 +71,5 @@ export class GameInput {
         return detectedEvents;
     }
 }
+exports.GameInput = GameInput;
 _GameInput_guiGameInput = new WeakMap(), _GameInput_keyboardGameInput = new WeakMap(), _GameInput_touchGameInput = new WeakMap(), _GameInput_gamepadGameInput = new WeakMap();

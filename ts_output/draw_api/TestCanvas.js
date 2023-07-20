@@ -1,16 +1,19 @@
+"use strict";
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _TestCanvas_instances, _TestCanvas_asAscii;
-import { expect } from "@jest/globals";
-import { SolidColor } from "../Color";
-import { xy_ } from "../Xy";
-export class TestCanvas {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TestCanvas = void 0;
+const globals_1 = require("@jest/globals");
+const Color_1 = require("../Color");
+const Xy_1 = require("../Xy");
+class TestCanvas {
     constructor(width, height, color) {
         _TestCanvas_instances.add(this);
-        this.size = xy_(width, height);
+        this.size = (0, Xy_1.xy_)(width, height);
         this.bytes = new Uint8ClampedArray(4 * width * height);
         for (let i = 0; i < width * height; i += 1) {
             this.bytes[4 * i] = color.r;
@@ -21,7 +24,7 @@ export class TestCanvas {
     }
     expectToEqual(params) {
         // first, let's check if bytes didn't increase in their length
-        expect(this.bytes.length).toEqual(this.size.x * this.size.y * 4);
+        (0, globals_1.expect)(this.bytes.length).toEqual(this.size.x * this.size.y * 4);
         // then, let's proceed to the actual image check
         const { withMapping: asciiToColor, expectedImageAsAscii } = params;
         const colorToAscii = new Map(Object.entries(asciiToColor).map(([ascii, color]) => [color.id(), ascii]));
@@ -36,9 +39,10 @@ export class TestCanvas {
             .join(" "))
             .filter((line) => line.length > 0)
             .join("\n") + "\n";
-        expect(actualAscii).toEqual(expectedAscii);
+        (0, globals_1.expect)(actualAscii).toEqual(expectedAscii);
     }
 }
+exports.TestCanvas = TestCanvas;
 _TestCanvas_instances = new WeakSet(), _TestCanvas_asAscii = function _TestCanvas_asAscii(colorToAscii) {
     let asciiImage = "";
     for (let y = 0; y < this.size.y; y += 1) {
@@ -49,7 +53,7 @@ _TestCanvas_instances = new WeakSet(), _TestCanvas_asAscii = function _TestCanva
                 asciiImage += "!";
             }
             else {
-                const color = new SolidColor(colorBytes[0], colorBytes[1], colorBytes[2]);
+                const color = new Color_1.SolidColor(colorBytes[0], colorBytes[1], colorBytes[2]);
                 asciiImage += colorToAscii.get(color.id()) ?? "?";
             }
         }

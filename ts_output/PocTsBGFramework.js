@@ -1,3 +1,4 @@
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -10,7 +11,9 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _a, _PocTsBGFramework_framework;
-import { Framework } from "./Framework";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PocTsBGFramework = void 0;
+const Framework_1 = require("./Framework");
 //  This class is only a facade over other capabilities of this game framework.
 //    It serves as a public, global, statically accessible API.
 //    Inspiration: [PICO-8's API](https://www.lexaloffle.com/dl/docs/pico-8_manual.html).
@@ -23,7 +26,7 @@ class PocTsBGFramework {
     //
     // TODO: type the startGame fn or the entire object inside resolved Promise
     static init(frameworkOptions, assetsToLoad) {
-        __classPrivateFieldSet(PocTsBGFramework, _a, new Framework(frameworkOptions), "f", _PocTsBGFramework_framework);
+        __classPrivateFieldSet(PocTsBGFramework, _a, new Framework_1.Framework(frameworkOptions), "f", _PocTsBGFramework_framework);
         return __classPrivateFieldGet(PocTsBGFramework, _a, "f", _PocTsBGFramework_framework).loadAssets(assetsToLoad);
     }
     // Framework's lifecycle methods, exposed for a static access.
@@ -48,4 +51,4 @@ _PocTsBGFramework_framework = { value: void 0 };
 //
 PocTsBGFramework.frameNumber = 0;
 PocTsBGFramework.averageFps = 1;
-export { PocTsBGFramework };
+exports.PocTsBGFramework = PocTsBGFramework;
