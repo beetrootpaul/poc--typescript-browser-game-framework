@@ -3,6 +3,7 @@
     "moduleResolution": "node16",
     "esModuleInterop": true,
     "target": "ES2020",
+    "module": "CommonJS",
     "declaration": true,
     "outDir": "./ts_output/",
     "strict": true,
